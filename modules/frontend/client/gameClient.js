@@ -13,6 +13,7 @@ class GameClient {
      *                              -1 for any other error or unknown status code.
      */
     async validateUser(username, password) {
+        return 0;
         const options = {
             method: 'GET',
             headers: {

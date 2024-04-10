@@ -5,7 +5,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #f8ffbb; /* Example background color */
+    background-color: #fff3bb; /* Example background color */
     background-image: url('asset/logo.PNG'); /* Path to your image */
     background-size: contain; /* Cover ensures the background image covers the entire element */
     background-position: center; /* Center the background image */
@@ -13,7 +13,7 @@ body {
 }
 
 /* Styles for the login container */
-#login-container {
+#login-container, #register-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -24,7 +24,7 @@ body {
 }
 
 /* Styles for the input fields and button */
-#username, #password, #login-button {
+#username, #password, #submit-login, #new-username, #new-password, #submit-register{
     width: 100%; /* Makes the input fields and button take up the full container width */
     padding: 10px;
     margin-bottom: 15px; /* Adds some space between the elements */
@@ -33,6 +33,6 @@ body {
 }
 
 /* Remove the bottom margin from the last element to avoid extra space */
-#login-button {
+#submit-login, #submit-register {
     margin-bottom: 0;
 }
