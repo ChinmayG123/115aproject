@@ -1,0 +1,38 @@
+/* Styles for the body to ensure full height and centering */
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f8ffbb; /* Example background color */
+    background-image: url('asset/logo.PNG'); /* Path to your image */
+    background-size: contain; /* Cover ensures the background image covers the entire element */
+    background-position: center; /* Center the background image */
+    background-repeat: no-repeat; /* Do not repeat the image */
+}
+
+/* Styles for the login container */
+#login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background: #fff; /* Background color for the login box */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: Adds a subtle shadow */
+    border-radius: 5px; /* Optional: Rounds the corners */
+}
+
+/* Styles for the input fields and button */
+#username, #password, #login-button {
+    width: 100%; /* Makes the input fields and button take up the full container width */
+    padding: 10px;
+    margin-bottom: 15px; /* Adds some space between the elements */
+    border: 1px solid #ccc; /* Example border */
+    border-radius: 5px; /* Rounds the corners */
+}
+
+/* Remove the bottom margin from the last element to avoid extra space */
+#login-button {
+    margin-bottom: 0;
+}
