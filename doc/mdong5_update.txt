@@ -1,0 +1,4 @@
+2024/04/09: 
+Created a file structure. Created skeleton code for client/server functionalities and a login page. 
+The login page should pair with a dashboard program that calls client functions to decide whether to launch the game or reject user. The client has a function called validateUser(). This function will send an HTTP GET request to the server to check if the inputed Username does exist and Password is correct. 
+The server program should connect to MongoDB. The server will receive and parse HTTP request, and then send query to database, and send  HTTP response back to client based on the database connector's result. 
