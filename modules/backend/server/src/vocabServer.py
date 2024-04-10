@@ -1,7 +1,7 @@
 import socket
 import threading
 import signal
-import Server
+from Server import Server
 
 # Declare server_socket as a global variable
 server_socket = None
@@ -10,6 +10,11 @@ def signal_handler(signum, frame):
     print('Signal received, shutting down server.')
     if server_socket:
         server_socket.close()
+
+def worker(client_socket, address):
+    server = Server(client_socket) 
+    server.run()
+    return
 
 def start_server(host, port):
     global server_socket
@@ -21,7 +26,7 @@ def start_server(host, port):
     while True:
         client_socket, address = server_socket.accept()
         print(f"Accepted connection from {address}")
-        client_thread = threading.Thread(target=Server, args=(client_socket, address))
+        client_thread = threading.Thread(target=worker, args=(client_socket, address))
         client_thread.start()
 
 if __name__ == "__main__":
