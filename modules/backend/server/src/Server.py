@@ -1,5 +1,5 @@
 import socket
-
+from ServerToDatabase import DatabaseAccess
 
 class Server:
     def __init__(self, client_socket, debug_mode=False):
@@ -73,6 +73,14 @@ class Server:
     def send_response(self):
         response = self.compose_response()
         self.socket.sendall(response.encode("utf-8"))
+        
+    def process_request(self):
+        db_access = DatabaseAccess()
+        if self.Request.get('URI') == '/userlist':
+            requestHeaders: dict = self.Request.get('Headers')
+            username = requestHeaders.get('Username')
+            password = requestHeaders.get('Password')
+            db_access.request_login(username, password)
 
     def log_request(self):
         # This method can be expanded as needed
@@ -83,11 +91,12 @@ class Server:
 
         while True:
             if state == "RECV":
-                self.request_data = self.recv_request()
+                self.recv_request()
                 state = "PROCESS"
 
             elif state == "PROCESS":
                 # Process the request here
+                
                 self.process_request()
                 state = "SEND"
 

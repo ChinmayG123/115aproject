@@ -1,6 +1,11 @@
 class GameClient {
-    // Private fields and constructor remain the same...
+    // Private fields
+    #HOST = '127.0.0.1';
+    #PORT = 8080;
 
+    constructor() {
+        this.baseURL = `http://${this.#HOST}:${this.#PORT}`;
+    }
     /**
      * Validates a user by sending a GET request with custom headers for username and password.
      *
@@ -13,7 +18,6 @@ class GameClient {
      *                              -1 for any other error or unknown status code.
      */
     async validateUser(username, password) {
-        return 0;
         const options = {
             method: 'GET',
             headers: {
@@ -22,8 +26,18 @@ class GameClient {
             }
         };
 
+        // Create a promise that rejects in 3000 milliseconds (3 seconds)
+        const timeoutPromise = new Promise((_, reject) => {
+            setTimeout(() => {
+                reject(new Error('Request timed out')); // Reject with an error when timeout is reached
+            }, 3000); // Timeout set to 3 seconds
+        });
+
         try {
-            const response = await fetch(`${this.baseURL}/userlist`, options);
+            const response = await Promise.race([
+                fetch(`${this.baseURL}/userlist`, options), // The actual fetch request
+                timeoutPromise                               // The timeout promise
+            ]);
 
             switch (response.status) {
                 case 200:
