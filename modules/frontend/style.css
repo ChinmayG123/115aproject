@@ -1,27 +1,87 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+*:focus{
+    outline: none;
+}
+
 /* Styles for the body to ensure full height and centering */
 body {
+    /*
     margin: 0;
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #fff3bb; /* Example background color */
-    background-image: url('asset/logo.PNG'); /* Path to your image */
-    background-size: contain; /* Cover ensures the background image covers the entire element */
-    background-position: center; /* Center the background image */
-    background-repeat: no-repeat; /* Do not repeat the image */
+    background-color: #fff3bb; 
+    background-image: url('asset/logo.PNG'); 
+    background-size: contain;
+    background-position: center; 
+    background-repeat: no-repeat; */
+
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: url('asset/logo.PNG');
+    background-size: cover;
+    background-position: center;
+    
+    background-color: #fff3bb; 
+
+    font-family: 'roboto', sans-serif;
+}
+ 
+
+.link{
+    opacity: 1;
+    text-align: center;
+    text-transform: capitalize;
+    color: rgba(5, 5, 5, 0.7);
+    display: block;
+    margin: 30px auto;
+    transition: color 0.3s;
+}
+
+.link:hover{
+    color: #1920de;
 }
 
 /* Styles for the login container */
 #login-container, #register-container {
-    display: flex;
+    width: 400px;
+    height: auto;
+    color: #fff;
+    font-family: 'roboto', sans-serif;
+    
+    /* display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: center; */
+    
     padding: 20px;
-    background: #fff; /* Background color for the login box */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: Adds a subtle shadow */
-    border-radius: 5px; /* Optional: Rounds the corners */
+    
+    /*background: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+    border-radius: 5px;  */
 }
+
+.heading{
+    /* opacity: 0; */
+    text-transform: capitalize;
+    text-align: center;
+    font-size: 80px;
+    font-weight: 300;
+    margin-bottom: 50px;
+    color: #000000;
+}
+
+
 
 /* Styles for the input fields and button */
 #username, #password, #submit-login, #new-username, #new-password, #submit-register{
