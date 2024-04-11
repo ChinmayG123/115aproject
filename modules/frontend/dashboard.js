@@ -1,30 +1,5 @@
 const gameClient = new GameClient();
 
-function handleLogin() {
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-    const errorMsg = document.getElementById('login-error-msg');
-
-    console.log('Submitting login...');
-    console.log('Username:', username);
-    console.log('Password:', password);
-    // Assuming gameClient is an instance of GameClient
-    gameClient.validateUser(username, password)
-        .then(result => {
-            if (result === 0) {
-                console.log('Login successful');
-                errorMsg.textContent = '';
-                // Proceed with the game or redirect to another page
-            } else {
-                console.log('Login failed');
-                errorMsg.textContent = 'Login failed. Please check your username and password.';
-            }
-        })
-        .catch(error => {
-            console.error('Login error:', error);
-            errorMsg.textContent = 'An error occurred during login. Please try again.';
-        });
-}
 
 document.addEventListener('DOMContentLoaded', function () {
     const frontContainer = document.getElementById('front-container');
@@ -45,17 +20,63 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('submit-login').addEventListener('click', handleLogin);
 
     } else if (registerContainer) {
-        document.getElementById('submit-register').addEventListener('click', function () {
-            console.log('Submitting registration...');
-            const username = document.getElementById('new-username').value;
-            const password = document.getElementById('new-password').value;
-            console.log('Username:', username);
-            console.log('Password:', password);
-            // Implement registration logic here
-        });
+        document.getElementById('submit-register').addEventListener('click', handleRegister);
     }
 });
 
+function handleLogin() {
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const errorMsg = document.getElementById('login-error-msg');
+    const successMsg = document.getElementById('login-success-msg');
+
+    console.log('Submitting login...');
+    console.log('Username:', username);
+    console.log('Password:', password);
+    // Assuming gameClient is an instance of GameClient
+    gameClient.validateUser(username, password)
+        .then(result => {
+            if (result === 0) {
+                console.log('Login successful');
+                successMsg.textContent = 'Welcome Back';
+                // Proceed with the game or redirect to another page
+            } else {
+                console.log('Login failed');
+                errorMsg.textContent = 'Login failed. Please check your username and password.';
+            }
+        })
+        .catch(error => {
+            console.error('Login error:', error);
+            errorMsg.textContent = 'An error occurred during login. Please try again.';
+        });
+}
+
+function handleRegister() {
+    const username = document.getElementById('new-username').value;
+    const password = document.getElementById('new-password').value;
+    const errorMsg = document.getElementById('register-error-msg');
+    const successMsg = document.getElementById('register-success-msg');
+
+    console.log('Submitting register...');
+    console.log('Username:', username);
+    console.log('Password:', password);
+    // Assuming gameClient is an instance of GameClient
+    gameClient.addNewUser(username, password)
+        .then(result => {
+            if (result === 0) {
+                console.log('Register successful');
+                successMsg.textContent = 'Welcome Back';
+                // Proceed with the game or redirect to another page
+            } else {
+                console.log('Register failed');
+                errorMsg.textContent = 'Register failed. Please check your username and password.';
+            }
+        })
+        .catch(error => {
+            console.error('Register error:', error);
+            errorMsg.textContent = 'An error occurred during register. Please try again.';
+        });
+}
 
 function startGame() {
     // Include the Phaser library

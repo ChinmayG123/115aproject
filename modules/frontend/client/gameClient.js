@@ -5,6 +5,7 @@ class GameClient {
 
     constructor() {
         this.baseURL = `http://${this.#HOST}:${this.#PORT}`;
+        this.userTable = '/userlist';
     }
     /**
      * Validates a user by sending a GET request with custom headers for username and password.
@@ -17,6 +18,7 @@ class GameClient {
      *                               2 if access is forbidden, or
      *                              -1 for any other error or unknown status code.
      */
+
     async validateUser(username, password) {
         const options = {
             method: 'GET',
@@ -25,7 +27,21 @@ class GameClient {
                 'Password': password  // Set the custom password header
             }
         };
+        return this.retrieveUserTable(options);
+    }
 
+    async addNewUser(username, password) {
+        const options = {
+            method: 'POST',
+            headers: {
+                'Username': username, // Set the custom username header
+                'Password': password  // Set the custom password header
+            }
+        };
+        return this.retrieveUserTable(options);
+    }
+
+    async retrieveUserTable(options) {
         // Create a promise that rejects in 3000 milliseconds (3 seconds)
         const timeoutPromise = new Promise((_, reject) => {
             setTimeout(() => {
@@ -35,7 +51,7 @@ class GameClient {
 
         try {
             const response = await Promise.race([
-                fetch(`${this.baseURL}/userlist`, options), // The actual fetch request
+                fetch(`${this.baseURL}${this.userTable}`, options), // The actual fetch request
                 timeoutPromise                               // The timeout promise
             ]);
 
