@@ -1,4 +1,5 @@
 class DatabaseAccess:
+    
     def request_login(self, username, password):
         """
         This function checks the given username and password against the entries

@@ -1,6 +1,7 @@
 import socket
 from ServerToDatabase import DatabaseAccess
 
+
 class Server:
     def __init__(self, client_socket, debug_mode=False):
         self.socket = client_socket
@@ -16,7 +17,7 @@ class Server:
             "StatusLine": None,
             "Version": "HTTP/1.1",
             "Headers": {},
-            "Body": None,
+            "Body": "",
         }
         self.debugMode = debug_mode
 
@@ -35,13 +36,9 @@ class Server:
         self.Request["Body"] = lines[-1]
 
         if self.debugMode:
-            print("Request:\n", self.Request)
+            print("Parsed Request:\n", self.Request)
 
     def compose_response(self):
-        self.Response["StatusCode"] = "200"
-        self.Response["StatusLine"] = "OK"
-        self.Response["Headers"]["Content-Type"] = "text/plain"
-        self.Response["Body"] = "Hello, World!"
 
         response = (
             f"{self.Response['Version']} {self.Response['StatusCode']} {self.Response['StatusLine']}\r\n"
@@ -56,7 +53,7 @@ class Server:
         )
 
         if self.debugMode:
-            print("Response:", response)
+            print("\nComposed Response:\n", response)
 
         return response
 
@@ -73,14 +70,46 @@ class Server:
     def send_response(self):
         response = self.compose_response()
         self.socket.sendall(response.encode("utf-8"))
-        
-    def process_request(self):
+
+    def retrieve_data(self):
         db_access = DatabaseAccess()
-        if self.Request.get('URI') == '/userlist':
-            requestHeaders: dict = self.Request.get('Headers')
-            username = requestHeaders.get('Username')
-            password = requestHeaders.get('Password')
-            db_access.request_login(username, password)
+        if self.Request["URI"] == "/userlist":
+            username = self.Request["Headers"]["Username"]
+            password = self.Request["Headers"]["Password"]
+            result = db_access.request_login(username, password)
+            if result == 0:
+                self.Response["StatusCode"] = "200"
+                self.Response["StatusLine"] = "OK"
+            elif result == 1:
+                self.Response["StatusCode"] = "404"
+                self.Response["StatusLine"] = "Not Found"
+
+            self.Response["Headers"]["Access-Control-Allow-Origin"] = "*"
+
+    def update_data(self):
+        pass
+
+    def process_request(self):
+        if self.Request["Method"] == "GET":
+            if self.debugMode:
+                print("Retrive request received")
+            self.retrieve_data()
+        elif self.Request["Method"] == "POST":
+            if self.debugMode:
+                print("Update request received")
+            self.update_data()
+        elif self.Request["Method"] == "OPTIONS":
+            self.Response["StatusCode"] = "200"
+            self.Response["StatusLine"] = "OK"
+            self.Response["Headers"]["Access-Control-Allow-Origin"] = "*"
+            self.Response["Headers"]["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
+            self.Response["Headers"]["Access-Control-Allow-Headers"] = "Content-Type, Username, Password"
+            self.Response["Headers"]["Access-Control-Max-Age"] = "86400"
+            self.Response["Headers"]["Content-Length"] = "0"
+            self.Response["Headers"]["Connection"] = "close"
+        else:
+            self.Response["StatusCode"] = "501"
+            self.Response["StatusLine"] = "Not Implemented"
 
     def log_request(self):
         # This method can be expanded as needed
@@ -96,19 +125,20 @@ class Server:
 
             elif state == "PROCESS":
                 # Process the request here
-                
+
                 self.process_request()
                 state = "SEND"
 
             elif state == "SEND":
                 response = self.compose_response()
-                self.client_socket.sendall(response.encode("utf-8"))
+                self.socket.sendall(response.encode("utf-8"))
                 state = "CLOSE"
 
             elif state == "CLOSE":
-                self.client_socket.close()
+                self.socket.shutdown(socket.SHUT_RDWR)
+                self.socket.close()
                 break
-            else: # invalid state
+            else:  # invalid state
                 break
 
 
