@@ -30,19 +30,19 @@ if __name__ == "__main__":
     HOST = ""
     PORT = 8080
 
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
-        server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        server_socket.bind((HOST, PORT))
-        server_socket.listen()
-        print(f"Server listening on {HOST}:{PORT}")
+    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    server_socket.bind((HOST, PORT))
+    server_socket.listen()
+    print(f"Server listening on {socket.gethostbyname(socket.gethostname())}:{PORT}")
 
-        while not termination:
-            try:
-                client_socket, address = server_socket.accept()
-                print(f"Accepted connection from {address}")
-                client_thread = threading.Thread(target=worker, args=(client_socket, address))
-                client_thread.start()
-            except OSError:
-                break  # Break from the loop if server_socket is closed by signal handler
+    while not termination:
+        try:
+            client_socket, address = server_socket.accept()
+            print(f"Accepted connection from {address}")
+            client_thread = threading.Thread(target=worker, args=(client_socket, address))
+            client_thread.start()
+        except OSError:
+            break  # Break from the loop if server_socket is closed by signal handler
 
     print("Server has been shut down.")
