@@ -2,3 +2,20 @@
 Created a file structure. Created skeleton code for client/server functionalities and a login page. 
 The login page should pair with a dashboard program that calls client functions to decide whether to launch the game or reject user. The client has a function called validateUser(). This function will send an HTTP GET request to the server to check if the inputed Username does exist and Password is correct. 
 The server program should connect to MongoDB. The server will receive and parse HTTP request, and then send query to database, and send  HTTP response back to client based on the database connector's result. 
+
+2024/04/10: 
+Implemented socket communication between client and server.
+Implemented client login/register functions. 
+Server multithreading complete.
+
+2024/04/11: 
+Client to Server/Server to Client communication validated. 
+Server supported methods: GET, POST, OPTIONS. 
+Worked with Chinmay on the login/register webpage update. 
+
+2024/04/12: 
+Per Michelle Quach's suggest, our team decided to move the project to cloud. 
+Purchased a Vultr VPS. Regular cloud compute. 1GB RAM. 1-core CPU. 25GB SSD. 
+Server configured to run on Vultr VPS. Public IPv4 is 140.82.49.13. IPv6 is 2001:19f0:ac00:4fed:5400:04ff:fedb:e3b3. Port 8080 opened for connection. 
+Verified functionality with Ari. 
+Remote server is then closed for future developments. A running server costs money. 
