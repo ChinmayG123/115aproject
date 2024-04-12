@@ -39,10 +39,12 @@ function handleLogin() {
             if (result === 0) {
                 console.log('Login successful');
                 successMsg.textContent = 'Welcome Back';
+                errorMsg.textContent = '';
                 // Proceed with the game or redirect to another page
             } else {
                 console.log('Login failed');
                 errorMsg.textContent = 'Login failed. Please check your username and password.';
+                successMsg.textContent = '';
             }
         })
         .catch(error => {
