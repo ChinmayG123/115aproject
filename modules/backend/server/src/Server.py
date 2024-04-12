@@ -94,10 +94,12 @@ class Server:
             if self.debugMode:
                 print("Retrive request received")
             self.retrieve_data()
+            
         elif self.Request["Method"] == "POST":
             if self.debugMode:
                 print("Update request received")
             self.update_data()
+            
         elif self.Request["Method"] == "OPTIONS":
             self.Response["StatusCode"] = "200"
             self.Response["StatusLine"] = "OK"

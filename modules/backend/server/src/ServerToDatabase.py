@@ -13,3 +13,4 @@ class DatabaseAccess:
         """
         # Here, you would add your MongoDB access code
         return 0
+
