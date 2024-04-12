@@ -72,40 +72,67 @@ class Server:
         self.socket.sendall(response.encode("utf-8"))
 
     def retrieve_data(self):
+        self.Response["Headers"]["Access-Control-Allow-Origin"] = "*"
         db_access = DatabaseAccess()
         if self.Request["URI"] == "/userlist":
             username = self.Request["Headers"]["Username"]
             password = self.Request["Headers"]["Password"]
             result = db_access.request_login(username, password)
-            if result == 0:
+            
+            if result == db_access.SUCCESSFUL:
                 self.Response["StatusCode"] = "200"
                 self.Response["StatusLine"] = "OK"
-            elif result == 1:
+            elif result == db_access.USER_NAME_NOT_EXIST:
                 self.Response["StatusCode"] = "404"
                 self.Response["StatusLine"] = "Not Found"
-
-            self.Response["Headers"]["Access-Control-Allow-Origin"] = "*"
+            elif result == db_access.USER_PASSWORD_INVALID:
+                self.Response["StatusCode"] = "403"
+                self.Response["StatusLine"] = "Forbidden"
+                
+        elif self.Request["URI"] == "/userdata":
+            pass
 
     def update_data(self):
-        pass
+        self.Response["Headers"]["Access-Control-Allow-Origin"] = "*"
+        db_access = DatabaseAccess()
+        if self.Request["URI"] == "/userlist":
+            username = self.Request["Headers"]["Username"]
+            password = self.Request["Headers"]["Password"]
+            result = db_access.add_new_user(username, password)
+            if result == db_access.SUCCESSFUL:
+                self.Response["StatusCode"] = "200"
+                self.Response["StatusLine"] = "OK"
+            elif result == db_access.USER_CONFLICT:
+                self.Response["StatusCode"] = "409"
+                self.Response["StatusLine"] = "Conflict"
+            elif result == db_access.USER_PASSWORD_INVALID:
+                self.Response["StatusCode"] = "406"
+                self.Response["StatusLine"] = "Not Acceptable"
+        else:
+            pass
+
 
     def process_request(self):
         if self.Request["Method"] == "GET":
             if self.debugMode:
                 print("Retrive request received")
             self.retrieve_data()
-            
+
         elif self.Request["Method"] == "POST":
             if self.debugMode:
                 print("Update request received")
             self.update_data()
-            
+
         elif self.Request["Method"] == "OPTIONS":
             self.Response["StatusCode"] = "200"
             self.Response["StatusLine"] = "OK"
             self.Response["Headers"]["Access-Control-Allow-Origin"] = "*"
-            self.Response["Headers"]["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
-            self.Response["Headers"]["Access-Control-Allow-Headers"] = "Content-Type, Username, Password"
+            self.Response["Headers"][
+                "Access-Control-Allow-Methods"
+            ] = "POST, GET, OPTIONS"
+            self.Response["Headers"][
+                "Access-Control-Allow-Headers"
+            ] = "Content-Type, Username, Password"
             self.Response["Headers"]["Access-Control-Max-Age"] = "86400"
             self.Response["Headers"]["Content-Length"] = "0"
             self.Response["Headers"]["Connection"] = "close"

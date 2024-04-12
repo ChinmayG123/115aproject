@@ -1,5 +1,17 @@
+import sqlite3
+
 class DatabaseAccess:
-    
+
+    DB_ERROR = -1
+    DB_EMPTY = ""
+        
+    SUCCESSFUL = 0
+    USER_NAME_NOT_EXIST = 1
+    USER_PASSWORD_INCORRECT = 2
+        
+    USER_CONFLICT = 1
+    USER_PASSWORD_INVALID = 2
+        
     def request_login(self, username, password):
         """
         This function checks the given username and password against the entries

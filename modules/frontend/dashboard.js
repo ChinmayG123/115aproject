@@ -67,7 +67,7 @@ function handleRegister() {
         .then(result => {
             if (result === 0) {
                 console.log('Register successful');
-                successMsg.textContent = 'Welcome Back';
+                successMsg.textContent = 'Welcome to VocabVenture';
                 // Proceed with the game or redirect to another page
             } else {
                 console.log('Register failed');
