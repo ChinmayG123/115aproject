@@ -94,24 +94,54 @@ class DatabaseAccess:
         - param2 status: The log in status (online or offline) as a boolean.
         - return: 0 for success, -1 for internal failure which will force client to logout.
         """
-        return 0
-    
-    def retrieve_user_data(self, username):
-        """
-        This function looks up for user's game progress (learned words, defeated boss, unlocked language, etc.). 
-
-        - param1 username: The username as a string.
-        - return: a string of user data for success, empty string for internal failure which will force client to logout.
-        """
-        data = "somedata"
-        return data
-    
-    #test main just for debugging purposes
-if __name__ == "__main__":
-    test = DatabaseAccess()
-    #test.add_new_user("testuser2", "addedthrucode") #uncomment this line if you want to try adding new users
-    success_code = test.request_login("testuser2", "addedthrucode")
-    print(success_code)
-
+         try:
+            user_ref = self.db.collection('users').document(username)
+            user_ref.update({'online_status': status})
+            return self.SUCCESSFUL  
         
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            return self.DB_ERROR 
     
+    def retrieve_user_data(self, username, language):
+    """
+    This function looks up for a user's game progress, such as learned words, defeated bosses, and unlocked languages.
+
+    - param1 username: The username as a string.
+    - param2 language: The language being learned, as a string.
+    - return: Dictionary of user data for success, empty dictionary for no data found, or DB_EMPTY for internal failure.
+    """
+        try:
+            progress_ref = self.db.collection('users').document(username).collection('progress').document(language)
+            progress_doc = progress_ref.get()
+            if progress_doc.exists:
+                learned_words = progress_doc.to_dict().get('learnedWords', {})  
+                return learned_words
+        
+        except Exception as e:
+             print(f"An error occurred: {e}")
+             return self.DB_EMPTY  
+
+    def learn_new_words(self, username, language, new_words):
+    """
+    Add new words to the user's learned list for a specified language.
+
+    :param username: The username of the user.
+    :param language: The language being learned.
+    :param new_words: List of words that the user has learned.
+    """
+    
+        try:
+            progress_ref = self.db.collection('users').document(username).collection('progress').document(language)
+            progress_doc = progress_ref.get()
+            if progress_doc.exists:
+                # Update the learned words list by adding new words
+                current_words = progress_doc.to_dict().get('learnedWords', {})
+                updated_words = {word: True for word in new_words if word not in current_words}
+                current_words.update(updated_words)
+                progress_ref.update({'learnedWords': current_words})
+                return self.SUCCESSFUL
+        
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            return self.DB_ERROR
