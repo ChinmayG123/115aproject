@@ -94,7 +94,7 @@ class DatabaseAccess:
         - param2 status: The log in status (online or offline) as a boolean.
         - return: 0 for success, -1 for internal failure which will force client to logout.
         """
-         try:
+        try:
             user_ref = self.db.collection('users').document(username)
             user_ref.update({'online_status': status})
             return self.SUCCESSFUL  
@@ -104,13 +104,13 @@ class DatabaseAccess:
             return self.DB_ERROR 
     
     def retrieve_user_data(self, username, language):
-    """
-    This function looks up for a user's game progress, such as learned words, defeated bosses, and unlocked languages.
+        """
+        This function looks up for a user's game progress, such as learned words, defeated bosses, and unlocked languages.
 
-    - param1 username: The username as a string.
-    - param2 language: The language being learned, as a string.
-    - return: Dictionary of user data for success, empty dictionary for no data found, or DB_EMPTY for internal failure.
-    """
+        - param1 username: The username as a string.
+        - param2 language: The language being learned, as a string.
+        - return: Dictionary of user data for success, empty dictionary for no data found, or DB_EMPTY for internal failure.
+        """
         try:
             progress_ref = self.db.collection('users').document(username).collection('progress').document(language)
             progress_doc = progress_ref.get()
@@ -123,13 +123,13 @@ class DatabaseAccess:
              return self.DB_EMPTY  
 
     def learn_new_words(self, username, language, new_words):
-    """
-    Add new words to the user's learned list for a specified language.
+        """
+        Add new words to the user's learned list for a specified language.
 
-    :param username: The username of the user.
-    :param language: The language being learned.
-    :param new_words: List of words that the user has learned.
-    """
+        :param username: The username of the user.
+        :param language: The language being learned.
+        :param new_words: List of words that the user has learned.
+        """
     
         try:
             progress_ref = self.db.collection('users').document(username).collection('progress').document(language)
