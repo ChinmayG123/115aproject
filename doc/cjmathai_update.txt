@@ -1,0 +1,6 @@
+4/14/2024
+Implemented two previously defined functions that would check the user's status and update it 
+if they were online. The next function retrieves the user's data to correctly match their progress
+(# of words they have learned, bosses defeated...). I also implemented a new function that will update 
+the collection of learned words the user has come across after they have learned them by speaking to an NPC. 
+Luckily Firebase allows for realtime updates which will help in both performance and debugging. 

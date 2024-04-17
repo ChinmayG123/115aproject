@@ -1,0 +1,8 @@
+2024/04/14:
+
+Created Firestore cloud database (chose the free version of Firebase), and configured service key as a .json file, which I have placed inside of cfg folder
+Created basic features, such as being able to create a user, and basic login verification
+Created users Collection on Firestore, and made each user have their own Document, which contains vital login info
+such as their password, and other fields which will be added later
+Firestore database can be found at: https://console.firebase.google.com/u/0/project/vocabventuredb/firestore/databases/-default-/data/
+Our team can track the status of our database in real time through link

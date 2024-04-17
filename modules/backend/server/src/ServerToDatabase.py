@@ -1,4 +1,6 @@
-import sqlite3
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import firestore
 
 class DatabaseAccess:
 
@@ -11,6 +13,18 @@ class DatabaseAccess:
         
     USER_CONFLICT = 1
     USER_PASSWORD_INVALID = 2
+
+
+    def __init__(self):
+        self.cred = credentials.Certificate('cfg/dbaccess.json')
+        firebase_admin.initialize_app(self.cred)
+
+        self.db = firestore.client()
+
+        #the collection we are under is the users collection on Firestore
+        self.collection_name = 'users'
+
+
         
     def request_login(self, username, password):
         """
@@ -23,7 +37,27 @@ class DatabaseAccess:
         - param2 password: The password as a string.
         - return: 0 for success, 1 for user not exits, 2 for incorrect password, -1 for internal failure.
         """
-        # Here, you would add your MongoDB access code
+        #obtain a reference to the respective document on Firestore containing the user data
+        user_ref = self.db.collection(self.collection_name).document(username)
+        user_doc = user_ref.get()
+
+        # If the document exists, compare the password
+        if user_doc.exists:
+            user_data = user_doc.to_dict()
+            if user_data['password'] == password:
+                # Passwords match
+                print("Passwords match!")
+                return 0
+            else:
+                # Passwords do not match
+                print("Passwords do not match, incorrect password")
+                return 2
+        else:
+            # Username not found, the user does not exist
+            print("You are not registered as a user, please create an account")
+            return 1
+
+
         return 0
 
     def add_new_user(self, username, password):
@@ -32,7 +66,25 @@ class DatabaseAccess:
         - param2 password: The password as a string.
         - return: 0 for success, 1 for user already exits, 2 for invalid password format, -1 for internal failure.
         """
-        return 0;
+        #passwords have to be strings, if not they are invalid passwords
+        if not isinstance(password, str):
+            print("Invalid password format, passwords need to be strings")
+            return 2
+        
+        #obtain reference to the document on Firestore
+        doc_ref = self.db.collection(self.collection_name).document(username)
+        doc = doc_ref.get()
+
+        #check if a document already exists, if so the user has already been registered
+        if doc.exists:
+            print(f"Document '{username}' already exists.")
+            return 1
+        #otherwise register the user
+        else:
+            doc_ref.set({"password":password})
+            print(f"New document '{username}' created.")
+            return 0
+        
 
     def update_user_status(self, username, status):
         """
@@ -42,14 +94,54 @@ class DatabaseAccess:
         - param2 status: The log in status (online or offline) as a boolean.
         - return: 0 for success, -1 for internal failure which will force client to logout.
         """
-        return 0
+        try:
+            user_ref = self.db.collection('users').document(username)
+            user_ref.update({'online_status': status})
+            return self.SUCCESSFUL  
+        
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            return self.DB_ERROR 
     
-    def retrieve_user_data(self, username):
+    def retrieve_user_data(self, username, language):
         """
-        This function looks up for user's game progress (learned words, defeated boss, unlocked language, etc.). 
+        This function looks up for a user's game progress, such as learned words, defeated bosses, and unlocked languages.
 
         - param1 username: The username as a string.
-        - return: a string of user data for success, empty string for internal failure which will force client to logout.
+        - param2 language: The language being learned, as a string.
+        - return: Dictionary of user data for success, empty dictionary for no data found, or DB_EMPTY for internal failure.
         """
-        data = "somedata"
-        return data
+        try:
+            progress_ref = self.db.collection('users').document(username).collection('progress').document(language)
+            progress_doc = progress_ref.get()
+            if progress_doc.exists:
+                learned_words = progress_doc.to_dict().get('learnedWords', {})  
+                return learned_words
+        
+        except Exception as e:
+             print(f"An error occurred: {e}")
+             return self.DB_EMPTY  
+
+    def learn_new_words(self, username, language, new_words):
+        """
+        Add new words to the user's learned list for a specified language.
+
+        :param username: The username of the user.
+        :param language: The language being learned.
+        :param new_words: List of words that the user has learned.
+        """
+    
+        try:
+            progress_ref = self.db.collection('users').document(username).collection('progress').document(language)
+            progress_doc = progress_ref.get()
+            if progress_doc.exists:
+                # Update the learned words list by adding new words
+                current_words = progress_doc.to_dict().get('learnedWords', {})
+                updated_words = {word: True for word in new_words if word not in current_words}
+                current_words.update(updated_words)
+                progress_ref.update({'learnedWords': current_words})
+                return self.SUCCESSFUL
+        
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            return self.DB_ERROR
