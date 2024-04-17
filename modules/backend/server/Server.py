@@ -1,6 +1,14 @@
+import os
 import socket
+from datetime import datetime
 from ServerToDatabase import DatabaseAccess
 
+script_path = os.path.abspath(__file__)
+server_dir_path = os.path.dirname(script_path)
+database_dir_path = os.path.dirname(server_dir_path) + "/database"
+print("Server program location: ", script_path)
+print("The server module is located in: ", server_dir_path)
+print("The database module is located in: ", database_dir_path)
 
 class Server:
     def __init__(self, client_socket, debug_mode=False):
@@ -36,7 +44,7 @@ class Server:
         self.Request["Body"] = lines[-1]
 
         if self.debugMode:
-            print("Parsed Request:\n", self.Request)
+            print(datetime.now(), " - Parsed Request:\n\n", self.Request)
 
     def compose_response(self):
 
@@ -53,7 +61,7 @@ class Server:
         )
 
         if self.debugMode:
-            print("\nComposed Response:\n", response)
+            print(datetime.now(), " - Composed Response:\n\n", response)
 
         return response
 
@@ -73,7 +81,7 @@ class Server:
 
     def retrieve_data(self):
         self.Response["Headers"]["Access-Control-Allow-Origin"] = "*"
-        db_access = DatabaseAccess()
+        db_access = DatabaseAccess(database_dir_path)
         if self.Request["URI"] == "/userlist":
             username = self.Request["Headers"]["Username"]
             password = self.Request["Headers"]["Password"]
@@ -94,7 +102,7 @@ class Server:
 
     def update_data(self):
         self.Response["Headers"]["Access-Control-Allow-Origin"] = "*"
-        db_access = DatabaseAccess()
+        db_access = DatabaseAccess(database_dir_path)
         if self.Request["URI"] == "/userlist":
             username = self.Request["Headers"]["Username"]
             password = self.Request["Headers"]["Password"]
@@ -165,7 +173,7 @@ class Server:
 
             elif state == "CLOSE":
                 self.socket.shutdown(socket.SHUT_RDWR)
-                self.socket.close()
+                # self.socket.close()
                 break
             else:  # invalid state
                 break

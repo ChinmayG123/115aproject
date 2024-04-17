@@ -15,10 +15,9 @@ class DatabaseAccess:
     USER_PASSWORD_INVALID = 2
 
 
-    def __init__(self):
-        self.cred = credentials.Certificate('cfg/dbaccess.json')
+    def __init__(self, script_path):
+        self.cred = credentials.Certificate(script_path + '/cfg/dbaccess.json')
         self.firebase_app  = firebase_admin.initialize_app(self.cred)
-
         self.db = firestore.client()
 
         #the collection we are under is the users collection on Firestore
