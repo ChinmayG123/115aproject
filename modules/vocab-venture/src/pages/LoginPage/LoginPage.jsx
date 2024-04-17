@@ -1,6 +1,5 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom/dist';
-
 const LoginPage = function() {
     const navigate = useNavigate();
     const goToMainPage =() => {navigate('/home')};
@@ -12,18 +11,20 @@ const LoginPage = function() {
                     <h1>Login</h1>
                     
                     <div className= "input-box"> {/*use className= instead of class= for jsx*/}
-                        <input type="text" placeholder= 'Username' required/>
+                        <input type="text" id = "username" placeholder= 'Username' required/>
                     </div>
                     <div className="input-box">
-                        <input type= "password" placeholder= 'Password' required />
+                        <input type= "password" id = "password" placeholder= 'Password' required />
                     </div>
-                    <button type= "submit">Login</button>
+                
+                    <button type= "submit" id= "submit-login">Login</button>
                     <p>
                         Don't have an account? <a href="/register">Register</a>
                     </p>
-                    <button type= "submit" onClick= {goToMainPage}>Back Home</button>
+                    <button type= "submit" id = "submit-mainpage" onClick= {goToMainPage}>Back Home</button>
 
                 </form>
+                
                 </div>
  
      );
