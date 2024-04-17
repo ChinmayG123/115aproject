@@ -17,8 +17,8 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
     } else if (loginContainer) {
-        document.getElementById('submit-login').addEventListener('click', handleLogin);
-
+        document.getElementById('submit-login-id').addEventListener('click', handleLogin);
+ 
     } else if (registerContainer) {
         document.getElementById('submit-register').addEventListener('click', handleRegister);
     }
@@ -38,13 +38,17 @@ function handleLogin() {
         .then(result => {
             if (result === 0) {
                 console.log('Login successful');
-                successMsg.textContent = 'Welcome Back';
-                errorMsg.textContent = '';
+                if (successMsg) successMsg.textContent = 'Welcome Back';
+                if (errorMsg) errorMsg.textContent = '';
+                // successMsg.textContent = 'Welcome Back';
+                // errorMsg.textContent = '';
                 // Proceed with the game or redirect to another page
             } else {
                 console.log('Login failed');
-                errorMsg.textContent = 'Login failed. Please check your username and password.';
-                successMsg.textContent = '';
+                if (errorMsg) errorMsg.textContent = 'Login failed. Please check your username and password.';
+                if (successMsg) successMsg.textContent = '';
+                // errorMsg.textContent = 'Login failed. Please check your username and password.';
+                // successMsg.textContent = '';
             }
         })
         .catch(error => {
@@ -67,11 +71,11 @@ function handleRegister() {
         .then(result => {
             if (result === 0) {
                 console.log('Register successful');
-                successMsg.textContent = 'Welcome to VocabVenture';
+                if (successMsg) successMsg.textContent = 'Welcome to VocabVenture';
                 // Proceed with the game or redirect to another page
             } else {
                 console.log('Register failed');
-                errorMsg.textContent = 'Register failed. Please check your username and password.';
+                if (errorMsg) errorMsg.textContent = 'Register failed. Please check your username and password.';
             }
         })
         .catch(error => {
