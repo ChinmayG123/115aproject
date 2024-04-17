@@ -1,6 +1,6 @@
 class GameClient {
     // Private fields
-    #HOST = '140.82.49.13';
+    #HOST = '149.28.199.169';
     #PORT = 8080;
 
     constructor() {

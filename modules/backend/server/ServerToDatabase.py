@@ -15,15 +15,18 @@ class DatabaseAccess:
     USER_PASSWORD_INVALID = 2
 
 
-    def __init__(self):
-        self.cred = credentials.Certificate('cfg/dbaccess.json')
-        firebase_admin.initialize_app(self.cred)
-
+    def __init__(self, script_path):
+        self.cred = credentials.Certificate(script_path + '/cfg/dbaccess.json')
+        self.firebase_app  = firebase_admin.initialize_app(self.cred)
         self.db = firestore.client()
 
         #the collection we are under is the users collection on Firestore
         self.collection_name = 'users'
 
+
+    def __del__(self):
+        # Clean up Firebase app on object destruction
+        firebase_admin.delete_app(self.firebase_app)
 
         
     def request_login(self, username, password):
@@ -57,8 +60,6 @@ class DatabaseAccess:
             print("You are not registered as a user, please create an account")
             return 1
 
-
-        return 0
 
     def add_new_user(self, username, password):
         """
