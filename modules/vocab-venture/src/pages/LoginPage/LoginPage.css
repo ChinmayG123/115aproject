@@ -1,0 +1,20 @@
+#username, #password, #submit-login-id, #new-username, #new-password, #submit-register-id{
+    width: 100%; /* Makes the input fields and button take up the full container width */
+    padding: 10px;
+    margin-bottom: 15px; /* Adds some space between the elements */
+    border: 1px solid #ccc; /* Example border */
+    border-radius: 5px; /* Rounds the corners */
+}
+
+
+/* Styles for message containers */
+#login-error-msg, #login-success-msg, #register-error-msg, #register-success-msg {
+    width: 100%; /* Aligns with other elements */
+    text-align: center; /* Centers text */
+    margin-bottom: 15px; /* Space before the button */
+}
+
+/* Remove the bottom margin from the last element to avoid extra space */
+#submit-login-id, #submit-register {
+    margin-bottom: 10;
+}
