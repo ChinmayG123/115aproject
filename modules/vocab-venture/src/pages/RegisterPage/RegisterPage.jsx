@@ -29,7 +29,7 @@ const RegisterPage = function() {
                     </div>
                     <button type= "button" id = "submit-register-id">Register</button>
                     <p>
-                        Already have an account? <a href="/register">Register</a>
+                        Already have an account? <a href="/login">Login</a>
                     </p>
                     <button type= "button" id = "submit-mainpage" onClick= {goToMainPage}>Back Home</button>
                 </form>

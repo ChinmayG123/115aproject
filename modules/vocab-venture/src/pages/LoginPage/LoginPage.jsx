@@ -1,7 +1,7 @@
 // import React from 'react';
+import './LoginPage.css';
 import React, { useEffect } from 'react'; // Import useEffect from react
 import { useNavigate } from 'react-router-dom/dist';
-
 
 const LoginPage = function() {
     const navigate = useNavigate();
@@ -13,11 +13,11 @@ const LoginPage = function() {
         return () => {
             document.getElementById('submit-login-id').removeEventListener('click', handleLogin);
         };
-    }, []);
+    }, );
     
     return(  
-        
             <div className='wrapper'>
+
                 <form action ="">
                     <h1>Login</h1>
                     

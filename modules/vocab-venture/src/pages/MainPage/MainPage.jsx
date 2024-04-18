@@ -3,7 +3,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom/dist';
 //let the register and login buttons go to different pages
-
 const MainPage = function() {
     const navigate = useNavigate();
     const goToLoginPage =() => {navigate('/login')};
@@ -13,6 +12,7 @@ const MainPage = function() {
             <div className='wrapper'>
                 <h1>Vocab Venture</h1>
                 <p>Learn words from different languages</p>
+                {/* idk how to put MainPageCat.png from assets to right here */}
                     <div id="front-container">
                         <h3>Get Started</h3>
                             <button id="login-button" onClick= {goToLoginPage}>Login</button>
