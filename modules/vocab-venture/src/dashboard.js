@@ -73,6 +73,9 @@ function handleRegister() {
                 console.log('Register successful');
                 if (successMsg) successMsg.textContent = 'Welcome to VocabVenture';
                 // Proceed with the game or redirect to another page
+            } else if (result === 409) {
+                console.log('Register failed - Username already exists');
+                if (errorMsg) errorMsg.textContent = 'Username already exists. Please choose a different username.';
             } else {
                 console.log('Register failed');
                 if (errorMsg) errorMsg.textContent = 'Register failed. Please check your username and password.';
