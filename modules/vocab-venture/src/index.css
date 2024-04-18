@@ -3,34 +3,45 @@
     padding: 0;
     box-sizing: border-box;
 }
+hr{
+    width:100%;
+    display: block;
+  height: 1px;
+  border: 0;
+  border-top: 2px solid #e6c2c0;
+  margin: 1em 0;
+  padding: 0;
 
+}
 .wrapper {
+    
     width: 420px;
     background: #fcf1dd;
     color: #c57b92;
     padding: 30px 40px;
-    border:2px solid #c57b92;
-    border-radius: 10px
+    border: 7px double #e6c2c0;
+    border-radius: 10px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 
 }
 
 .wrapper h1{
     /* opacity: 0; */
-    text-transform: capitalize;
+    text-transform: uppercase;
     text-align: center;
-    font-size: 50px;
-    font-weight: 300;
+    font-size: 37px;
+    font-weight: 300px;
     margin-bottom: 10px;
 }
 
 .wrapper p{
     text-align: center;
-
 }
 
 .wrapper h3{
     text-align: center;
-    margin-top: 40px;
     margin-bottom:10px;
     font-size: 25px;
 }
@@ -62,10 +73,12 @@ body {
     flex-direction: column;
     align-items: center;
     gap: 15px; /* Adds space between buttons/inputs */
-}
+    }
 
 button {
-    
+    font-family: inherit;
+    font-size: 1em;
+    text-transform: uppercase;
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -80,7 +93,6 @@ button {
 
 
 button, input {
-    padding: 10px;
     width: 100%; /* Set a fixed width for buttons and inputs */
 }
 

@@ -6,6 +6,9 @@
     border-radius: 5px; /* Rounds the corners */
 }
 
+label{
+    text-align: left;
+}
 
 /* Styles for message containers */
 #login-error-msg, #login-success-msg, #register-error-msg, #register-success-msg {

@@ -20,10 +20,13 @@ const RegisterPage = function() {
             <div className='wrapper'>
                 <form action ="">
                     <h1>Register</h1>
-                    
+
+                    <label>Username</label>
                     <div className= "input-box"> {/*use className= instead of class= for jsx*/}
                     <input type="text" id = "new-username" placeholder= 'Username' required/>
                     </div>
+
+                    <label>Password</label>
                     <div className="input-box">
                         <input type= "password" id = "new-password" placeholder= 'Password' required />
                     </div>
@@ -31,6 +34,8 @@ const RegisterPage = function() {
                     <p>
                         Already have an account? <a href="/login">Login</a>
                     </p>
+                    <hr/>
+
                     <button type= "button" id = "submit-mainpage" onClick= {goToMainPage}>Back Home</button>
                 </form>
             </div>
