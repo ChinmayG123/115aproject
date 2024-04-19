@@ -15,8 +15,6 @@
     opacity: .5;
     &:before {
       content: '';
-      // use the linear-gradient for the fading effect
-      // use a solid background color for a solid bar
       background: linear-gradient(to right, transparent, #818078, transparent);
       position: absolute;
       left: 0;
@@ -32,7 +30,6 @@
   
       padding: 0 .5em;
       line-height: 1.5em;
-      // this is really the only tricky part, you need to specify the background color of the container element...
       color: #818078;
       background-color: #fcfcfa;
     }
