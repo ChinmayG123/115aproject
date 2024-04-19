@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router-dom/dist';
 const LoginPage = function() {
     const navigate = useNavigate();
     const goToMainPage =() => {navigate('/home')};
-    const goToMap =() => {navigate('/map');}
     const goToLanguage =() => {navigate('/language');}
 
 
@@ -23,7 +22,7 @@ const LoginPage = function() {
                 handleLogin().then((result) => {
                     // Handle the result of the login attempt
                     if (result.status === 'success') {
-                        setLoginStatus('success');
+                        // setLoginStatus('success');
                         goToLanguage();
                     } else {
                         setLoginStatus('failed');

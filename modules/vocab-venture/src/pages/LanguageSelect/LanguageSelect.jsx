@@ -21,7 +21,7 @@ const LoginPage = function() {
         <div className='wrapper'>          
           <form action ="">
           <button type= "button" id= "submit-spanish" onClick = {goToMap}>Spanish</button>
-          <button type= "button" id= "submit-french">French</button>
+          <button type= "button" id= "submit-french" onClick = {goToMap}>French</button>
           <hr/>
                     <button type= "button" id = "submit-mainpage" onClick= {goToMainPage}>Back Home</button>
           </form>

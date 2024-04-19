@@ -1,22 +1,58 @@
 // import React from 'react';
-import React, { useEffect } from 'react'; // Import useEffect from react
+// import React, { useEffect } from 'react'; // Import useEffect from react
+import React, { useEffect, useState } from 'react';
+
 import { useNavigate } from 'react-router-dom/dist';
 
 const RegisterPage = function() {
     const navigate = useNavigate();
     const goToMainPage =() => {navigate('/home')};
-    
+
+    const goToLanguage =() => {navigate('/language');}
+
+
+
+    const [registerStatus, setRegisterStatus] = useState(null);
+    const [errorMsg, setErrorMsg] = useState('');
+
 
 
     useEffect(() => {
         const submitRegisterElement = document.getElementById('submit-register-id');
         if (submitRegisterElement) {
-            submitRegisterElement.addEventListener('click', handleRegister);
+            submitRegisterElement.addEventListener('click', () => {
+                handleRegister().then((result) => {
+                    // Handle the result of the login attempt
+                    if (result.status === 'success') {
+                        // setLoginStatus('success');
+                        goToLanguage();
+                    } else {
+                        setRegisterStatus('failed');
+                        setErrorMsg(result.message);
+                    }
+                }).catch((error) => {
+                    console.error('Register error:', error);
+                    setErrorMsg('An error occurred during register. Please try again.');
+                });
+            });
             return () => {
                 submitRegisterElement.removeEventListener('click', handleRegister);
             };
         }
     }, []);
+
+    
+
+
+    // useEffect(() => {
+    //     const submitRegisterElement = document.getElementById('submit-register-id');
+    //     if (submitRegisterElement) {
+    //         submitRegisterElement.addEventListener('click', handleRegister);
+    //         return () => {
+    //             submitRegisterElement.removeEventListener('click', handleRegister);
+    //         };
+    //     }
+    // }, []);
 
     
 
