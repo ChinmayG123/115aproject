@@ -79,6 +79,9 @@ const RegisterPage = function() {
                     <div className="input-box">
                         <input type= "password" id = "new-password" placeholder= 'Password' required />
                     </div>
+
+                    {errorMsg && <p className="error-msg">{errorMsg}</p>}<br></br>
+                    
                     <button type= "button" id = "submit-register-id">Register</button>
                     <p>
                         Already have an account? <a href="/login">Login</a>

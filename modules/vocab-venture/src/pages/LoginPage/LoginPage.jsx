@@ -73,6 +73,8 @@ const LoginPage = function() {
                         <input type="password" id="password" placeholder='Password' required autoComplete="current-password" />
 
                     </div>
+
+                    {errorMsg && <p className="error-msg">{errorMsg}</p>}<br></br>
                 
                     <button type= "button" id= "submit-login-id">Login</button>
 
@@ -81,7 +83,7 @@ const LoginPage = function() {
                     </p>
                     <hr/>
                     <button type= "button" id = "submit-mainpage" onClick= {goToMainPage}>Back Home</button>
-
+                    
                 </form>
                 
                 </div>
