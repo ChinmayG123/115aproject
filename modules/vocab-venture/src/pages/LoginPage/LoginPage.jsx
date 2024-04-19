@@ -1,22 +1,54 @@
 // import React from 'react';
 import './LoginPage.css';
-import React, { useEffect } from 'react'; // Import useEffect from react
+// import React, { useEffect } from 'react'; // Import useEffect from react
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom/dist';
 
 const LoginPage = function() {
     const navigate = useNavigate();
     const goToMainPage =() => {navigate('/home')};
+    const goToMap =() => {navigate('/map');}
+    const goToLanguage =() => {navigate('/language');}
+
+
+    const [loginStatus, setLoginStatus] = useState(null);
+    const [errorMsg, setErrorMsg] = useState('');
+
 
 
     useEffect(() => {
         const submitLoginElement = document.getElementById('submit-login-id');
         if (submitLoginElement) {
-            submitLoginElement.addEventListener('click', handleLogin);
+            submitLoginElement.addEventListener('click', () => {
+                handleLogin().then((result) => {
+                    // Handle the result of the login attempt
+                    if (result.status === 'success') {
+                        setLoginStatus('success');
+                        goToLanguage();
+                    } else {
+                        setLoginStatus('failed');
+                        setErrorMsg(result.message);
+                    }
+                }).catch((error) => {
+                    console.error('Login error:', error);
+                    setErrorMsg('An error occurred during login. Please try again.');
+                });
+            });
             return () => {
                 submitLoginElement.removeEventListener('click', handleLogin);
             };
         }
     }, []);
+
+    // useEffect(() => {
+    //     const submitLoginElement = document.getElementById('submit-login-id');
+    //     if (submitLoginElement) {
+    //         submitLoginElement.addEventListener('click', handleLogin);
+    //         return () => {
+    //             submitLoginElement.removeEventListener('click', handleLogin);
+    //         };
+    //     }
+    // }, []);
     
     
     // useEffect(() => {

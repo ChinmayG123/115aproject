@@ -7,6 +7,7 @@ import MainPage from "./pages/MainPage/MainPage";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import RegisterPage from "./pages/RegisterPage/RegisterPage";
 import MapPage from "./pages/MapPage/MapPage";
+import LanguagePage from "./pages/LanguageSelect/LanguageSelect";
 
 export default function App() {
   
@@ -19,6 +20,7 @@ export default function App() {
         <Route exact path= "/login" element={<LoginPage></LoginPage>}/>
         <Route exact path= "/register" element={<RegisterPage></RegisterPage>}/>
         <Route exact path= "/map" element={<MapPage></MapPage>}/>
+        <Route exact path= "/language" element={<LanguagePage></LanguagePage>}/>
 
 
         </Routes>

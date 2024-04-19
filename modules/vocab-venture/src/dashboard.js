@@ -24,11 +24,15 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
-function handleLogin() {
+// function handleLogin() {
+const handleLogin = async () => {
+
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
     const errorMsg = document.getElementById('login-error-msg');
     const successMsg = document.getElementById('login-success-msg');
+
+    // const result = await gameClient.validateUser(username, password);
 
     console.log('Submitting login...');
     console.log('Username:', username);
@@ -40,6 +44,7 @@ function handleLogin() {
                 console.log('Login successful');
                 if (successMsg) successMsg.textContent = 'Welcome Back';
                 if (errorMsg) errorMsg.textContent = '';
+                return { status: 'success' };
                 // successMsg.textContent = 'Welcome Back';
                 // errorMsg.textContent = '';
                 // Proceed with the game or redirect to another page
@@ -47,6 +52,7 @@ function handleLogin() {
                 console.log('Login failed');
                 if (errorMsg) errorMsg.textContent = 'Login failed. Please check your username and password.';
                 if (successMsg) successMsg.textContent = '';
+                return { status: 'failed', message: 'Login failed. Please check your username and password.' }; // Return a failed status
                 // errorMsg.textContent = 'Login failed. Please check your username and password.';
                 // successMsg.textContent = '';
             }
@@ -54,6 +60,8 @@ function handleLogin() {
         .catch(error => {
             console.error('Login error:', error);
             errorMsg.textContent = 'An error occurred during login. Please try again.';
+            return { status: 'error', message: 'An error occurred during login. Please try again.' }; // Return an error status
+
         });
 }
 
