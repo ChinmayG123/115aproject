@@ -6,7 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainPage from "./pages/MainPage/MainPage";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import RegisterPage from "./pages/RegisterPage/RegisterPage";
-
+import MapPage from "./pages/MapPage/MapPage";
 
 export default function App() {
   
@@ -18,6 +18,8 @@ export default function App() {
         <Route index element= {<MainPage></MainPage>}/>
         <Route exact path= "/login" element={<LoginPage></LoginPage>}/>
         <Route exact path= "/register" element={<RegisterPage></RegisterPage>}/>
+        <Route exact path= "/map" element={<MapPage></MapPage>}/>
+
 
         </Routes>
     </BrowserRouter>
