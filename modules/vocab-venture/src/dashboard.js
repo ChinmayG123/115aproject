@@ -73,7 +73,7 @@ function handleRegister() {
                 console.log('Register successful');
                 if (successMsg) successMsg.textContent = 'Welcome to VocabVenture';
                 // Proceed with the game or redirect to another page
-            } else if (result === 409) {
+            } else if (result === -1) {
                 console.log('Register failed - Username already exists');
                 if (errorMsg) errorMsg.textContent = 'Username already exists. Please choose a different username.';
             } else {

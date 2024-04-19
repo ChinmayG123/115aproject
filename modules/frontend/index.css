@@ -3,7 +3,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-image: url('asset/logo.PNG'); /* Path to your image */
+    background-image: url('asset/BkgrTest.PNG'); /* Path to your image */
     background-position: center; /* Center the background image */
     background-repeat: no-repeat; /* Do not repeat the image */
 

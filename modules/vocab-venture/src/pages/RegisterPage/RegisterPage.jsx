@@ -7,12 +7,25 @@ const RegisterPage = function() {
     const goToMainPage =() => {navigate('/home')};
     
 
+
     useEffect(() => {
-        document.getElementById('submit-register-id').addEventListener('click', handleRegister);
-        return () => {
-            document.getElementById('submit-register-id').removeEventListener('click', handleRegister);
-        };
+        const submitRegisterElement = document.getElementById('submit-register-id');
+        if (submitRegisterElement) {
+            submitRegisterElement.addEventListener('click', handleRegister);
+            return () => {
+                submitRegisterElement.removeEventListener('click', handleRegister);
+            };
+        }
     }, []);
+
+    
+
+    // useEffect(() => {
+    //     document.getElementById('submit-register-id').addEventListener('click', handleRegister);
+    //     return () => {
+    //         document.getElementById('submit-register-id').removeEventListener('click', handleRegister);
+    //     };
+    // }, []);
     
 
     return(  

@@ -18,7 +18,7 @@ class GameClient {
      *                               2 if access is forbidden, or
      *                              -1 for any other error or unknown status code.
      */
-
+ 
     async validateUser(username, password) {
         const options = {
             method: 'GET',

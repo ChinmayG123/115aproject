@@ -7,13 +7,24 @@ const LoginPage = function() {
     const navigate = useNavigate();
     const goToMainPage =() => {navigate('/home')};
 
-    
+
     useEffect(() => {
-        document.getElementById('submit-login-id').addEventListener('click', handleLogin);
-        return () => {
-            document.getElementById('submit-login-id').removeEventListener('click', handleLogin);
-        };
-    }, );
+        const submitLoginElement = document.getElementById('submit-login-id');
+        if (submitLoginElement) {
+            submitLoginElement.addEventListener('click', handleLogin);
+            return () => {
+                submitLoginElement.removeEventListener('click', handleLogin);
+            };
+        }
+    }, []);
+    
+    
+    // useEffect(() => {
+    //     document.getElementById('submit-login-id').addEventListener('click', handleLogin);
+    //     return () => {
+    //         document.getElementById('submit-login-id').removeEventListener('click', handleLogin);
+    //     };
+    // }, );
     
     return(  
             <div className='wrapper'>
