@@ -1,4 +1,5 @@
 import firebase_admin
+import os
 from firebase_admin import credentials
 from firebase_admin import firestore
 
@@ -83,9 +84,31 @@ class DatabaseAccess:
         #otherwise register the user
         else:
             doc_ref.set({"password":password})
+            doc_ref.update({"french": {}})
+            doc_ref.update({"spanish":{}})
             print(f"New document '{username}' created.")
             return 0
-        
+    
+    def update_language(self, username, language, learnedWord):
+        doc_ref = self.db.collection(self.collection_name).document(username)
+        doc = doc_ref.get()
+
+        if doc.exists:
+            field_value = doc.get(language)
+            #print("This is the type:", type(field_value))
+            field_value[learnedWord] = 1
+            doc_ref.update({language: field_value})
+            return self.SUCCESSFUL
+        else:
+            return self.USER_NAME_NOT_EXIST
+
+
+
+
+
+
+
+
 
     def update_user_status(self, username, status):
         """
@@ -146,3 +169,13 @@ class DatabaseAccess:
         except Exception as e:
             print(f"An error occurred: {e}")
             return self.DB_ERROR
+#main method just for debugging purposes
+if __name__ == '__main__':
+    script_path = os.path.abspath(__file__)
+    server_dir_path = os.path.dirname(script_path)
+    database_dir_path = os.path.dirname(server_dir_path) + "/database"
+    test = DatabaseAccess(database_dir_path)
+    first = test.add_new_user("LanguageUserTest4", "12345")
+    out = test.update_language("LanguageUserTest4","spanish", "spanishword4")
+    print(first)
+    print(out)
