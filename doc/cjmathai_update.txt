@@ -4,3 +4,8 @@ if they were online. The next function retrieves the user's data to correctly ma
 (# of words they have learned, bosses defeated...). I also implemented a new function that will update 
 the collection of learned words the user has come across after they have learned them by speaking to an NPC. 
 Luckily Firebase allows for realtime updates which will help in both performance and debugging. 
+
+4/20/2024
+Created the totalWords database on Firebase which consists of all the words that we will be incorporating
+into our game. Each document is named as the English word with two fields for French and Spanish that 
+correspond to the actual translation
