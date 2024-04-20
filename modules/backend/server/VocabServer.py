@@ -58,7 +58,7 @@ from Server import Server
 server_socket = None
 termination = False
 debug_mode = True
-
+active_users = set()
 
 def signal_handler(signum, frame):
     global termination

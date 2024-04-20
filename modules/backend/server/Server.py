@@ -1,3 +1,4 @@
+import json
 import os
 import socket
 from datetime import datetime
@@ -21,8 +22,8 @@ class Server:
             "Body": None,
         }
         self.Response = {
-            "StatusCode": None,
-            "StatusLine": None,
+            "StatusCode": '503',
+            "StatusLine": 'Service Unavailable',
             "Version": "HTTP/1.1",
             "Headers": {},
             "Body": "",
@@ -82,7 +83,8 @@ class Server:
     def retrieve_data(self):
         self.Response["Headers"]["Access-Control-Allow-Origin"] = "*"
         db_access = DatabaseAccess(database_dir_path)
-        if self.Request["URI"] == "/userlist":
+        
+        if self.Request["URI"] == "/userlist": # get user login result
             username = self.Request["Headers"]["Username"]
             password = self.Request["Headers"]["Password"]
             result = db_access.request_login(username, password)
@@ -96,9 +98,25 @@ class Server:
             elif result == db_access.USER_PASSWORD_INVALID:
                 self.Response["StatusCode"] = "403"
                 self.Response["StatusLine"] = "Forbidden"
-                
-        elif self.Request["URI"] == "/userdata":
-            pass
+            else: 
+                pass
+        elif self.Request["URI"] == "/progress": # get user learned words
+            username = self.Request["Headers"]["Username"]
+            language = self.Request["Headers"]["Game-Language"]
+            result = db_access.retrieve_user_data(username, language)
+            if isinstance(result, dict):  # Check if result is a dictionary
+                self.Response["Body"] = json.dumps(result)
+                self.Response["Headers"]["Content-Length"] = str(len(self.Response["Body"]))
+                self.Response["Headers"]["Content-Type"] = "application/json"
+                self.Response["StatusCode"] = "200"
+                self.Response["StatusLine"] = "OK"
+            elif isinstance(result, int):  # Handle error codes
+                if result == 1:
+                    self.Response["StatusCode"] = "403"
+                    self.Response["StatusLine"] = "Forbidden"
+                elif result == -1:
+                    self.Response["StatusCode"] = "500"
+                    self.Response["StatusLine"] = "Internal Server Error"
 
     def update_data(self):
         self.Response["Headers"]["Access-Control-Allow-Origin"] = "*"
@@ -140,7 +158,7 @@ class Server:
             ] = "POST, GET, OPTIONS"
             self.Response["Headers"][
                 "Access-Control-Allow-Headers"
-            ] = "Content-Type, Username, Password"
+            ] = "Content-Type, Content-Length, Username, Password, Game-Language"
             self.Response["Headers"]["Access-Control-Max-Age"] = "86400"
             self.Response["Headers"]["Content-Length"] = "0"
             self.Response["Headers"]["Connection"] = "close"
