@@ -1,4 +1,4 @@
-2024/04/09: 
+2024/04/09: major update
 Created a file structure. Created skeleton code for client/server functionalities and a login page. 
 The login page should pair with a dashboard program that calls client functions to decide whether to launch the game or reject user. The client has a function called validateUser(). This function will send an HTTP GET request to the server to check if the inputed Username does exist and Password is correct. 
 The server program should connect to MongoDB. The server will receive and parse HTTP request, and then send query to database, and send  HTTP response back to client based on the database connector's result. 
@@ -8,7 +8,7 @@ Implemented socket communication between client and server.
 Implemented client login/register functions. 
 Server multithreading complete.
 
-2024/04/11: 
+2024/04/11: major update
 Client to Server/Server to Client communication validated. 
 Server supported methods: GET, POST, OPTIONS. 
 Worked with Chinmay on the login/register webpage update. 
@@ -19,3 +19,14 @@ Purchased a Vultr VPS. Regular cloud compute. 1GB RAM. 1-core CPU. 25GB SSD.
 Server configured to run on Vultr VPS. Public IPv4 is 140.82.49.13. IPv6 is 2001:19f0:ac00:4fed:5400:04ff:fedb:e3b3. Port 8080 opened for connection. 
 Verified functionality with Ari. 
 Remote server is then closed for future developments. A running server costs money. 
+
+2024/04/16: major update
+Remote VPS starts today. It will remain open until further update. Data ran through from React frontent to Firebase backed. 
+Server's capability verified. May host frontend in next major update.  
+Added basic encryption to our database credentials.
+Server can now self configure the host machine to run the server program. 
+Backend developers should run VocabServer.py before doing database test. 
+
+2024/04/19:
+Changed VocabVenture's frontend API. New definitions for return values are documented in gameClient.js file. Frontend developers should revise their Implementation. 
+Implemented getUserDictionary(), please use it when open Dictionary Mode. Testing still underway, no promise for correctness. 
