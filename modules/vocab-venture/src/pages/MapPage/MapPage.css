@@ -155,7 +155,6 @@ body.mapbackground {
   position: absolute;
   top: -370px; 
   left: 160px; 
-  /* z-index: 1;  */
   width: 1000px;
   height: 1000px;
   transform: scale(1.1); 
@@ -192,6 +191,12 @@ body.mapbackground {
 }
 
 
+#dictionaryimg img:hover {
+  transform: scale(1.1); 
+}
+
+
+
 #menuimg {
   position: absolute;
   top: 422px; 
@@ -212,3 +217,9 @@ body.mapbackground {
   max-width: 300px;
   max-height: 300px;
 } 
+
+
+
+#menuimg img:hover {
+  transform: scale(1.1); 
+}
