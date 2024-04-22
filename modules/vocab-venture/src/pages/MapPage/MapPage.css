@@ -1,25 +1,3 @@
-/* #backgroundpic{
-    font-family: 'Popins', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-fond-smoothing: grayscale;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background-image: url('assets/MenuBG.png'); 
-  background-position: center; 
-  background-repeat: no-repeat; 
-
-  
-  position: relative;
-  width: 100%;
-  min-height: 100vh;
-  height: auto;
-  
-  background-size: cover;
-  font-family: 'roboto', sans-serif;
-} */
-
 
 body.mapbackground {
   font-family: 'Popins', sans-serif;
@@ -33,8 +11,6 @@ body.mapbackground {
   background-position: center; 
   background-repeat: no-repeat; 
 
-
-  
   position: absolute;
   top: 0;
   right: 0;
@@ -49,3 +25,190 @@ body.mapbackground {
   font-family: 'roboto', sans-serif;
 } 
 
+
+#schoolimg {
+  position: absolute;
+  top: 50px; /* Distance from the top */
+  left: 1000px; /* Distance from the left */
+  
+  border: none;  
+  background-color: transparent; 
+  padding: 0; 
+
+  width: 250px;
+  height: 250px;
+}
+
+#schoolimg img {
+  max-width: 300px;
+  max-height: 300px;
+}
+
+#schoolimg img:hover {
+  transform: scale(1.1); 
+}
+
+#artistimg {
+  position: absolute;
+  top: 380px; /* Distance from the top */
+  left: 1080px; /* Distance from the left */
+  
+  border: none;  
+  background-color: transparent; 
+  padding: 0; 
+
+  width: 180px;
+  height: 250px;
+}
+
+#artistimg img {
+  max-width: 300px;
+  max-height: 300px;
+}
+
+
+#artistimg img:hover {
+  transform: scale(1.1); 
+}
+
+
+#marketimg {
+  position: absolute;
+  top: 380px; /* Distance from the top */
+  left: 130px; /* Distance from the left */
+  
+  border: none;  
+  background-color: transparent; 
+  padding: 0; 
+
+
+  width: 240px;
+  height: 250px;
+
+}
+
+#marketimg img {
+  max-width: 300px;
+  max-height: 300px;
+}
+
+
+#marketimg img:hover {
+  transform: scale(1.1); 
+}
+
+
+#outskirtsimg {
+  position: absolute;
+  top: 50px; /* Distance from the top */
+  left: 550px; /* Distance from the left */
+  
+  border: none;  
+  background-color: transparent; 
+  padding: 0; 
+
+
+  width: 290px;
+  height: 270px;
+
+}
+
+#outskirtsimg img {
+  max-width: 300px;
+  max-height: 300px;
+}
+
+
+#outskirtsimg img:hover {
+  transform: scale(1.1); 
+}
+
+#tailorimg {
+  position: absolute;
+  top: 50px; /* Distance from the top */
+  left: 160px; /* Distance from the left */
+  
+  border: none;  
+  background-color: transparent; 
+  padding: 0; 
+
+
+  width: 280px;
+  height: 270px;
+
+}
+
+#tailorimg img {
+  max-width: 300px;
+  max-height: 300px;
+}
+
+
+#tailorimg img:hover {
+  transform: scale(1.1); 
+}
+
+
+
+
+#menubarimg {
+  position: absolute;
+  top: -370px; 
+  left: 160px; 
+  /* z-index: 1;  */
+  width: 1000px;
+  height: 1000px;
+  transform: scale(1.1); 
+  pointer-events: none; 
+}
+
+#menubarimg img {
+  max-width: 300px;
+  max-height: 300px;
+}
+
+
+
+
+#dictionaryimg {
+  position: absolute;
+  top: 460px; 
+  left: 450px; 
+  
+  border: none;  
+  background-color: transparent; 
+  padding: 0; 
+
+
+  width: 300px;
+  height: 225px;
+  transform: scale(0.5); 
+
+}
+
+#dictionaryimg img {
+  max-width: 300px;
+  max-height: 300px;
+}
+
+
+#menuimg {
+  position: absolute;
+  top: 422px; 
+  left: 620px; 
+  
+  border: none;  
+  background-color: transparent; 
+  padding: 0; 
+
+
+  width: 250px;
+  height: 310px;
+  transform: scale(0.4); 
+
+}
+
+#menuimg img {
+  max-width: 300px;
+  max-height: 300px;
+} 
