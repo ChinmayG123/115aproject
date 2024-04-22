@@ -48,7 +48,7 @@ class DatabaseAccess:
         # If the document exists, compare the password
         if user_doc.exists:
             user_data = user_doc.to_dict()
-            if user_data['password'] == password:
+            if isinstance(user_data, dict) and user_data['password'] == password:
                 # Passwords match
                 print("Passwords match!")
                 return 0
@@ -102,14 +102,6 @@ class DatabaseAccess:
         else:
             return self.USER_NAME_NOT_EXIST
 
-
-
-
-
-
-
-
-
     def update_user_status(self, username, status):
         """
         This function update the database about whether a user is online. 
@@ -133,7 +125,7 @@ class DatabaseAccess:
 
         - param1 username: The username as a string.
         - param2 language: The language being learned, as a string.
-        - return: Dictionary of user data for success, empty dictionary for no data found, or DB_EMPTY for internal failure.
+        - return: Dictionary of user data for success, None for internal failure.
         """
         try:
             progress_ref = self.db.collection('users').document(username).collection('progress').document(language)
@@ -141,11 +133,25 @@ class DatabaseAccess:
             if progress_doc.exists:
                 learned_words = progress_doc.to_dict().get('learnedWords', {})  
                 return learned_words
+            else:
+                print(f"No data exist for users/{username}/progress/{language}")
+                return None
         
         except Exception as e:
              print(f"An error occurred: {e}")
-             return self.DB_EMPTY  
+             return None
 
+    def update_user_dictionary(self, username, language, new_dict):
+        """
+        Advanced method to change a word's proficiency number to the user's learned list for a specified language.
+
+        - param username: The username of the user.
+        - param language: The language being learned.
+        - param new_dict: The dictionary contains all words to be altered with their key as new proficiency value. Create if word not learned. 
+        - return: true for success, false for failure
+        """
+        pass
+    
     def learn_new_words(self, username, language, new_words):
         """
         Add new words to the user's learned list for a specified language.
@@ -169,6 +175,18 @@ class DatabaseAccess:
         except Exception as e:
             print(f"An error occurred: {e}")
             return self.DB_ERROR
+        
+    def alter_proficiency(self, username, language, word, action):
+        """
+        Toggle a word's proficiency value by 1.
+
+        - param username: The username of the user.
+        - param language: The language being learned.
+        - param word: The word to be altered. 
+        - param action: can be 'up' or 'down'
+        """
+        pass
+    
 #main method just for debugging purposes
 if __name__ == '__main__':
     script_path = os.path.abspath(__file__)

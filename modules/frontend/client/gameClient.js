@@ -1,9 +1,17 @@
 /**
- * Class containing VocabVenture Client API. Each function creates a dedicated client. 
+ * Class containing VocabVenture Client API. Each function creates a dedicated client. Implemented functions:
+ * 
+ * validateUser(username, password);
+ * addNewUser(username, password);
+ * getUserDictionary(username, language);
+ * updateUserDictionary(username, language, word, proficiency = 5);
+ * learnNewWord(username, language, word);
+ * upProficiency(username, langauge, word);
+ * downProficiency(username, langauge, word);
  */
 class GameClient {
     // Private fields
-    #HOST = '149.28.199.169';
+    #HOST = '127.0.0.1';
     #PORT = 8080;
 
     constructor() {
@@ -83,22 +91,22 @@ class GameClient {
     }
 
     /**
-    * Retrieves a user's dictionary data by sending a GET request.
-    * This method is used to fetch language-specific data for a given user, which
-    * include records like a list of learned words.
-    *
-    * @param {string} username - The username to identify the user whose data is being requested.
-    * @param {string} language - The user's current language context (e.g., french, spanish).
-    *
-    * @returns {Promise<Object|null>} - A JSON object or null if the data cannot be retrieved,
-    *                                   which could occur due to invalid credentials, or internal server issues.
-    *                                   The function returns an object directly related to the language learning context,
-    *                                   such as a list of words, or a structured object containing language learning progress.
+     * Retrieves a user's dictionary data by sending a GET request.
+     * This method is used to fetch language-specific data for a given user, which
+     * include records like a list of learned words.
+     *
+     * @param {string} username - The username to identify the user whose data is being requested.
+     * @param {string} language - The user's current language context (e.g., french, spanish).
+     *
+     * @returns {Promise<Object|null>} - A JSON object or null if the data cannot be retrieved,
+     *                                   which could occur due to invalid credentials, or internal server issues.
+     *                                   The function returns an object directly related to the language learning context,
+     *                                   such as a list of words, or a structured object containing language learning progress.
 
-    * Possible Resolutions:
-    * - { apple: 5, banana: 3, pear: 1 } // Sample data format if successful.
-    * - null // If there is an error or data cannot be found.
-    */
+     * Possible Resolutions:
+     * - { apple: 5, banana: 3, pear: 1 } // Sample data format if successful.
+     * - null // If there is an error or data cannot be found.
+     */
     async getUserDictionary(username, language) {
         if (username.length === 0 || language.length === 0) {
             return null;
@@ -121,18 +129,18 @@ class GameClient {
     }
 
     /**
-    * Notify the server that a user has learned a new word.
-    * Use the proficiency parameter to change user's existing record
-    *
-    * @param {string} username - The username to identify the user whose data is being requested.
-    * @param {string} language - The user's current language context (e.g., french, spanish).
-    * @param {string} word -     The specific word to learn
-    * @param {number} [proficiency=5] - The number represent user's proficiency (1 - 10)
-    * @returns {Promise<number>} - A promise that resolves to:
-    *                               0 if the update is successful,
-    *                               1 if word not exist in database,
-    *                              -1 for any other error or unknown status code.
-    */
+     * Notify the server that a user has learned a new word.
+     * Use the proficiency parameter to change user's existing record
+     *
+     * @param {string} username - The username to identify the user whose data is being requested.
+     * @param {string} language - The user's current language context (e.g., french, spanish).
+     * @param {string} word -     The specific word to learn
+     * @param {number} [proficiency=5] - The number represent user's proficiency (1 - 10)
+     * @returns {Promise<number>} - A promise that resolves to:
+     *                               0 if the update is successful,
+     *                               1 if word not exist in database,
+     *                              -1 for any other error or unknown status code.
+     */
     async updateUserDictionary(username, language, word, proficiency = 5) {
         if (username.length === 0 || language.length === 0 || word.length === 0) {
             return -1;
@@ -145,6 +153,84 @@ class GameClient {
                 'Game-Language': language
             },
             body: JSON.stringify({ [word]: proficiency })
+        };
+        const response = await this.retrieveData(this.userProgress, options);
+        this.printDebug(response);
+        switch (response.status) {
+            case 200: case 201: return 0; // 200 OK, 201 Created
+            case 404: return 1; // 404 Not Found
+            default: return -1;
+        }
+    }
+    /**
+     * 
+     * @param {*} username 
+     * @param {*} language 
+     * @param {*} word 
+     * @returns {Promise<number>} - A promise that resolves to:
+     *                               0 if the update is successful,
+     *                               1 if word not exist in database,
+     *                              -1 for any other error or unknown status code.
+     */
+    async learnNewWord(username, language, word) {
+        if (username.length === 0 || language.length === 0 || word.length === 0) {
+            return -1;
+        }
+        const options = {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Username': username,
+                'Game-Language': language,
+                'Action': 'learn'
+            },
+            body: word
+        };
+        const response = await this.retrieveData(this.userProgress, options);
+        this.printDebug(response);
+        switch (response.status) {
+            case 200: case 201: return 0; // 200 OK, 201 Created
+            case 404: return 1; // 404 Not Found
+            default: return -1;
+        }
+    }
+
+    async upProficiency(username, langauge, word){
+        if (username.length === 0 || language.length === 0 || word.length === 0) {
+            return -1;
+        }
+        const options = {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Username': username,
+                'Game-Language': language,
+                'Action': 'up'
+            },
+            body: word
+        };
+        const response = await this.retrieveData(this.userProgress, options);
+        this.printDebug(response);
+        switch (response.status) {
+            case 200: case 201: return 0; // 200 OK, 201 Created
+            case 404: return 1; // 404 Not Found
+            default: return -1;
+        }
+    }
+
+    async downProficiency(username, langauge, word){
+        if (username.length === 0 || language.length === 0 || word.length === 0) {
+            return -1;
+        }
+        const options = {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Username': username,
+                'Game-Language': language,
+                'Action': 'down'
+            },
+            body: word
         };
         const response = await this.retrieveData(this.userProgress, options);
         this.printDebug(response);
@@ -190,4 +276,10 @@ class GameClient {
 
 }
 
-export default GameClient;
+// Check if the environment is Node.js (CommonJS)
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+    module.exports = GameClient;
+} else {
+    // If not Node.js, assign to global window object for the browser
+    window.GameClient = GameClient;
+}

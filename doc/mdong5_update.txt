@@ -21,7 +21,7 @@ Verified functionality with Ari.
 Remote server is then closed for future developments. A running server costs money. 
 
 2024/04/16: major update
-Remote VPS starts today. It will remain open until further update. Data ran through from React frontent to Firebase backed. 
+Remote VPS starts today. It will remain open until further update. Data ran through from React frontend to Firebase backend. 
 Server's capability verified. May host frontend in next major update.  
 Added basic encryption to our database credentials.
 Server can now self configure the host machine to run the server program. 
@@ -30,3 +30,12 @@ Backend developers should run VocabServer.py before doing database test.
 2024/04/19:
 Changed VocabVenture's frontend API. New definitions for return values are documented in gameClient.js file. Frontend developers should revise their Implementation. 
 Implemented getUserDictionary(), please use it when open Dictionary Mode. Testing still underway, no promise for correctness. 
+
+2024/04/21:
+Implemented API: 
+updateUserDictionary(username, language, word, proficiency = 5);
+learnNewWord(username, language, word);
+upProficiency(username, langauge, word);
+downProficiency(username, langauge, word);
+Updated server to support these functions. 
+Need to fix formatting in database to start testing. 

@@ -85,10 +85,11 @@ def delete_files_in_directory(directory):
 
 def worker(client_socket, address):
     thread_id = threading.current_thread().ident
-    server = Server(client_socket, debug_mode)
-    server.run()
+    server = Server(client_socket, active_users, debug_mode)
+    served_user = server.run()
     client_socket.close()
     if debug_mode:
+        print(datetime.now(), f" - Thread: {thread_id} served {served_user}")
         print(datetime.now(), f" - Thread: {thread_id} exit")
 
 
