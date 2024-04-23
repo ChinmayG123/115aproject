@@ -15,3 +15,8 @@ Added update_language functionality for ServerToDatabase.py, so user can now hav
 lists of french and spanish language words updated as a running dictionary
 Lists of French and Spanish words learned by the user are represented by two dictionaries,
 french and spanish respectively
+
+2024/04/23:
+
+Added alter_proficiency function, which allows for the adjustment of a user's proficiency of a certain word
+in a certain language. 
