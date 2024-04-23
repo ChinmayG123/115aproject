@@ -18,9 +18,11 @@ import dictionaryImage from '../../assets/DictionaryTab.png';
 import menuImage from '../../assets/MenuTab.png'; 
 
 import './MapPage.css';
+import DictionaryPopup from '../../components/dictionary/DictionaryPopup';
 
 
 const Map = function() {
+    const [buttonPopup, setButtonPopup] = useState(false);
 
     const navigate = useNavigate(); 
     const goToSchool =() => {navigate('/school');}
@@ -81,7 +83,7 @@ const Map = function() {
 
     return(  
         <body className = "mapbackground">
-
+            
             < form action ="">
                 <button type= "button" id= "schoolimg" onClick={goToSchool} onMouseEnter={handleSchoolMouseEnter} onMouseLeave={handleSchoolMouseLeave}>
                     <img src={isSchoolHovered ? schoolHLImage : schoolImage} />
@@ -104,9 +106,12 @@ const Map = function() {
                 </button>
 
 
-                <button type="button" id="dictionaryimg">
-                    <img src={dictionaryImage} />
+                <button type="button" id="dictionaryimg" onClick= {() => setButtonPopup(true)}> 
+                        <img src={dictionaryImage} />
+                        
                 </button>
+               
+                
 
                 <button type="button" id="menuimg" onClick={goToMenu}>
                     <img src={menuImage} />
@@ -116,8 +121,10 @@ const Map = function() {
                 
 
             </form>
+            <DictionaryPopup trigger = {buttonPopup} setTrigger={setButtonPopup}>
+              
+            </DictionaryPopup>
             
-
         </body>
 
      );
