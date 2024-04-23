@@ -7,11 +7,13 @@ import baseimg from '../../assets/dictionary-assets/DictionaryBaseFull.png'
 
 
 function DictionaryPopup (props) {
+  const goToMenu =() => {navigate('/home')};
+  
   return (props.trigger) ? (
     <div className= "popup">      
         <div className= "popup-inner">
           <div className= "button-row">
-            <button className= "button" id= "dictionary-menu-btn">
+            <button className= "button" id= "dictionary-menu-btn" onClick={goToMenu}>
               <img src={menuimg} /></button>
             <button className= "button" id= "dictionary-close-btn" onClick={() => props.setTrigger(false)}>
               <img src={closeimg} /></button>
@@ -19,7 +21,7 @@ function DictionaryPopup (props) {
           {props.children}
 
           <div className= "popup-pages">
-            
+
           </div>
           
 
