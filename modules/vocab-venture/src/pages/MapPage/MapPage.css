@@ -26,17 +26,44 @@ body.mapbackground {
 } 
 
 
+button[type="button"] img {
+  width: 20vw;
+  height: auto; /* Maintain aspect ratio */
+}
+
+
+
+
+
+/* Hover effect */
+button[type="button"]:hover img {
+  transform: scale(1.1);
+}
+
 #schoolimg {
+
   position: absolute;
-  top: 50px; /* Distance from the top */
-  left: 1000px; /* Distance from the left */
+  top: 25%; 
+  left: 80%;
+  transform: translate(-50%, -50%); 
+  
+  border: none;  
+  background-color: transparent; 
+  padding: 0; 
+
+  width: 17%;
+  height: 36%;
+
+  /* position: absolute;
+  top: 50px; 
+  left: 1000px; 
   
   border: none;  
   background-color: transparent; 
   padding: 0; 
 
   width: 250px;
-  height: 250px;
+  height: 250px; */
 }
 
 #schoolimg img {
@@ -49,16 +76,29 @@ body.mapbackground {
 }
 
 #artistimg {
+
   position: absolute;
-  top: 380px; /* Distance from the top */
-  left: 1080px; /* Distance from the left */
+  top: 75%; 
+  left: 82%;
+  transform: translate(-50%, -50%); 
+  
+  border: none;  
+  background-color: transparent; 
+  padding: 0; 
+
+  width: 10%;
+  height: 36%;
+
+  /* position: absolute;
+  top: 380px; 
+  left: 1080px; 
   
   border: none;  
   background-color: transparent; 
   padding: 0; 
 
   width: 180px;
-  height: 250px;
+  height: 250px; */
 }
 
 #artistimg img {
@@ -73,17 +113,30 @@ body.mapbackground {
 
 
 #marketimg {
+
   position: absolute;
-  top: 380px; /* Distance from the top */
-  left: 130px; /* Distance from the left */
+  top: 75%; 
+  left: 15%;
+  transform: translate(-50%, -50%); 
   
   border: none;  
   background-color: transparent; 
   padding: 0; 
 
+  width: 15%;
+  height: 35%;
+
+  
+  /* position: absolute;
+  top: 380px; 
+  left: 130px; 
+  
+  border: none;  
+  background-color: transparent; 
+  padding: 0; 
 
   width: 240px;
-  height: 250px;
+  height: 250px; */
 
 }
 
@@ -99,9 +152,22 @@ body.mapbackground {
 
 
 #outskirtsimg {
+
   position: absolute;
-  top: 50px; /* Distance from the top */
-  left: 550px; /* Distance from the left */
+  top: 20%; 
+  left: 47%;
+  transform: translate(-50%, -50%); 
+  
+  border: none;  
+  background-color: transparent; 
+  padding: 0; 
+
+  width: 20%;
+  height: 40%;
+  
+  /* position: absolute;
+  top: 50px;
+  left: 550px; 
   
   border: none;  
   background-color: transparent; 
@@ -109,7 +175,7 @@ body.mapbackground {
 
 
   width: 290px;
-  height: 270px;
+  height: 270px; */
 
 }
 
@@ -124,9 +190,23 @@ body.mapbackground {
 }
 
 #tailorimg {
+
   position: absolute;
-  top: 50px; /* Distance from the top */
-  left: 160px; /* Distance from the left */
+  top: 25%; 
+  left: 20%;
+  transform: translate(-50%, -50%); 
+  
+  border: none;  
+  background-color: transparent; 
+  padding: 0; 
+
+  width: 20%;
+  height: 40%;
+
+
+  /* position: absolute;
+  top: 50px; 
+  left: 160px; 
   
   border: none;  
   background-color: transparent; 
@@ -134,7 +214,7 @@ body.mapbackground {
 
 
   width: 280px;
-  height: 270px;
+  height: 270px; */
 
 }
 
@@ -165,23 +245,40 @@ body.mapbackground {
   max-width: 300px;
   max-height: 300px;
 }
+/* 
 
+#menubarimg {
+  position: absolute;
+  top: 28%; 
+  left: 35%; 
+  width: 20vw; 
+  height: auto; 
+  transform: scale(5); 
+  pointer-events: none; 
+  z-index: 999;
+}
+
+#menubarimg img {
+  max-width: 100%; 
+  height: auto; 
+} */
 
 
 
 #dictionaryimg {
   position: absolute;
-  top: 460px; 
-  left: 450px; 
+  top: 68%; 
+  left: 32%; 
   
   border: none;  
   background-color: transparent; 
   padding: 0; 
 
 
-  width: 300px;
-  height: 225px;
+  width: 20%;
+  height: 32%;
   transform: scale(0.5); 
+
 
 }
 
@@ -198,17 +295,19 @@ body.mapbackground {
 
 
 #menuimg {
+
+
   position: absolute;
-  top: 422px; 
-  left: 620px; 
+  top: 62%; 
+  left: 42%; 
   
   border: none;  
   background-color: transparent; 
   padding: 0; 
 
 
-  width: 250px;
-  height: 310px;
+  width: 20%;
+  height: 46%;
   transform: scale(0.4); 
 
 }
