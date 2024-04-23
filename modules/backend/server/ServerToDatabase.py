@@ -185,15 +185,33 @@ class DatabaseAccess:
         - param word: The word to be altered. 
         - param action: can be 'up' or 'down'
         """
-        pass
+
+        #for ease of functionality we can make action equal to 1 or -1 for increment
+        #or decrement respectively, and just append that value to the current proficiency
+        #level
+        doc_ref = self.db.collection(self.collection_name).document(username)
+        doc = doc_ref.get()
+        if doc.exists:
+            field_value = doc.get(language)
+            #print("This is the type:", type(field_value))
+            field_value[word] = field_value[word] + action
+            doc_ref.update({language: field_value})
+            return self.SUCCESSFUL
+        else:
+            return self.USER_NAME_NOT_EXIST
     
 #main method just for debugging purposes
 if __name__ == '__main__':
     script_path = os.path.abspath(__file__)
     server_dir_path = os.path.dirname(script_path)
+    print("This is the directory path:", os.path.dirname(server_dir_path))
     database_dir_path = os.path.dirname(server_dir_path) + "/database"
     test = DatabaseAccess(database_dir_path)
     first = test.add_new_user("LanguageUserTest4", "12345")
     out = test.update_language("LanguageUserTest4","spanish", "spanishword4")
+    out2 = test.alter_proficiency("LanguageUserTest4", 'spanish', 'spanishword4', 1)
+    out3 = test.alter_proficiency("LanguageUserTest4", 'spanish', 'spanishword3', -1)
     print(first)
     print(out)
+    print(out2)
+    print(out3)
