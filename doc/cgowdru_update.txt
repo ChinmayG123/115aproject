@@ -1,0 +1,48 @@
+04/11/2024:
+
+Updated the login ui to work with the server that Mingwei created.
+Touched up the login ui to look better.
+
+04/17/2024:
+
+Got the new react jsx files to work with the server created.
+
+04/18/2024:
+
+Got the react jsx files to only enter the program if the login values are right and if not, it doesn't enter.
+Got the error messages to pop up as well.
+Access the dashboard and gameclient functions to check if the login and register values are right
+Move from each page to select language and to the map page
+
+04/22/2024:
+
+Created the map page so when the user clicks on a category it will go to that category's page
+these categories are images and buttons
+
+04/23/2024:
+
+I made sure when the browser is resized, the buttons are also resized.
+
+
+Created Firestore cloud database (chose the free version of Firebase), and configured service key as a .json file, which I have placed inside of cfg folder
+Created basic features, such as being able to create a user, and basic login verification
+Created users Collection on Firestore, and made each user have their own Document, which contains vital login info
+such as their password, and other fields which will be added later
+Firestore database can be found at: https://console.firebase.google.com/u/0/project/vocabventuredb/firestore/databases/-default-/data/
+Our team can track the status of our database in real time through link
+
+2024/04/18:
+
+Added two new fields for users, french and spanish, which are dictionaries which hold
+the french and spanish words learned by the user respectively
+Added update_language functionality for ServerToDatabase.py, so user can now have their 
+lists of french and spanish language words updated as a running dictionary
+Lists of French and Spanish words learned by the user are represented by two dictionaries,
+french and spanish respectively
+
+2024/04/23:
+
+Added alter_proficiency function, which allows for the adjustment of a user's proficiency of a certain word
+in a certain language. 
+Added small fixes, such as setting default proficiency to 5 and setting lower and upper bounds
+for proficiency. 
