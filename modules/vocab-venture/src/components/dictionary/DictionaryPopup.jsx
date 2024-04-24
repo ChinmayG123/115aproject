@@ -26,9 +26,6 @@ function DictionaryPopup (props) {
               <img src={menuimg} /></button>
             <button className= "button" id= "dictionary-close-btn" onClick={() => props.setTrigger(false)}>
               <img src={closeimg} /></button>
-
-              
-
             
           </div>
 

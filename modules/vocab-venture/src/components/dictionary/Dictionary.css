@@ -40,6 +40,9 @@
     padding: 0; 
   }
 
+#dictionary-menu-btn img:hover {
+  transform: scale(1.1); 
+}
 
   #dictionary-close-btn{
     width:15%;
@@ -49,6 +52,12 @@
     background-color: transparent; 
     padding: 0; 
 } 
+
+
+#dictionary-close-btn img:hover {
+  transform: scale(1.1); 
+}
+
 
 #next-page-btn{
   position: absolute;
