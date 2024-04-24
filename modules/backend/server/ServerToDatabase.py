@@ -143,30 +143,6 @@ class DatabaseAccess:
              print(f"An error occurred: {e}")
              return None
 
-    def learn_new_words(self, username, language, word_id):
-    """
-    Add an English word to the user's learned lists for the specified language (French or Spanish).
-
-    :param username: The username of the user.
-    :param language: The language being learned ('french' or 'spanish').
-    :param word_id: The document ID from the 'totalWords' collection for the word to be learned.
-    """
-    try:
-        # Reference to the total words document
-        total_word_ref = self.db.collection('totalWords').document(word_id)
-        total_word_doc = total_word_ref.get()
-
-        # Get the user document from the users collection
-        user_ref = self.db.collection('users').document(username)
-        user_doc = user_ref.get()
-
-        user_ref.update({f"{language}.{word_id}: 5"})  
-        return self.SUCCESSFUL
-    
-    except Exception as e:
-        print(f"An error occurred: {e}")
-        return self.DB_ERROR
-
 
     def update_user_dictionary(self, username, language, new_dict):
         """
@@ -178,43 +154,6 @@ class DatabaseAccess:
         - return: true for success, false for failure
         """
         pass
-    '''
-    def learn_new_words(self, username, word_id):
-        """
-    Add a new word to the user's learned lists for both French and Spanish based on the language they learned.
-    Assumes that the 'totalWords' collection contains documents with word translations for both languages.
-
-    :param username: The username of the user.
-    :param word_id: The document ID from the 'totalWords' collection for the word to be learned.
-    """
-
-    try:
-        # Reference to the total words document
-        total_word_ref = self.db.collection('totalWords').document(word_id)
-        total_word_doc = total_word_ref.get()
-
-        word_data = total_word_doc.to_dict()
-        french_word = word_data.get('french')
-        spanish_word = word_data.get('spanish')
-
-        user_ref = self.db.collection('users').document(username)
-        user_doc = user_ref.get()
-
-        updates = {}
-        if french_word:
-            updates[f"french.{french_word}"] = True  
-        if spanish_word:
-            updates[f"spanish.{spanish_word}"] = True 
-
-        if updates:
-            user_ref.update(updates)
-
-        return self.SUCCESSFUL
-    
-    except Exception as e:
-        print(f"An error occurred: {e}")
-        return self.DB_ERROR
-    '''
     def alter_proficiency(self, username, language, word, action):
         """
         Toggle a word's proficiency value by 1.
@@ -283,6 +222,7 @@ if __name__ == '__main__':
 
     first = test.add_new_user("TestApril23", "123456")
     out = test.update_language("TestApril23","spanish", "spanishword4")
+    out = test.update_language("TestApril23","spanish", "spanishword5")
     out2 = test.calculate_progress("TestApril23", "spanish")
    #out2 = test.alter_proficiency("LanguageUserTest4", 'spanish', 'spanishword4', 1)
     #out3 = test.alter_proficiency("LanguageUserTest4", 'spanish', 'spanishword3', -1)
