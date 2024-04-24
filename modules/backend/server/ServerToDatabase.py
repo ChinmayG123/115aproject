@@ -172,10 +172,6 @@ class DatabaseAccess:
         user_ref = self.db.collection('users').document(username)
         user_doc = user_ref.get()
 
-        if not user_doc.exists:
-            print(f"The user with username {username} does not exist.")
-            return self.DB_ERROR
-
         updates = {}
         if french_word:
             updates[f"french.{french_word}"] = True  
