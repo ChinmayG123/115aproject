@@ -39,3 +39,8 @@ upProficiency(username, langauge, word);
 downProficiency(username, langauge, word);
 Updated server to support these functions. 
 Need to fix formatting in database to start testing. 
+
+2024/04/23:
+Tweaked server Implementation for new database access functions. 
+Conducted a few tests. 
+Supported learning and proficiency value toggling. 

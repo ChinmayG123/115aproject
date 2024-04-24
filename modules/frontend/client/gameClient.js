@@ -195,7 +195,7 @@ class GameClient {
         }
     }
 
-    async upProficiency(username, langauge, word){
+    async upProficiency(username, language, word){
         if (username.length === 0 || language.length === 0 || word.length === 0) {
             return -1;
         }
@@ -205,7 +205,7 @@ class GameClient {
                 'Content-Type': 'application/json',
                 'Username': username,
                 'Game-Language': language,
-                'Action': 'up'
+                'Action': 'proficiency up'
             },
             body: word
         };
@@ -228,7 +228,7 @@ class GameClient {
                 'Content-Type': 'application/json',
                 'Username': username,
                 'Game-Language': language,
-                'Action': 'down'
+                'Action': 'proficiency down'
             },
             body: word
         };
@@ -272,6 +272,7 @@ class GameClient {
         response.headers.forEach((value, key) => {
             console.log(`${key}: ${value}`);
         });
+        console.log(response)
     }
 
 }

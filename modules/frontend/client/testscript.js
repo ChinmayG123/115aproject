@@ -7,10 +7,39 @@ async function testGetUserDictionary() {
     const client = new GameClient();
     try {
         const result = await client.getUserDictionary(username, language);
-        console.log('Test result:', result);
+        console.log('testGetUserDictionary() result:', result);
     } catch (error) {
         console.error('Error during test:', error);
     }
 }
 
-testGetUserDictionary();
+async function testlearnNewWord(){
+    const username = "TestApril23";
+    const language = "spanish";
+    const new_word = "school"
+    const client = new GameClient();
+    try {
+        const result = await client.learnNewWord(username, language, new_word);
+        console.log('testlearnNewWord()\'s result:', result);
+    } catch (error) {
+        console.error('Error during test:', error);
+    }
+
+}
+
+async function testupProficiency(){
+    const username = "TestApril232ndUser";
+    const language = "spanish";
+    const word = "airport"
+    const client = new GameClient();
+    try {
+        const result = await client.upProficiency(username, language, word);
+        console.log('testupProficiency()\'s result:', result);
+    } catch (error) {
+        console.error('Error during test:', error);
+    }
+}
+
+//testGetUserDictionary();
+//testlearnNewWord();
+testupProficiency();

@@ -195,16 +195,16 @@ class Server:
             if action == 'learn':
                 self.toggle_learn(self.username)
             elif action == 'proficiency up':
-                pass
+                self.toggle_proficiency(self.username, 1)
             elif action == 'proficiency down':
-                pass
+                self.toggle_proficiency(self.username, -1)
 
     def toggle_learn(self, username):
         db_access = DatabaseAccess(database_dir_path)
         language = self.Request["Headers"]["Game-Language"]
         new_words = str(self.Request["Body"])
         result = db_access.learn_new_word(username, language, new_words)
-        if result:
+        if result == db_access.SUCCESSFUL:
             self.Response["StatusCode"] = "200"
             self.Response["StatusLine"] = "OK"
         else:
@@ -212,6 +212,19 @@ class Server:
             self.Response["StatusLine"] = "Internal Server Error"
             self.Response["Body"] = "learn_new_words() failed"
 
+    def toggle_proficiency(self, username, change):
+        db_access = DatabaseAccess(database_dir_path)
+        language = self.Request["Headers"]["Game-Language"]
+        word = str(self.Request["Body"])
+        result = db_access.alter_proficiency(username, language, word, change)
+        if result == db_access.SUCCESSFUL:
+            self.Response["StatusCode"] = "200"
+            self.Response["StatusLine"] = "OK"
+        else:
+            self.Response["StatusCode"] = "500"
+            self.Response["StatusLine"] = "Internal Server Error"
+            self.Response["Body"] = "alter_proficiency() failed"
+            
     def process_request(self):
         if self.Request["Method"] == "GET":
             if self.debugMode:
