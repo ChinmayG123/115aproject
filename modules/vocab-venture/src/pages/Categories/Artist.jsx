@@ -19,8 +19,11 @@ const Artist = function() {
                 <img id = "npcimg" src={npcimg} />
             </div>
             <img id= "easelimg" src={easel}></img>
+            <div className= "textdiv">
+                <input type="text" className = "learnInputBox" placeholder='text'/>
+            </div>
         </div>
- 
+    
      );
 };
 

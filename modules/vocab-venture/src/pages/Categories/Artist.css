@@ -5,10 +5,7 @@
     left: 0px;
   
     position: absolute;
-    border-style: solid;
-    border-color: rgb(94, 166, 229);
-    border-width: 3px;
-
+    
     width:100%;
     height:100%;
     display:flex;
@@ -19,16 +16,10 @@
     width: 100%;
     height: 100vh
 }
-#learnBG{
-    border-style: solid;
-    border-color: rgb(226, 56, 164);
-    border-width: 3px;
-}
+
 .learn-content{
     position:relative;
-    border-style: solid;
-    border-color: aliceblue;
-    border-width: 3px;
+   
 
     width:50vw;
     height:85vh;
@@ -37,10 +28,9 @@
     justify-content: center;
 }
 #npcimg{
+    
     position:absolute;
-    border-style: solid;
-    border-color: rgb(28, 231, 167);
-    border-width: 3px;
+    
     width:38vw;
     display:flex;
     left: 10%;
@@ -50,9 +40,7 @@
 }
 #npcTextbox{
     position: absolute;
-    border-style: solid;
-    border-color: rgb(231, 109, 28);
-    border-width: 3px;
+    
     width: 40vw;
     
 }
@@ -60,12 +48,7 @@
 .npc-content{
     padding-top: 5px;
     position:relative;
-    border-style: solid;
-    border-color: rgb(101, 44, 255);
-    border-width: 3px;
-
     width:60vw;
-
     display:flex;
     justify-content: flex-start;
 
@@ -74,9 +57,33 @@
 #easelimg{
     position:absolute;
     height:100%;
-    border-style: solid;
-    border-color: rgb(69, 181, 112);
-    border-width: 3px;  
-    left:90%
+    
+    left:84%
+    
 
+}
+
+.textdiv{
+    position:absolute;
+    
+    width: 100%;
+    height: 15vh;
+
+    margin-top: 85vh;
+    padding-top:5px;
+    padding-left: 25%;
+    padding-right: 25%;
+    padding-bottom: 5px;
+
+    background-color: rgba(255, 215, 177, 0.4);
+    
+}
+
+input.learnInputBox{
+    height: 70%;
+    background-color: antiquewhite;
+    border-color: rgb(239, 202, 157);
+    border-radius:3px;
+    border-style: solid;
+    padding-left: 10px;
 }
