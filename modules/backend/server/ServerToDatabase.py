@@ -96,7 +96,7 @@ class DatabaseAccess:
         if doc.exists:
             field_value = doc.get(language)
             #print("This is the type:", type(field_value))
-            field_value[learnedWord] = 1
+            field_value[learnedWord] = 5
             doc_ref.update({language: field_value})
             return self.SUCCESSFUL
         else:
@@ -194,7 +194,10 @@ class DatabaseAccess:
         if doc.exists:
             field_value = doc.get(language)
             #print("This is the type:", type(field_value))
-            field_value[word] = field_value[word] + action
+            
+            #only update if it is within the bounds
+            if 0 <= (field_value[word] + action) <= 10:
+                field_value[word] = field_value[word] + action
             doc_ref.update({language: field_value})
             return self.SUCCESSFUL
         else:

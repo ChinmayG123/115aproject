@@ -20,3 +20,5 @@ french and spanish respectively
 
 Added alter_proficiency function, which allows for the adjustment of a user's proficiency of a certain word
 in a certain language. 
+Added small fixes, such as setting default proficiency to 5 and setting lower and upper bounds
+for proficiency. 
