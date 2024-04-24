@@ -153,7 +153,7 @@ class DatabaseAccess:
         - return: true for success, false for failure
         """
         pass
-    
+    '''
     def learn_new_words(self, username, word_id):
     """
     Add a new word to the user's learned lists for both French and Spanish based on the language they learned.
@@ -162,6 +162,7 @@ class DatabaseAccess:
     :param username: The username of the user.
     :param word_id: The document ID from the 'totalWords' collection for the word to be learned.
     """
+
     try:
         # Reference to the total words document
         total_word_ref = self.db.collection('totalWords').document(word_id)
@@ -188,7 +189,7 @@ class DatabaseAccess:
     except Exception as e:
         print(f"An error occurred: {e}")
         return self.DB_ERROR
-        
+    '''
     def alter_proficiency(self, username, language, word, action):
         """
         Toggle a word's proficiency value by 1.
@@ -222,7 +223,7 @@ class DatabaseAccess:
 
         - param username: The username of the user.
         - param language: The language being learned.
-        
+
         """
           
         collection_ref = self.db.collection(self.collection_name)
