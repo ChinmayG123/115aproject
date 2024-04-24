@@ -143,6 +143,31 @@ class DatabaseAccess:
              print(f"An error occurred: {e}")
              return None
 
+    def learn_new_words(self, username, language, word_id):
+    """
+    Add an English word to the user's learned lists for the specified language (French or Spanish).
+
+    :param username: The username of the user.
+    :param language: The language being learned ('french' or 'spanish').
+    :param word_id: The document ID from the 'totalWords' collection for the word to be learned.
+    """
+    try:
+        # Reference to the total words document
+        total_word_ref = self.db.collection('totalWords').document(word_id)
+        total_word_doc = total_word_ref.get()
+
+        # Get the user document from the users collection
+        user_ref = self.db.collection('users').document(username)
+        user_doc = user_ref.get()
+
+        user_ref.update({f"{language}.{word_id}: 5"})  
+        return self.SUCCESSFUL
+    
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return self.DB_ERROR
+
+
     def update_user_dictionary(self, username, language, new_dict):
         """
         Advanced method to change a word's proficiency number to the user's learned list for a specified language.
@@ -155,7 +180,7 @@ class DatabaseAccess:
         pass
     '''
     def learn_new_words(self, username, word_id):
-    """
+        """
     Add a new word to the user's learned lists for both French and Spanish based on the language they learned.
     Assumes that the 'totalWords' collection contains documents with word translations for both languages.
 
