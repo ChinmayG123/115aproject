@@ -152,29 +152,44 @@ class DatabaseAccess:
         """
         pass
     
-    def learn_new_words(self, username, language, new_words):
-        """
-        Add new words to the user's learned list for a specified language.
+    def learn_new_words(self, username, word_id):
+    """
+    Add a new word to the user's learned lists for both French and Spanish based on the language they learned.
+    Assumes that the 'totalWords' collection contains documents with word translations for both languages.
 
-        :param username: The username of the user.
-        :param language: The language being learned.
-        :param new_words: List of words that the user has learned.
-        """
-    
-        try:
-            progress_ref = self.db.collection('users').document(username).collection('progress').document(language)
-            progress_doc = progress_ref.get()
-            if progress_doc.exists:
-                # Update the learned words list by adding new words
-                current_words = progress_doc.to_dict().get('learnedWords', {})
-                updated_words = {word: True for word in new_words if word not in current_words}
-                current_words.update(updated_words)
-                progress_ref.update({'learnedWords': current_words})
-                return self.SUCCESSFUL
-        
-        except Exception as e:
-            print(f"An error occurred: {e}")
+    :param username: The username of the user.
+    :param word_id: The document ID from the 'totalWords' collection for the word to be learned.
+    """
+    try:
+        # Reference to the total words document
+        total_word_ref = self.db.collection('totalWords').document(word_id)
+        total_word_doc = total_word_ref.get()
+
+        word_data = total_word_doc.to_dict()
+        french_word = word_data.get('french')
+        spanish_word = word_data.get('spanish')
+
+        user_ref = self.db.collection('users').document(username)
+        user_doc = user_ref.get()
+
+        if not user_doc.exists:
+            print(f"The user with username {username} does not exist.")
             return self.DB_ERROR
+
+        updates = {}
+        if french_word:
+            updates[f"french.{french_word}"] = True  
+        if spanish_word:
+            updates[f"spanish.{spanish_word}"] = True 
+
+        if updates:
+            user_ref.update(updates)
+
+        return self.SUCCESSFUL
+    
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return self.DB_ERROR
         
     def alter_proficiency(self, username, language, word, action):
         """

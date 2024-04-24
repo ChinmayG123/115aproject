@@ -9,3 +9,7 @@ Luckily Firebase allows for realtime updates which will help in both performance
 Created the totalWords database on Firebase which consists of all the words that we will be incorporating
 into our game. Each document is named as the English word with two fields for French and Spanish that 
 correspond to the actual translation
+
+4/24/2024
+Updated Learned_Words function to represent the newly updated database structures for total words and the 
+users collections. 
