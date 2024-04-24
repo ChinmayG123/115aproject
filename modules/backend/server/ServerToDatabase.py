@@ -86,6 +86,8 @@ class DatabaseAccess:
             doc_ref.set({"password":password})
             doc_ref.update({"french": {}})
             doc_ref.update({"spanish":{}})
+            doc_ref.update({"french_progress": "0%"})
+            doc_ref.update({"spanish_progress": "0%"})
             print(f"New document '{username}' created.")
             return 0
     
@@ -214,6 +216,36 @@ class DatabaseAccess:
         else:
             return self.USER_NAME_NOT_EXIST
     
+    def calculate_progress(self, username, language):
+        """
+        Calculates and updates the user's current progress in a desired language
+
+        - param username: The username of the user.
+        - param language: The language being learned.
+        
+        """
+          
+        collection_ref = self.db.collection(self.collection_name)
+        doc_ref = self.db.collection(self.collection_name).document(username)
+        doc = doc_ref.get()
+        if doc.exists:
+            #get the number of keys in the desired dictionary
+            dictionary = doc.get(language)
+            learned_words = len(dictionary.keys())
+            docs = collection_ref.stream()
+    
+            # Count the documents
+            count = sum(1 for _ in docs)
+            progress = ((learned_words/count) * 100)
+            rounded_prog = round(progress, 2)
+            str_progress = str(rounded_prog) + "%"
+            str_progresskey = language + "_" + "progress"
+            print(str_progresskey)
+            doc_ref.update({str_progresskey: str_progress})
+            return self.SUCCESSFUL
+        else:
+            return self.USER_NAME_NOT_EXIST
+    
 #main method just for debugging purposes
 if __name__ == '__main__':
     script_path = os.path.abspath(__file__)
@@ -221,11 +253,12 @@ if __name__ == '__main__':
     print("This is the directory path:", os.path.dirname(server_dir_path))
     database_dir_path = os.path.dirname(server_dir_path) + "/database"
     test = DatabaseAccess(database_dir_path)
-    first = test.add_new_user("LanguageUserTest4", "12345")
-    out = test.update_language("LanguageUserTest4","spanish", "spanishword4")
-    out2 = test.alter_proficiency("LanguageUserTest4", 'spanish', 'spanishword4', 1)
-    out3 = test.alter_proficiency("LanguageUserTest4", 'spanish', 'spanishword3', -1)
-    print(first)
-    print(out)
+
+
+    first = test.add_new_user("TestApril23", "123456")
+    out = test.update_language("TestApril23","spanish", "spanishword4")
+    out2 = test.calculate_progress("TestApril23", "spanish")
+   #out2 = test.alter_proficiency("LanguageUserTest4", 'spanish', 'spanishword4', 1)
+    #out3 = test.alter_proficiency("LanguageUserTest4", 'spanish', 'spanishword3', -1)
+
     print(out2)
-    print(out3)
