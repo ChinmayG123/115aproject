@@ -40,6 +40,9 @@
     padding: 0; 
   }
 
+#dictionary-menu-btn img:hover {
+  transform: scale(1.1); 
+}
 
   #dictionary-close-btn{
     width:15%;
@@ -48,6 +51,34 @@
     border: none;  
     background-color: transparent; 
     padding: 0; 
+} 
+
+
+#dictionary-close-btn img:hover {
+  transform: scale(1.1); 
+}
+
+
+#next-page-btn{
+  position: absolute;
+  width: 189.5%;
+  height: 980px;
+  transform: scale(0.05); 
+  border: none;  
+  background-color: transparent; 
+  padding: 0; 
+
+} 
+
+#prvs-page-btn{
+  position: absolute;
+  width: 10%;
+  height: 980px;
+  transform: scale(0.05); 
+  border: none;  
+  background-color: transparent; 
+  padding: 0; 
+
 } 
 
 

@@ -202,8 +202,8 @@ class Server:
     def toggle_learn(self, username):
         db_access = DatabaseAccess(database_dir_path)
         language = self.Request["Headers"]["Game-Language"]
-        new_words = list(self.Request["Body"])
-        result = db_access.learn_new_words(username, language, new_words)
+        new_words = str(self.Request["Body"])
+        result = db_access.learn_new_word(username, language, new_words)
         if result:
             self.Response["StatusCode"] = "200"
             self.Response["StatusLine"] = "OK"
