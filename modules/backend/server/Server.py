@@ -203,7 +203,7 @@ class Server:
         db_access = DatabaseAccess(database_dir_path)
         language = self.Request["Headers"]["Game-Language"]
         new_words = str(self.Request["Body"])
-        result = db_access.update_language(username, language, new_words)
+        result = db_access.learn_new_word(username, language, new_words)
         if result:
             self.Response["StatusCode"] = "200"
             self.Response["StatusLine"] = "OK"

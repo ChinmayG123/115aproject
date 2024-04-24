@@ -91,7 +91,7 @@ class DatabaseAccess:
             print(f"New document '{username}' created.")
             return 0
     
-    def update_language(self, username, language, learnedWord):
+    def learn_new_word(self, username, language, learnedWord):
         doc_ref = self.db.collection(self.collection_name).document(username)
         doc = doc_ref.get()
 
@@ -220,10 +220,13 @@ if __name__ == '__main__':
     test = DatabaseAccess(database_dir_path)
 
 
-    first = test.add_new_user("TestApril23", "123456")
-    out = test.update_language("TestApril23","spanish", "spanishword4")
-    out = test.update_language("TestApril23","spanish", "spanishword5")
-    out2 = test.calculate_progress("TestApril23", "spanish")
+    first = test.add_new_user("TestApril232ndUser", "123454")
+    out = test.learn_new_word("TestApril232ndUser","spanish", "EnglishKey1")
+    out = test.learn_new_word("TestApril232ndUser","spanish", "EnglishKey2")
+    out = test.learn_new_word("TestApril232ndUser","french", "EnglishKey1")
+    out = test.learn_new_word("TestApril232ndUser","french", "EnglishKey2")
+
+    out2 = test.calculate_progress("TestApril232ndUser", "french")
    #out2 = test.alter_proficiency("LanguageUserTest4", 'spanish', 'spanishword4', 1)
     #out3 = test.alter_proficiency("LanguageUserTest4", 'spanish', 'spanishword3', -1)
 
