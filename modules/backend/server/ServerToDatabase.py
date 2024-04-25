@@ -121,28 +121,27 @@ class DatabaseAccess:
             print(f"An error occurred: {e}")
             return self.DB_ERROR 
     
-    def retrieve_user_data(self, username, language):
+    def retrieve_user_data(self, username):
         """
-        This function looks up for a user's game progress, such as learned words, defeated bosses, and unlocked languages.
+        Retrieve a user's learned words along with their associated values for both French and Spanish.
 
-        - param1 username: The username as a string.
-        - param2 language: The language being learned, as a string.
-        - return: Dictionary of user data for success, None for internal failure.
+        :param username: The username of the user.
+        :return: A dictionary containing the 'french' and 'spanish' fields with learned words and values, or None for internal failure.
         """
         try:
-            progress_ref = self.db.collection('users').document(username).collection('progress').document(language)
-            progress_doc = progress_ref.get()
-            if progress_doc.exists:
-                learned_words = progress_doc.to_dict().get('learnedWords', {})  
-                return learned_words
-            else:
-                print(f"No data exist for users/{username}/progress/{language}")
-                return None
-        
-        except Exception as e:
-             print(f"An error occurred: {e}")
-             return None
+            user_ref = self.db.collection('users').document(username)
+            user_doc = user_ref.get()
 
+            user_data = user_doc.to_dict()
+            learned_data = {
+                'french': user_data.get('french', {}),  # Get the French learned words map
+                'spanish': user_data.get('spanish', {})  # Get the Spanish learned words map
+            }
+            return learned_data
+
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            return None
 
     def update_user_dictionary(self, username, language, new_dict):
         """
@@ -154,6 +153,7 @@ class DatabaseAccess:
         - return: true for success, false for failure
         """
         pass
+        
     def alter_proficiency(self, username, language, word, action):
         """
         Toggle a word's proficiency value by 1.
@@ -211,23 +211,3 @@ class DatabaseAccess:
         else:
             return self.USER_NAME_NOT_EXIST
     
-#main method just for debugging purposes
-if __name__ == '__main__':
-    script_path = os.path.abspath(__file__)
-    server_dir_path = os.path.dirname(script_path)
-    print("This is the directory path:", os.path.dirname(server_dir_path))
-    database_dir_path = os.path.dirname(server_dir_path) + "/database"
-    test = DatabaseAccess(database_dir_path)
-
-
-    first = test.add_new_user("TestApril232ndUser", "123454")
-    out = test.learn_new_word("TestApril232ndUser","spanish", "EnglishKey1")
-    out = test.learn_new_word("TestApril232ndUser","spanish", "EnglishKey2")
-    out = test.learn_new_word("TestApril232ndUser","french", "EnglishKey1")
-    out = test.learn_new_word("TestApril232ndUser","french", "EnglishKey2")
-
-    out2 = test.calculate_progress("TestApril232ndUser", "french")
-   #out2 = test.alter_proficiency("LanguageUserTest4", 'spanish', 'spanishword4', 1)
-    #out3 = test.alter_proficiency("LanguageUserTest4", 'spanish', 'spanishword3', -1)
-
-    print(out2)
