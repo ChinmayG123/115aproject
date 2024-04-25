@@ -21,6 +21,9 @@ import './MapPage.css';
 import DictionaryPopup from '../../components/dictionary/DictionaryPopup';
 
 
+import { useLocation } from 'react-router-dom';
+
+
 const Map = function() {
     const [buttonPopup, setButtonPopup] = useState(false);
 
@@ -32,6 +35,9 @@ const Map = function() {
     const goToTailor =() => {navigate('/tailor');}
 
     const goToMenu =() => {navigate('/home')};
+
+    const location = useLocation();
+    const username = location.state.username;
 
 
     const [isSchoolHovered, setIsSchoolHovered] = useState(false);
@@ -83,6 +89,8 @@ const Map = function() {
 
     return(  
         <body className = "mapbackground">
+
+            <h1>Welcome, {username}!</h1>
             
             < form action ="">
                 <button type= "button" id= "schoolimg" onClick={goToSchool} onMouseEnter={handleSchoolMouseEnter} onMouseLeave={handleSchoolMouseLeave}>
@@ -121,7 +129,7 @@ const Map = function() {
                 
 
             </form>
-            <DictionaryPopup trigger = {buttonPopup} setTrigger={setButtonPopup}>
+            <DictionaryPopup trigger = {buttonPopup} setTrigger={setButtonPopup} username={username}>
               
             </DictionaryPopup>
             

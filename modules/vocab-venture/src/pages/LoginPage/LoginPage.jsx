@@ -7,13 +7,18 @@ import { useNavigate } from 'react-router-dom/dist';
 const LoginPage = function() {
     const navigate = useNavigate();
     const goToMainPage =() => {navigate('/home')};
-    const goToLanguage =() => {navigate('/language');}
+    // const goToLanguage =() => {navigate('/language');}
 
 
     const [loginStatus, setLoginStatus] = useState(null);
     const [errorMsg, setErrorMsg] = useState('');
 
+    
 
+    const goToLanguage = () => {
+        const username = document.getElementById('username').value;
+        navigate('/language', { state: { username } });
+    };
 
     useEffect(() => {
         const submitLoginElement = document.getElementById('submit-login-id');
