@@ -23,26 +23,6 @@ these categories are images and buttons
 
 I made sure when the browser is resized, the buttons are also resized.
 
+04/25/2024:
 
-Created Firestore cloud database (chose the free version of Firebase), and configured service key as a .json file, which I have placed inside of cfg folder
-Created basic features, such as being able to create a user, and basic login verification
-Created users Collection on Firestore, and made each user have their own Document, which contains vital login info
-such as their password, and other fields which will be added later
-Firestore database can be found at: https://console.firebase.google.com/u/0/project/vocabventuredb/firestore/databases/-default-/data/
-Our team can track the status of our database in real time through link
-
-2024/04/18:
-
-Added two new fields for users, french and spanish, which are dictionaries which hold
-the french and spanish words learned by the user respectively
-Added update_language functionality for ServerToDatabase.py, so user can now have their 
-lists of french and spanish language words updated as a running dictionary
-Lists of French and Spanish words learned by the user are represented by two dictionaries,
-french and spanish respectively
-
-2024/04/23:
-
-Added alter_proficiency function, which allows for the adjustment of a user's proficiency of a certain word
-in a certain language. 
-Added small fixes, such as setting default proficiency to 5 and setting lower and upper bounds
-for proficiency. 
+I sent the username to the Dictionary. I am trying to retrieve the data of the username for the dictionary.
