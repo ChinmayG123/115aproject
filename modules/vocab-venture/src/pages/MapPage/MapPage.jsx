@@ -90,7 +90,7 @@ const Map = function() {
     return(  
         <body className = "mapbackground">
 
-            <h1>Welcome, {username}!</h1>
+            {/* <h1>Welcome, {username}!</h1> */}
             
             < form action ="">
                 <button type= "button" id= "schoolimg" onClick={goToSchool} onMouseEnter={handleSchoolMouseEnter} onMouseLeave={handleSchoolMouseLeave}>

@@ -10,6 +10,10 @@ import { useNavigate } from 'react-router-dom'; // Import useNavigate from react
 
 // import { retrieve_user_data } from '../../../../backend/server/ServerToDatabase.py';
 
+// import axios from 'axios';
+
+// import pyodide from 'pyodide';
+
 
 
 
@@ -17,6 +21,35 @@ function DictionaryPopup (props) {
 
   const navigate = useNavigate(); 
   const goToMenu =() => {navigate('/home')};
+
+
+
+  // const [result, setResult] = useState(null);
+
+  // useEffect(() => {
+  //     const runPythonCode = async () => {
+  //         await pyodide.loadPackage(['numpy']); // Load any Python packages you need
+  //         await pyodide.loadScript('../../../../backend/server/ServerToDatabase.py'); // Load your Python script
+
+  //         // Call your Python function
+  //         const pyResult = pyodide.globals.retrieve_user_data(props.username);
+  //         setResult(pyResult);
+  //     };
+
+  //     runPythonCode();
+  // }, []);
+
+
+
+  // const [userData, setUserData] = useState(null);
+
+  //   useEffect(() => {
+  //       const fetchData = async () => {
+  //           const response = await axios.get(`http://localhost:5000/api/retrieve_user_data/${props.username}`);
+  //           setUserData(response.data);
+  //       };
+  //       fetchData();
+  //   }, [props.username]);
 
 
 
@@ -52,12 +85,12 @@ function DictionaryPopup (props) {
           </div>
 
           
-          {props.children}
+          {/* {props.children} */}
 
           <div className= "popup-pages">
 
-{/*           
-          {userData && (
+          
+          {/* {userData && (
               <div>
                   <h1>Welcome, {props.username}!</h1>
               </div>
@@ -65,6 +98,9 @@ function DictionaryPopup (props) {
 
 
           <h1>Welcome, {props.username}!</h1>
+{/* 
+          <h1>Result:</h1>
+            <p>{result}</p> */}
 
           <button className= "button" id= "next-page-btn" onClick={goToMenu}>
             <img src={nextimg} /></button>
