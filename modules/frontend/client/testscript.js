@@ -8,13 +8,12 @@ async function testGetUserDictionary() {
     try {
         const result = await client.getUserDictionary(username, language);
         console.log('testGetUserDictionary() result:', result);
-        console.log('spanish learned words:', result['spanish']);
     } catch (error) {
         console.error('Error during test:', error);
     }
 }
 
-async function testlearnNewWord(){
+async function testlearnNewWord() {
     const username = "TestApril23";
     const language = "spanish";
     const new_word = "school"
@@ -28,7 +27,7 @@ async function testlearnNewWord(){
 
 }
 
-async function testupProficiency(){
+async function testupProficiency() {
     const username = "TestApril232ndUser";
     const language = "spanish";
     const word = "airport"
@@ -41,6 +40,12 @@ async function testupProficiency(){
     }
 }
 
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 testGetUserDictionary();
+sleep(1000);
 testlearnNewWord();
+sleep(1000);
 testupProficiency();

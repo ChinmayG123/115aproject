@@ -127,7 +127,7 @@ class DatabaseAccess:
             print(f"An error occurred: {e}")
             return self.DB_ERROR 
     
-    def retrieve_user_data(self, username):
+    def retrieve_user_data(self, username, language):
         """
         Retrieve a user's learned words along with their associated values for both French and Spanish.
 
@@ -165,7 +165,7 @@ class DatabaseAccess:
                 'spanish': spanish_learned_words,
             }
 
-            return learned_data
+            return learned_data[language]
 
         except Exception as e:
             print(f"An error occurred: {e}")

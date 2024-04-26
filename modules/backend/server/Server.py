@@ -103,10 +103,10 @@ class Server:
         elif target_db == "/progress":  # get user learned words
             self.username = self.Request["Headers"]["Username"]
             # if self.username in self.activeAccount:
-            #     self.retreive_user_dict(self.username)
+            #     self.retrieve_user_dict(self.username)
             # else:
             #     self.Response["Body"] = "User not in session"
-            self.retreive_user_dict(self.username)
+            self.retrieve_user_dict(self.username)
 
     def retrieve_login(self, username):
         db_access = DatabaseAccess(database_dir_path)
@@ -125,10 +125,10 @@ class Server:
         else:
             pass
 
-    def retreive_user_dict(self, username):
+    def retrieve_user_dict(self, username):
         db_access = DatabaseAccess(database_dir_path)
         language = self.Request["Headers"]["Game-Language"]
-        result = db_access.retrieve_user_data(username)
+        result = db_access.retrieve_user_data(username, language)
         if isinstance(result, dict):  # Check if result is a dictionary
             self.Response["Body"] = json.dumps(result)
             self.Response["Headers"]["Content-Length"] = str(len(self.Response["Body"]))
@@ -139,6 +139,19 @@ class Server:
             self.Response["StatusCode"] = "500"
             self.Response["StatusLine"] = "Internal Server Error"
 
+    def retrieve_all_dict(self, catagory=''):
+        db_access = DatabaseAccess(database_dir_path)
+        db_access.groupWordsByCategory()
+        result = db_access.getAllWordsFromCategory(catagory)
+        if isinstance(result, list):  # Check if result is a dictionary
+            self.Response["Body"] = result
+            self.Response["Headers"]["Content-Length"] = str(len(self.Response["Body"]))
+            self.Response["Headers"]["Content-Type"] = "application/json"
+            self.Response["StatusCode"] = "200"
+            self.Response["StatusLine"] = "OK"
+        else:  # Handle error codes
+            self.Response["StatusCode"] = "500"
+            self.Response["StatusLine"] = "Internal Server Error"
     def update_data(self):
         """
         Setter function for all database access. May consist sensitive data. Will alter database.
@@ -247,7 +260,7 @@ class Server:
             ] = "GET, POST, PUT, OPTIONS"
             self.Response["Headers"][
                 "Access-Control-Allow-Headers"
-            ] = "Content-Type, Content-Length, Username, Password, Game-Language, Action"
+            ] = "Content-Type, Content-Length, Username, Password, Game-Language, Action, Target-Asset"
             self.Response["Headers"]["Access-Control-Max-Age"] = "86400"
             self.Response["Headers"]["Content-Length"] = "0"
             self.Response["Headers"]["Connection"] = "close"
