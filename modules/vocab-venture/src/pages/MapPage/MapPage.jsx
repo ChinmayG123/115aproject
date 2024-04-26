@@ -35,7 +35,9 @@ const Map = function() {
 
     // Navigate to the Artist component with the username as a prop
     const goToArtist = () => {
-        navigate('/artist', { state: { username } });
+        // navigate('/artist', { state: { username } });
+        navigate('/artist', { state: { username, language: selectedLanguage } });
+
     };
 
     // const goToArtist =() => {navigate('/artist');}
@@ -49,6 +51,7 @@ const Map = function() {
 
     const location = useLocation();
     const username = location.state.username;
+    const selectedLanguage = location.state.language;
 
 
     const [isSchoolHovered, setIsSchoolHovered] = useState(false);
@@ -101,7 +104,6 @@ const Map = function() {
     return(  
         <body className = "mapbackground">
 
-            {/* <h1>Welcome, {username}!</h1> */}
             
             < form action ="">
                 <button type= "button" id= "schoolimg" onClick={goToSchool} onMouseEnter={handleSchoolMouseEnter} onMouseLeave={handleSchoolMouseLeave}>
@@ -140,7 +142,7 @@ const Map = function() {
                 
 
             </form>
-            <DictionaryPopup trigger = {buttonPopup} setTrigger={setButtonPopup} username={username}>
+            <DictionaryPopup trigger = {buttonPopup} setTrigger={setButtonPopup} username={username} selectedLanguage={selectedLanguage}>
               
             </DictionaryPopup>
             

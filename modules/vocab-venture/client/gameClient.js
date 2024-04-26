@@ -12,12 +12,14 @@
 class GameClient {
     // Private fields
     #HOST = '149.28.199.169';
+    // #HOST = '127.0.0.1';
     #PORT = 8080;
 
     constructor() {
         this.baseURL = `http://${this.#HOST}:${this.#PORT}`;
         this.userTable = '/userlist';
         this.userProgress = '/progress'
+        this.allDict = '/total'
     }
 
 
@@ -194,7 +196,7 @@ class GameClient {
         }
     }
 
-    async upProficiency(username, language, word){
+    async upProficiency(username, language, word) {
         if (username.length === 0 || language.length === 0 || word.length === 0) {
             return -1;
         }
@@ -217,7 +219,7 @@ class GameClient {
         }
     }
 
-    async downProficiency(username, language, word){
+    async downProficiency(username, language, word) {
         if (username.length === 0 || language.length === 0 || word.length === 0) {
             return -1;
         }
@@ -240,7 +242,28 @@ class GameClient {
         }
     }
 
-    async getProgressPercentage(username, language){
+    async getAllWordByCatagory(username, catagory) {
+        if (username.length === 0 || language.length === 0) {
+            return null;
+        }
+        const options = {
+            method: 'GET',
+            headers: {
+                'Username': username,
+                'Game-Language': language,
+                'Target-Asset': catagory
+            }
+        };
+        const response = await this.retrieveData(this.allDict, options);
+        this.printDebug(response);
+        if (response.status === 200) {
+            return await response; 
+        } else {
+            return null; // Error or data not found
+        }
+    }
+
+    async getProgressPercentage(username, language) {
 
     }
 

@@ -1,5 +1,9 @@
-import React, { useEffect } from 'react'; // Import useEffect from react
-import { useNavigate } from 'react-router-dom/dist';
+// import React, { useEffect } from 'react'; // Import useEffect from react
+import React, { useEffect, useState } from 'react'; // Import useEffect and useState from react
+
+// import { useNavigate } from 'react-router-dom/dist';
+import { useNavigate } from 'react-router-dom';
+
 import { useLocation } from 'react-router-dom';
 
 
@@ -8,14 +12,35 @@ const LanguageSelect = function() {
     const goToMainPage =() => {navigate('/home')};
     // const goToMap =() => {navigate('/map');}
 
-    const goToMap = () => {
-        navigate('/map', { state: { username } });
-    };
-    
+
 
 
     const location = useLocation();
+
+    const [selectedLanguage, setSelectedLanguage] = useState(null);
+
     const username = location.state.username;
+    // const goToMap = () => {
+    //     navigate('/map', { state: { username } });
+    // };
+
+    const goToMap = (language) => {
+        navigate('/map', { state: { username, language } });
+        console.log("language ", language);
+    };
+    
+
+    // const goToMap = () => {
+    //     navigate('/map', { state: { username, language: selectedLanguage } });
+    //     console.log("language ", selectedLanguage);
+    // };
+    
+
+    
+    console.log(selectedLanguage);
+    
+
+
 
     useEffect(() => {
         const submitLoginElement = document.getElementById('submit-login-id');
@@ -32,8 +57,12 @@ const LanguageSelect = function() {
         <div className='wrapper'>          
         <h1>Welcome, {username}!</h1>
           <form action ="">
-          <button type= "button" id= "submit-spanish" onClick = {goToMap}>Spanish</button>
-          <button type= "button" id= "submit-french" onClick = {goToMap}>French</button>
+          {/* <button type= "button" id= "submit-spanish" onClick = {goToMap}>Spanish</button>
+          <button type= "button" id= "submit-french" onClick = {goToMap}>French</button> */}
+
+            <button type="button" id="submit-spanish" onClick={() => { setSelectedLanguage('spanish'); goToMap('spanish'); }}>Spanish</button>
+            <button type="button" id="submit-french" onClick={() => { setSelectedLanguage('french'); goToMap('french'); }}>French</button>
+
           <hr/>
                     <button type= "button" id = "submit-mainpage" onClick= {goToMainPage}>Back Home</button>
           </form>

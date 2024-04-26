@@ -14,9 +14,9 @@ import { useNavigate } from 'react-router-dom'; // Import useNavigate from react
 
  
 
-const getTheUserInformation = async (username) => {
+const getTheUserInformation = async (username, language) => {
   try {
-      const result = await gameClient.getUserDictionary(username, "Spanish");
+      const result = await gameClient.getUserDictionary(username, language);
       // return { status: 'success' };
       return result;
       // return { status: 'success', result: result };
@@ -25,30 +25,19 @@ const getTheUserInformation = async (username) => {
   }
 }
 
-
-// const getTheUserInformation = async (username) => {
-//   try {
-//       const result = await gameClient.getUserDictionary(username, "Spanish");
-//       console.log(result);
-//       return { status: 'success', result: result }; // Assuming result.data is an array of items
-//   } catch (error) {
-//       return { status: 'error', message: 'An error occurred during login. Please try again.' };
-//   }
-// }
-
-
 function DictionaryPopup (props) {
+
+  const { selectedLanguage } = props;
+
 
   const navigate = useNavigate(); 
   const goToMenu =() => {navigate('/home')};
   const [userDictionary, setUserDictionary] = useState(null);
-  // const [userDictionary, setUserDictionary] = useState({ status: 'loading' });
-
-
 
   useEffect(() => {
     const fetchData = async () => {
-        const result = await getTheUserInformation(props.username);
+        
+        const result = await getTheUserInformation(props.username, selectedLanguage);
         console.log("HELLO");
         console.log(result);
         console.log("BYE");
@@ -61,7 +50,7 @@ function DictionaryPopup (props) {
   return (props.trigger) ? (
     <div className= "popup">      
 
-  
+
 
         
         <div className= "popup-inner">
@@ -81,6 +70,7 @@ function DictionaryPopup (props) {
           
 
           <h1>Welcome, {props.username}!</h1>
+          <h2>Selected Language: {selectedLanguage}</h2>
 
           <button className= "button" id= "next-page-btn" onClick={goToMenu}>
             <img src={nextimg} /></button>
@@ -89,7 +79,19 @@ function DictionaryPopup (props) {
             <img src={prvsimg} /></button><br></br>
 
 
-          {userDictionary && (
+            {userDictionary && (
+  <div>
+    <h2>{selectedLanguage}</h2>
+    <ul>
+      {Object.entries(userDictionary).map(([key, value]) => (
+        <li key={key}>{key}: {value}</li>
+      ))}
+    </ul>
+  </div>
+)}
+
+
+          {/* {userDictionary && (
   <div>
     <h2>French:</h2>
     <ul>
@@ -104,7 +106,30 @@ function DictionaryPopup (props) {
       ))}
     </ul>
   </div>
+)} */}
+{/* 
+
+{userDictionary && userDictionary.french && (
+  <div>
+    <h2>French:</h2>
+    <ul>
+      {Object.entries(userDictionary.french).map(([key, value]) => (
+        <li key={key}>{key}: {value}</li>
+      ))}
+    </ul>
+  </div>
 )}
+
+{userDictionary && userDictionary.spanish && (
+  <div>
+    <h2>Spanish:</h2>
+    <ul>
+      {Object.entries(userDictionary.spanish).map(([key, value]) => (
+        <li key={key}>{key}: {value}</li>
+      ))}
+    </ul>
+  </div>
+)} */}
 
 
 
