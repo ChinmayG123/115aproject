@@ -134,14 +134,36 @@ class DatabaseAccess:
         :return: A dictionary containing the 'french' and 'spanish' fields with learned words and values, or None for internal failure.
         """
         try:
+            # Get the user document from the users collection
             user_ref = self.db.collection('users').document(username)
             user_doc = user_ref.get()
 
+            if not user_doc.exists:
+                print(f"No data exist for the user with username {username}.")
+                return None
+
+            # Extract data from the document
             user_data = user_doc.to_dict()
+            if user_data is None:
+                print(f"Failed to convert user document to dictionary for username {username}.")
+                return None
+
+            # Initialize empty dictionaries for French and Spanish to handle possible missing fields
+            french_learned_words = {}
+            spanish_learned_words = {}
+
+            # Check for the presence of 'french' and 'spanish' fields explicitly
+            if 'french' in user_data:
+                french_learned_words = user_data['french']
+            if 'spanish' in user_data:
+                spanish_learned_words = user_data['spanish']
+
+            # Prepare the learned data dictionary
             learned_data = {
-                'french': user_data.get('french', {}),  # Get the French learned words map
-                'spanish': user_data.get('spanish', {})  # Get the Spanish learned words map
+                'french': french_learned_words,
+                'spanish': spanish_learned_words,
             }
+
             return learned_data
 
         except Exception as e:
