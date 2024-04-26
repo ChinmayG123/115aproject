@@ -6,8 +6,8 @@
  * getUserDictionary(username, language);
  * updateUserDictionary(username, language, word, proficiency = 5);
  * learnNewWord(username, language, word);
- * upProficiency(username, langauge, word);
- * downProficiency(username, langauge, word);
+ * upProficiency(username, language, word);
+ * downProficiency(username, language, word);
  */
 class GameClient {
     // Private fields
@@ -218,7 +218,7 @@ class GameClient {
         }
     }
 
-    async downProficiency(username, langauge, word){
+    async downProficiency(username, language, word){
         if (username.length === 0 || language.length === 0 || word.length === 0) {
             return -1;
         }
@@ -239,6 +239,10 @@ class GameClient {
             case 404: return 1; // 404 Not Found
             default: return -1;
         }
+    }
+
+    async getProgressPercentage(username, language){
+
     }
 
     // private function

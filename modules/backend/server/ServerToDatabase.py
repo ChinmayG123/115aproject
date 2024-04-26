@@ -1,5 +1,6 @@
 import firebase_admin
 import os
+import threading
 from firebase_admin import credentials
 from firebase_admin import firestore
 from collections import defaultdict
@@ -18,14 +19,17 @@ class DatabaseAccess:
 
 
     def __init__(self, script_path):
+        unique_name = f"firebaseApp-{threading.get_ident()}"
+        # print(f"Firebase instance {unique_name} created")
         self.cred = credentials.Certificate(script_path + '/cfg/dbaccess.json')
-        self.firebase_app  = firebase_admin.initialize_app(self.cred)
-        self.db = firestore.client()
+        self.firebase_app  = firebase_admin.initialize_app(self.cred, name=unique_name)
+        self.db = firestore.client(self.firebase_app)
 
         #the collection we are under is the users collection on Firestore
         self.collection_name = 'users'
 
         self.categoryData = defaultdict(list)
+        
 
         
 

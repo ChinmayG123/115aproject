@@ -128,7 +128,7 @@ class Server:
     def retreive_user_dict(self, username):
         db_access = DatabaseAccess(database_dir_path)
         language = self.Request["Headers"]["Game-Language"]
-        result = db_access.retrieve_user_data(username, language)
+        result = db_access.retrieve_user_data(username)
         if isinstance(result, dict):  # Check if result is a dictionary
             self.Response["Body"] = json.dumps(result)
             self.Response["Headers"]["Content-Length"] = str(len(self.Response["Body"]))

@@ -8,6 +8,7 @@ async function testGetUserDictionary() {
     try {
         const result = await client.getUserDictionary(username, language);
         console.log('testGetUserDictionary() result:', result);
+        console.log('spanish learned words:', result['spanish']);
     } catch (error) {
         console.error('Error during test:', error);
     }
@@ -40,6 +41,6 @@ async function testupProficiency(){
     }
 }
 
-//testGetUserDictionary();
-//testlearnNewWord();
+testGetUserDictionary();
+testlearnNewWord();
 testupProficiency();
