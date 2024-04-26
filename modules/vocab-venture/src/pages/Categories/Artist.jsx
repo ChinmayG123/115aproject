@@ -6,10 +6,22 @@ import easel from '../../assets/artist-assets/Easel.png';
 import artistbg from '../../assets/artist-assets/ArtistBG.png';
 import './Artist.css';
 
+
+
 const Artist = function() {
 
+    const goToMenu =() => {navigate('/home')};
+
+    const navigate = useNavigate(); 
     return(  
+
+        // <div className = "next-button">
+        //     <button type= "button" id = "nextbutton" onClick= {goToMenu}>Back Home</button>
+        // </div>
+
         <div className = "container">
+            
+              
             <img id= "artistbg" src={artistbg}></img>
             <div className = "learn-content">
                 <img id= "learnBG" src={learnBG} />
@@ -22,6 +34,11 @@ const Artist = function() {
             <div className= "textdiv">
                 <input type="text" className = "learnInputBox" placeholder='text'/>
             </div>
+
+            {/* <button onClick={goToMenu}>Go to Menu</button> */}
+            <button type= "button" id = "nextbutton" onClick= {goToMenu}>Next</button>
+
+                  
         </div>
     
      );

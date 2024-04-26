@@ -1,4 +1,6 @@
-import React from 'react';
+// import React from 'react';
+import React, { useEffect } from 'react';
+
 import './Dictionary.css'; // Import your CSS file for styling
 import closeimg from '../../assets/dictionary-assets/CloseTab.png'
 import menuimg from '../../assets/dictionary-assets/MenuTab.png'
@@ -22,6 +24,16 @@ function DictionaryPopup (props) {
   const navigate = useNavigate(); 
   const goToMenu =() => {navigate('/home')};
 
+
+  // const PythonExec = ()=>{
+  //   const python_code = `
+  //     print('Hello from Python')  
+  //   `;
+  //   const pyodide = window.pyodide;
+
+  //   pyodide.runPython(python_code);
+
+  // }
 
 
   // const [result, setResult] = useState(null);
@@ -107,6 +119,10 @@ function DictionaryPopup (props) {
           
           <button className= "button" id= "prvs-page-btn" onClick={goToMenu}>
             <img src={prvsimg} /></button>
+
+
+          {/* <button className= "button" id= "prvs-page-btn" onClick={PythonExec}>
+            <img src={prvsimg} /></button> */}
 
           </div>
           
