@@ -69,7 +69,7 @@ const Artist = function() {
             <div className = "npc-content">
                 {/* <img id= "npcTextbox" src={npcTextbox} />
                 <img id = "npcimg" src={npcimg} /> */}
-
+ 
                 {/* {showText && <p>This is the NPC's text.</p>} */}
                 <p>{texts[currentTextIndex]}</p>
                 <img id="npcTextbox" src={npcTextbox} alt="npc text box" />
