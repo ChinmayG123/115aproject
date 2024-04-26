@@ -26,3 +26,9 @@ I made sure when the browser is resized, the buttons are also resized.
 04/25/2024:
 
 I sent the username to the Dictionary. I am trying to retrieve the data of the username for the dictionary.
+I did the convo text for the artist page.
+
+04/26/2024:
+
+I got the dictionary to receive the user's data from the database.
+I am able to save the selected language as well.
