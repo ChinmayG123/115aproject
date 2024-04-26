@@ -69,13 +69,13 @@
     position: relative;
     z-index: 1;
 
-    top: 58%; /* Example top position */
+    top: 56%; /* Example top position */
     left: 35%; /* Example left position */
     transform: translate(-50%, -50%); /* Center the text */
     
     
     /* Set font size and family */
-    font-size: 20px; /* Example font size */
+    font-size: 30px; /* Example font size */
     font-family: Helvetica, sans-serif; /* Example font family */
     
     /* Add other styles as needed */
