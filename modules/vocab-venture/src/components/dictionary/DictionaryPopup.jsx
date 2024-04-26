@@ -11,11 +11,6 @@ import pagesimg from '../../assets/dictionary-assets/Pagesfull.png'
 import baseimg from '../../assets/dictionary-assets/DictionaryBaseFull.png'
 import { useNavigate } from 'react-router-dom'; // Import useNavigate from react-router-dom
 
-// import { retrieve_user_data } from '../../../../backend/server/ServerToDatabase.py';
-
-// import axios from 'axios';
-
-// import pyodide from 'pyodide';
 
  
 
@@ -46,8 +41,8 @@ function DictionaryPopup (props) {
 
   const navigate = useNavigate(); 
   const goToMenu =() => {navigate('/home')};
-  // const [userDictionary, setUserDictionary] = useState(null);
-  const [userDictionary, setUserDictionary] = useState({ status: 'loading' });
+  const [userDictionary, setUserDictionary] = useState(null);
+  // const [userDictionary, setUserDictionary] = useState({ status: 'loading' });
 
 
 
@@ -94,30 +89,33 @@ function DictionaryPopup (props) {
             <img src={prvsimg} /></button><br></br>
 
 
-            {userDictionary && userDictionary.result && (
-          <ul>
-            {userDictionary.result.map(item => (
-              <li key={item.id}>
-                {item.name}: {item.value}
-              </li>
-            ))}
-          </ul>
-        )}
-
-          {/* <p>HIHIIII, {userDictionary.result}</p> */}
-
-
-          {userDictionary && userDictionary.result && (
-  <ul>
-    {userDictionary.result.map(item => (
-      <li key={item.id}>
-        {item.name}: {item.value}
-      </li>
-    ))}
-  </ul>
+          {userDictionary && (
+  <div>
+    <h2>French:</h2>
+    <ul>
+      {Object.entries(userDictionary.french).map(([key, value]) => (
+        <li key={key}>{key}: {value}</li>
+      ))}
+    </ul>
+    <h2>Spanish:</h2>
+    <ul>
+      {Object.entries(userDictionary.spanish).map(([key, value]) => (
+        <li key={key}>{key}: {value}</li>
+      ))}
+    </ul>
+  </div>
 )}
 
-<p>HIHIIII, {userDictionary.result}</p>
+
+
+          {/* {userDictionary && (
+  <div>
+    <h2>French:</h2>
+    <p>{userDictionary.french.toString()}</p>
+    <h2>Spanish:</h2>
+    <p>{userDictionary.spanish.toString()}</p>
+  </div>
+)} */}
 
 
 
