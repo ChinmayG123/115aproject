@@ -1,5 +1,6 @@
 // import React from 'react';
-import React, { useEffect } from 'react';
+// import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import './Dictionary.css'; // Import your CSS file for styling
 import closeimg from '../../assets/dictionary-assets/CloseTab.png'
@@ -16,69 +17,52 @@ import { useNavigate } from 'react-router-dom'; // Import useNavigate from react
 
 // import pyodide from 'pyodide';
 
+ 
 
+const getTheUserInformation = async (username) => {
+  try {
+      const result = await gameClient.getUserDictionary(username, "Spanish");
+      // return { status: 'success' };
+      return result;
+      // return { status: 'success', result: result };
+  } catch (error) {
+      return { status: 'error', message: 'An error occurred during login. Please try again.' };
+  }
+}
+
+
+// const getTheUserInformation = async (username) => {
+//   try {
+//       const result = await gameClient.getUserDictionary(username, "Spanish");
+//       console.log(result);
+//       return { status: 'success', result: result }; // Assuming result.data is an array of items
+//   } catch (error) {
+//       return { status: 'error', message: 'An error occurred during login. Please try again.' };
+//   }
+// }
 
 
 function DictionaryPopup (props) {
 
   const navigate = useNavigate(); 
   const goToMenu =() => {navigate('/home')};
-
-
-  // const PythonExec = ()=>{
-  //   const python_code = `
-  //     print('Hello from Python')  
-  //   `;
-  //   const pyodide = window.pyodide;
-
-  //   pyodide.runPython(python_code);
-
-  // }
-
-
-  // const [result, setResult] = useState(null);
-
-  // useEffect(() => {
-  //     const runPythonCode = async () => {
-  //         await pyodide.loadPackage(['numpy']); // Load any Python packages you need
-  //         await pyodide.loadScript('../../../../backend/server/ServerToDatabase.py'); // Load your Python script
-
-  //         // Call your Python function
-  //         const pyResult = pyodide.globals.retrieve_user_data(props.username);
-  //         setResult(pyResult);
-  //     };
-
-  //     runPythonCode();
-  // }, []);
+  // const [userDictionary, setUserDictionary] = useState(null);
+  const [userDictionary, setUserDictionary] = useState({ status: 'loading' });
 
 
 
-  // const [userData, setUserData] = useState(null);
-
-  //   useEffect(() => {
-  //       const fetchData = async () => {
-  //           const response = await axios.get(`http://localhost:5000/api/retrieve_user_data/${props.username}`);
-  //           setUserData(response.data);
-  //       };
-  //       fetchData();
-  //   }, [props.username]);
-
-
-
-  // const [userData, setUserData] = useState(null);
-
-  // useEffect(() => {
-  //     if (props.trigger && props.username) {
-  //         const fetchData = async () => {
-  //             const data = await retrieve_user_data(props.username);
-  //             setUserData(data);
-  //         };
-  //         fetchData();
-  //     }
-  // }, [props.trigger, props.username]);
+  useEffect(() => {
+    const fetchData = async () => {
+        const result = await getTheUserInformation(props.username);
+        console.log("HELLO");
+        console.log(result);
+        console.log("BYE");
+        setUserDictionary(result);
+    }
+    fetchData();
+}, [props.username]);
 
 
-   
   return (props.trigger) ? (
     <div className= "popup">      
 
@@ -97,34 +81,66 @@ function DictionaryPopup (props) {
           </div>
 
           
-          {/* {props.children} */}
-
           <div className= "popup-pages">
 
           
-          {/* {userData && (
-              <div>
-                  <h1>Welcome, {props.username}!</h1>
-              </div>
-          )} */}
-
 
           <h1>Welcome, {props.username}!</h1>
-{/* 
-          <h1>Result:</h1>
-            <p>{result}</p> */}
 
           <button className= "button" id= "next-page-btn" onClick={goToMenu}>
             <img src={nextimg} /></button>
           
           <button className= "button" id= "prvs-page-btn" onClick={goToMenu}>
-            <img src={prvsimg} /></button>
+            <img src={prvsimg} /></button><br></br>
 
 
-          {/* <button className= "button" id= "prvs-page-btn" onClick={PythonExec}>
-            <img src={prvsimg} /></button> */}
+            {userDictionary && userDictionary.result && (
+          <ul>
+            {userDictionary.result.map(item => (
+              <li key={item.id}>
+                {item.name}: {item.value}
+              </li>
+            ))}
+          </ul>
+        )}
+
+          {/* <p>HIHIIII, {userDictionary.result}</p> */}
+
+
+          {userDictionary && userDictionary.result && (
+  <ul>
+    {userDictionary.result.map(item => (
+      <li key={item.id}>
+        {item.name}: {item.value}
+      </li>
+    ))}
+  </ul>
+)}
+
+<p>HIHIIII, {userDictionary.result}</p>
+
+
+
+
+{/* 
+          {userDictionary && userDictionary.status === 'success' && userDictionary.result && (
+            <ul>
+              {userDictionary.result.map(item => (
+                <li key={item.id}>{item.name}: {item.value}</li>
+              ))}
+              <p>BYE, {userDictionary.status}</p>
+            </ul>
+          )}
+          {userDictionary && userDictionary.status === 'error' && (
+            <p>An error occurred: {userDictionary.message}</p>
+          )}*/}
+
+          {/* <p>HIHIIII, {userDictionary.result}</p>  */}
+
+
 
           </div>
+
           
 
         </div>
