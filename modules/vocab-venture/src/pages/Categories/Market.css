@@ -1,0 +1,17 @@
+#marketnpcimg{ 
+    
+    position:absolute;
+    
+    width:38vw;
+    display:flex;
+    left: 20%;
+    align-self: flex-end;
+    justify-self: flex-end;
+}
+
+#marketnpcTextbox{
+    position: absolute;
+    right: 20%;
+    width: 40vw;
+    
+}
