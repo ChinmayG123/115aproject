@@ -115,8 +115,7 @@ class GameClient {
             method: 'GET',
             headers: {
                 'Username': username,
-                'Game-Language': language,
-                'Target-Asset': 'learned_word'
+                'Game-Language': language
             }
         };
         const response = await this.retrieveData(this.userProgress, options);
