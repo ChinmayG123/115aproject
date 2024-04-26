@@ -1,4 +1,6 @@
-import { useNavigate } from 'react-router-dom/dist';
+// import { useNavigate } from 'react-router-dom/dist';
+// import { useNavigate } from 'react-router-dom';
+
 import npcimg from '../../assets/artist-assets/Artist.png';
 import learnBG from '../../assets/artist-assets/Contentbox.png';
 import npcTextbox from '../../assets/artist-assets/ArtistTextbox.png';
@@ -6,13 +8,51 @@ import easel from '../../assets/artist-assets/Easel.png';
 import artistbg from '../../assets/artist-assets/ArtistBG.png';
 import './Artist.css';
 
+// import { useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+
+
+import React, { useState } from 'react';
 
 
 const Artist = function() {
 
+    const navigate = useNavigate(); 
+
     const goToMenu =() => {navigate('/home')};
 
-    const navigate = useNavigate(); 
+
+    const location = useLocation();
+    const username = location.state.username;
+
+    const texts = [
+        `Bonjour ${username}!`,
+        "We will learn about colors here!",
+        "Are you ready?"
+    ];
+
+
+    
+
+    // const [showText, setShowText] = useState(false);
+
+
+    // const showNpcText = () => {
+    //     setShowText(true);
+    // };
+
+    const [currentTextIndex, setCurrentTextIndex] = useState(0);
+
+
+
+    const showNextText = () => {
+        if (currentTextIndex < texts.length - 1) {
+            setCurrentTextIndex(currentTextIndex + 1);
+        }
+    };
+
+
+
     return(  
 
         // <div className = "next-button">
@@ -27,8 +67,17 @@ const Artist = function() {
                 <img id= "learnBG" src={learnBG} />
             </div>
             <div className = "npc-content">
-                <img id= "npcTextbox" src={npcTextbox} />
-                <img id = "npcimg" src={npcimg} />
+                {/* <img id= "npcTextbox" src={npcTextbox} />
+                <img id = "npcimg" src={npcimg} /> */}
+
+                {/* {showText && <p>This is the NPC's text.</p>} */}
+                <p>{texts[currentTextIndex]}</p>
+                <img id="npcTextbox" src={npcTextbox} alt="npc text box" />
+                <img id="npcimg" src={npcimg} alt="npc image" />
+                
+                
+
+                {/* {showText && <p>This is the NPC's text.</p>} */}
             </div>
             <img id= "easelimg" src={easel}></img>
             <div className= "textdiv">
@@ -36,7 +85,12 @@ const Artist = function() {
             </div>
 
             {/* <button onClick={goToMenu}>Go to Menu</button> */}
-            <button type= "button" id = "nextbutton" onClick= {goToMenu}>Next</button>
+            {/* <button type= "button" id = "nextbutton" onClick= {goToMenu}>Next</button> */}
+            {/* <button type="button" id="nextbutton" onClick={showNpcText}>Next</button> */}
+
+            <button type="button" id="nextbutton" onClick={showNextText}>Next</button>
+
+
 
                   
         </div>

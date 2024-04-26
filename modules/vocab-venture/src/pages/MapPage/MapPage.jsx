@@ -24,12 +24,23 @@ import DictionaryPopup from '../../components/dictionary/DictionaryPopup';
 import { useLocation } from 'react-router-dom';
 
 
+
+
 const Map = function() {
     const [buttonPopup, setButtonPopup] = useState(false);
 
     const navigate = useNavigate(); 
     const goToSchool =() => {navigate('/school');}
-    const goToArtist =() => {navigate('/artist');}
+
+
+    // Navigate to the Artist component with the username as a prop
+    const goToArtist = () => {
+        navigate('/artist', { state: { username } });
+    };
+
+    // const goToArtist =() => {navigate('/artist');}
+
+
     const goToMarket =() => {navigate('/market');}
     const goToOutskirts =() => {navigate('/outskirts');}
     const goToTailor =() => {navigate('/tailor');}
