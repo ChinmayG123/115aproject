@@ -2,7 +2,7 @@ const GameClient = require('./gameClient');  // Adjust the path to where your Ga
 
 async function testGetUserDictionary() {
     const username = "LanguageUserTest3";
-    const language = "spanish";
+    const language = "french";
 
     const client = new GameClient();
     try {

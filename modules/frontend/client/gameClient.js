@@ -11,8 +11,8 @@
  */
 class GameClient {
     // Private fields
-    // #HOST = '149.28.199.169';
-    #HOST = '127.0.0.1';
+    #HOST = '149.28.199.169';
+    // #HOST = '127.0.0.1';
     #PORT = 8080;
 
     constructor() {
@@ -113,6 +113,10 @@ class GameClient {
         if (username.length === 0 || language.length === 0) {
             return null;
         }
+        if (language != "spanish" || language != "french"){
+            console.log('getUserDictionary(): unsupported language');
+            return null;
+        }
         const options = {
             method: 'GET',
             headers: {
@@ -146,6 +150,10 @@ class GameClient {
         if (username.length === 0 || language.length === 0 || word.length === 0) {
             return -1;
         }
+        if (language != "spanish" || language != "french"){
+            console.log('updateUserDictionary(): unsupported language');
+            return null;
+        }
         const options = {
             method: 'POST',
             headers: {
@@ -177,6 +185,10 @@ class GameClient {
         if (username.length === 0 || language.length === 0 || word.length === 0) {
             return -1;
         }
+        if (language != "spanish" || language != "french"){
+            console.log('learnNewWord(): unsupported language');
+            return null;
+        }
         const options = {
             method: 'PUT',
             headers: {
@@ -200,6 +212,10 @@ class GameClient {
         if (username.length === 0 || language.length === 0 || word.length === 0) {
             return -1;
         }
+        if (language != "spanish" || language != "french"){
+            console.log('upProficiency(): unsupported language');
+            return null;
+        }
         const options = {
             method: 'PUT',
             headers: {
@@ -222,6 +238,10 @@ class GameClient {
     async downProficiency(username, language, word) {
         if (username.length === 0 || language.length === 0 || word.length === 0) {
             return -1;
+        }
+        if (language != "spanish" || language != "french"){
+            console.log('downProficiency(): unsupported language');
+            return null;
         }
         const options = {
             method: 'PUT',
