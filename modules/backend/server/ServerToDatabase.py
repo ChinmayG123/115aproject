@@ -2,6 +2,7 @@ import firebase_admin
 import os
 from firebase_admin import credentials
 from firebase_admin import firestore
+from collections import defaultdict
 
 class DatabaseAccess:
 
@@ -23,6 +24,10 @@ class DatabaseAccess:
 
         #the collection we are under is the users collection on Firestore
         self.collection_name = 'users'
+
+        self.categoryData = defaultdict(list)
+
+        
 
 
     def __del__(self):
@@ -181,6 +186,31 @@ class DatabaseAccess:
         else:
             return self.USER_NAME_NOT_EXIST
     
+
+    def groupWordsByCategory(self):
+        #groups words by category in a python dictionary called self.categoryData
+        db = firestore.client()
+        collection_ref = db.collection("totalWords")
+        docs = collection_ref.stream()
+
+        for doc in docs:
+            if doc.exists:  # Check if the document exists
+                data = doc.to_dict()
+                if data is not None:  # Check if the document data is not None
+                    category = data.get('category', 'No category field')
+                    self.categoryData[category].append(doc.id)
+                else:
+                    category = 'Document data is None'
+            else:
+                category = 'Document does not exist'
+        
+            #print(f'Document ID: {doc.id}, Category: {category}')
+    def getAllWordsFromCategory(self, categoryName):
+        #returns a list of all of the words in a given category
+        return self.categoryData[categoryName]
+
+
+    
     def calculate_progress(self, username, language):
         """
         Calculates and updates the user's current progress in a desired language
@@ -210,4 +240,17 @@ class DatabaseAccess:
             return self.SUCCESSFUL
         else:
             return self.USER_NAME_NOT_EXIST
+        
+if __name__ == '__main__':
+    script_path = os.path.abspath(__file__)
+    server_dir_path = os.path.dirname(script_path)
+    print("This is the directory path:", os.path.dirname(server_dir_path))
+    database_dir_path = os.path.dirname(server_dir_path) + "/database"
+    test = DatabaseAccess(database_dir_path)
+
+    test.groupWordsByCategory()
+    print(test.getAllWordsFromCategory("occupations"))
+
+
+
     

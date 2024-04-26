@@ -24,3 +24,8 @@ Added small fixes, such as setting default proficiency to 5 and setting lower an
 for proficiency. 
 Added french progress and spanish progress fields on Firestore, and function to update them based
 on words learned
+
+2024/04/25:
+
+Added groupWordsByCategory() and getAllWordsFromCategory() functions
+Readded main function for testing purposes in ServerToDatabase.py
