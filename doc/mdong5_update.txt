@@ -44,3 +44,9 @@ Need to fix formatting in database to start testing.
 Tweaked server Implementation for new database access functions. 
 Conducted a few tests. 
 Supported learning and proficiency value toggling. 
+
+2024/04/25: major update
+Second version of server is now deployed. 
+Now supports retrieving user's learned words (user dictionary).
+Improved the concurrency of firebase access. 
+Non-reproducible error detected. Shall not affect functionalities, debugging postponed. 

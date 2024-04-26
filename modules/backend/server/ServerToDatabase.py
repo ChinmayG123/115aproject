@@ -31,9 +31,6 @@ class DatabaseAccess:
         self.categoryData = defaultdict(list)
         
 
-        
-
-
     def __del__(self):
         # Clean up Firebase app on object destruction
         firebase_admin.delete_app(self.firebase_app)
