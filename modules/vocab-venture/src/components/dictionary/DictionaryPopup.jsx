@@ -12,6 +12,12 @@ import baseimg from '../../assets/dictionary-assets/DictionaryBaseFull.png'
 import { useNavigate } from 'react-router-dom'; // Import useNavigate from react-router-dom
 
 
+
+const handleNextPage = () => {
+  setCurrentPage(current => Math.min(current + 1, Object.keys(userDictionary).length - 1));
+  console.log("Current Page:", currentPage); // Print current page to console
+};
+
  
 
 const getTheUserInformation = async (username, language) => {
@@ -34,6 +40,9 @@ function DictionaryPopup (props) {
   const goToMenu =() => {navigate('/home')};
   const [userDictionary, setUserDictionary] = useState(null);
 
+  const [currentPage, setCurrentPage] = useState(0);
+
+
   useEffect(() => {
     const fetchData = async () => {
         
@@ -42,9 +51,10 @@ function DictionaryPopup (props) {
         console.log(result);
         console.log("BYE");
         setUserDictionary(result);
+        setCurrentPage(0); 
     }
     fetchData();
-}, [props.username]);
+}, [props.username, selectedLanguage]);
 
 
   return (props.trigger) ? (
@@ -70,25 +80,34 @@ function DictionaryPopup (props) {
           
 
           <h1>Welcome, {props.username}!</h1>
-          <h2>Selected Language: {selectedLanguage}</h2>
+          {/* <h2>Selected Language: {selectedLanguage}</h2> */}
 
           <button className= "button" id= "next-page-btn" onClick={goToMenu}>
             <img src={nextimg} /></button>
+
+            {/* <button className="button" id="next-page-btn" onClick={handleNextPage}
+                    disabled={currentPage === Object.keys(userDictionary).length - 1}>
+                    <img src={nextimg} />
+                </button>
+           */}
           
           <button className= "button" id= "prvs-page-btn" onClick={goToMenu}>
             <img src={prvsimg} /></button><br></br>
 
 
+
+
             {userDictionary && (
-  <div>
-    <h2>{selectedLanguage}</h2>
-    <ul>
-      {Object.entries(userDictionary).map(([key, value]) => (
-        <li key={key}>{key}: {value}</li>
-      ))}
-    </ul>
-  </div>
-)}
+              <div>
+                <h2>{selectedLanguage}</h2>
+                <p>Dictionary Length: {Object.keys(userDictionary).length}</p>
+                <ul>
+                  {Object.entries(userDictionary).map(([key, value]) => (
+                    <li key={key}>{key}: {value}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
 
 
 
