@@ -12,14 +12,6 @@ import baseimg from '../../assets/dictionary-assets/DictionaryBaseFull.png'
 import { useNavigate } from 'react-router-dom'; // Import useNavigate from react-router-dom
 
 
-
-const handleNextPage = () => {
-  setCurrentPage(current => Math.min(current + 1, Object.keys(userDictionary).length - 1));
-  console.log("Current Page:", currentPage); // Print current page to console
-};
-
- 
-
 const getTheUserInformation = async (username, language) => {
   try {
       const result = await gameClient.getUserDictionary(username, language);
@@ -43,6 +35,26 @@ function DictionaryPopup (props) {
   const [currentPage, setCurrentPage] = useState(0);
 
 
+
+
+// const handleNextPage = () => {
+//   setCurrentPage(current => Math.min(current + 1, Object.keys(userDictionary).length - 1));
+//   console.log("Current Page:", currentPage); // Print current page to console
+// };
+const handleNextPage = () => {
+  if (currentPage < Math.floor((Object.keys(userDictionary).length) / 2)) {
+    setCurrentPage(current => Math.min(current + 1, (Object.keys(userDictionary).length)));
+    console.log("Current Page:", currentPage); // Print current page to console
+  } else {
+    console.log("Cannot go to next page. Limit reached.");
+  }
+};
+
+
+const handlePreviousPage = () => {
+  setCurrentPage(current => Math.max(current - 1, 0));
+};
+
   useEffect(() => {
     const fetchData = async () => {
         
@@ -52,6 +64,7 @@ function DictionaryPopup (props) {
         console.log("BYE");
         setUserDictionary(result);
         setCurrentPage(0); 
+
     }
     fetchData();
 }, [props.username, selectedLanguage]);
@@ -82,22 +95,26 @@ function DictionaryPopup (props) {
           <h1>Welcome, {props.username}!</h1>
           {/* <h2>Selected Language: {selectedLanguage}</h2> */}
 
-          <button className= "button" id= "next-page-btn" onClick={goToMenu}>
-            <img src={nextimg} /></button>
+          {/* <button className= "button" id= "next-page-btn" onClick={goToMenu}>
+            <img src={nextimg} /></button> */}
 
-            {/* <button className="button" id="next-page-btn" onClick={handleNextPage}
+            <button className="button" id="next-page-btn" onClick={handleNextPage}
                     disabled={currentPage === Object.keys(userDictionary).length - 1}>
                     <img src={nextimg} />
                 </button>
-           */}
           
-          <button className= "button" id= "prvs-page-btn" onClick={goToMenu}>
-            <img src={prvsimg} /></button><br></br>
+          
+          {/* <button className= "button" id= "prvs-page-btn" onClick={goToMenu}>
+            <img src={prvsimg} /></button><br></br> */}
+
+<button className="button" id="prvs-page-btn" onClick={handlePreviousPage}>
+            <img src={prvsimg} />
+          </button><br />
 
 
 
 
-            {userDictionary && (
+            {/* {userDictionary && (
               <div>
                 <h2>{selectedLanguage}</h2>
                 <p>Dictionary Length: {Object.keys(userDictionary).length}</p>
@@ -107,8 +124,23 @@ function DictionaryPopup (props) {
                   ))}
                 </ul>
               </div>
-            )}
+            )} */}
 
+
+            {userDictionary &&
+              Object.entries(userDictionary).map(([key, value], index) => {
+                if (index >= currentPage * 2 && index < (currentPage + 1) * 2) {
+                  return (
+                    <div key={key} className="word-container">
+                      <p>{key}: {value}</p>
+                    </div>
+                  );
+                }
+                return null;
+              })}
+
+
+                      
 
 
 
