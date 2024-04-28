@@ -41,14 +41,29 @@ function DictionaryPopup (props) {
 //   setCurrentPage(current => Math.min(current + 1, Object.keys(userDictionary).length - 1));
 //   console.log("Current Page:", currentPage); // Print current page to console
 // };
+// const handleNextPage = () => {
+//   if (currentPage < Math.floor((Object.keys(userDictionary).length) / 2)) {
+//     setCurrentPage(current => Math.min(current + 1, (Object.keys(userDictionary).length)));
+//     console.log("Current Page:", currentPage); // Print current page to console
+//   } else {
+//     console.log("Cannot go to next page. Limit reached.");
+//   }
+// };
+
+
 const handleNextPage = () => {
-  if (currentPage < Math.floor((Object.keys(userDictionary).length) / 2)) {
-    setCurrentPage(current => Math.min(current + 1, (Object.keys(userDictionary).length)));
-    console.log("Current Page:", currentPage); // Print current page to console
+  if (currentPage < Math.floor((Object.keys(userDictionary).length - 1) / 2)) {
+    setCurrentPage(current => {
+      const nextPage = current + 1;
+      console.log("Current Page:", nextPage); // Log the updated current page
+      return nextPage;
+    });
   } else {
     console.log("Cannot go to next page. Limit reached.");
   }
 };
+
+
 
 
 const handlePreviousPage = () => {
@@ -93,15 +108,21 @@ const handlePreviousPage = () => {
           
 
           <h1>Welcome, {props.username}!</h1>
-          {/* <h2>Selected Language: {selectedLanguage}</h2> */}
 
-          {/* <button className= "button" id= "next-page-btn" onClick={goToMenu}>
-            <img src={nextimg} /></button> */}
-
-            <button className="button" id="next-page-btn" onClick={handleNextPage}
+            {/* <button className="button" id="next-page-btn" onClick={handleNextPage}
                     disabled={currentPage === Object.keys(userDictionary).length - 1}>
                     <img src={nextimg} />
-                </button>
+                </button> */}
+
+
+                <button
+  className="button"
+  id="next-page-btn"
+  onClick={handleNextPage}
+  disabled={currentPage >= Math.floor((Object.keys(userDictionary).length - 1) / 2)}>
+  <img src={nextimg} />
+</button>
+
           
           
           {/* <button className= "button" id= "prvs-page-btn" onClick={goToMenu}>
@@ -138,6 +159,21 @@ const handlePreviousPage = () => {
                 }
                 return null;
               })}
+
+
+{/* 
+{userDictionary &&
+  Object.entries(userDictionary).map(([key, value], index) => {
+    if (index === currentPage) {
+      return (
+        <div key={key} className="word-container">
+          <p>{key}: {value}</p>
+        </div>
+      );
+    }
+    return null;
+  })} */}
+
 
 
                       
