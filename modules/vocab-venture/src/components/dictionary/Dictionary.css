@@ -116,3 +116,18 @@
  
 
  
+
+.welcome-user {
+  position: absolute;
+  top: 10px; /* Adjust the top position as needed */
+  left: 14px; /* Adjust the left position as needed */
+  transform: scale(1);
+}
+
+
+.learned-words {
+  position: absolute;
+  top: 70px; /* Adjust the top position as needed */
+  left: 14px; /* Adjust the left position as needed */
+  transform: scale(1);
+}

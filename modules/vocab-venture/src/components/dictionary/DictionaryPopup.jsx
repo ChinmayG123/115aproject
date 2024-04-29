@@ -105,86 +105,36 @@ const handlePreviousPage = () => {
           
           <div className= "popup-pages">
 
-          
+                <div className = "welcome-user">
+                    <h2>Welcome, {props.username}!</h2>
+                    <p>Dictionary Length: {Object.keys(userDictionary).length}</p>
+                </div>
 
-          <h1>Welcome, {props.username}!</h1>
-
-            {/* <button className="button" id="next-page-btn" onClick={handleNextPage}
-                    disabled={currentPage === Object.keys(userDictionary).length - 1}>
-                    <img src={nextimg} />
-                </button> */}
-
-
-                <button
-  className="button"
-  id="next-page-btn"
-  onClick={handleNextPage}
-  disabled={currentPage >= Math.floor((Object.keys(userDictionary).length - 1) / 2)}>
-  <img src={nextimg} />
-</button>
-
-          
-          
-          {/* <button className= "button" id= "prvs-page-btn" onClick={goToMenu}>
-            <img src={prvsimg} /></button><br></br> */}
-
-<button className="button" id="prvs-page-btn" onClick={handlePreviousPage}>
-            <img src={prvsimg} />
-          </button><br />
+                <br></br>
+                <div className = "learned-words">
+                  {userDictionary &&
+                    Object.entries(userDictionary).map(([key, value], index) => {
+                      if (index >= currentPage * 2 && index < (currentPage + 1) * 2) {
+                        return (
+                          <div key={key} className="word-container">
+                            <p>{key}: {value}</p>
+                          </div>
+                        );
+                      }
+                      return null;
+                    })}
+                </div>
 
 
+                <button className="button" id="next-page-btn" onClick={handleNextPage} 
+                  disabled={currentPage >= Math.floor((Object.keys(userDictionary).length - 1) / 2)}>
+                  <img src={nextimg} />
+                </button>
 
-
-            {/* {userDictionary && (
-              <div>
-                <h2>{selectedLanguage}</h2>
-                <p>Dictionary Length: {Object.keys(userDictionary).length}</p>
-                <ul>
-                  {Object.entries(userDictionary).map(([key, value]) => (
-                    <li key={key}>{key}: {value}</li>
-                  ))}
-                </ul>
-              </div>
-            )} */}
-
-
-            {userDictionary &&
-              Object.entries(userDictionary).map(([key, value], index) => {
-                if (index >= currentPage * 2 && index < (currentPage + 1) * 2) {
-                  return (
-                    <div key={key} className="word-container">
-                      <p>{key}: {value}</p>
-                    </div>
-                  );
-                }
-                return null;
-              })}
-
-
-{/* 
-{userDictionary &&
-  Object.entries(userDictionary).map(([key, value], index) => {
-    if (index === currentPage) {
-      return (
-        <div key={key} className="word-container">
-          <p>{key}: {value}</p>
-        </div>
-      );
-    }
-    return null;
-  })} */}
-
-
-
-                      
-
-
-
-
+                <button className="button" id="prvs-page-btn" onClick={handlePreviousPage}>
+                  <img src={prvsimg} />
+                </button><br />
           </div>
-
-          
-
         </div>
     </div>
   ) : "";
