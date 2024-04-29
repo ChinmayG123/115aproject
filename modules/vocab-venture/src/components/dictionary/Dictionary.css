@@ -39,7 +39,7 @@
   .popup-page-left {
     
     position:relative;
-    background-image: url('../../assets/dictionary-assets/DictPageLeft.PNG');
+    background-image: url('../../assets/dictionary-assets/DictPageLeft.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: left;
@@ -61,7 +61,7 @@
   }
   .popup-page-right {
     position:relative;
-    background-image: url('../../assets/dictionary-assets/DictPageRight.PNG');
+    background-image: url('../../assets/dictionary-assets/DictPageRight.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: right;
