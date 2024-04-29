@@ -11,8 +11,8 @@
  */
 class GameClient {
     // Private fields
-    #HOST = '149.28.199.169';
-    // #HOST = '127.0.0.1';
+    // #HOST = '149.28.199.169';
+    #HOST = '127.0.0.1';
     #PORT = 8080;
 
     constructor() {
@@ -113,7 +113,7 @@ class GameClient {
         if (username.length === 0 || language.length === 0) {
             return null;
         }
-        if (language != "spanish" || language != "french"){
+        if (language != "spanish" || language != "french") {
             console.log('getUserDictionary(): unsupported language');
             return null;
         }
@@ -121,7 +121,8 @@ class GameClient {
             method: 'GET',
             headers: {
                 'Username': username,
-                'Game-Language': language
+                'Game-Language': language,
+                'Target-Asset': 'learned'
             }
         };
         const response = await this.retrieveData(this.userProgress, options);
@@ -150,7 +151,7 @@ class GameClient {
         if (username.length === 0 || language.length === 0 || word.length === 0) {
             return -1;
         }
-        if (language != "spanish" || language != "french"){
+        if (language != "spanish" || language != "french") {
             console.log('updateUserDictionary(): unsupported language');
             return null;
         }
@@ -185,7 +186,7 @@ class GameClient {
         if (username.length === 0 || language.length === 0 || word.length === 0) {
             return -1;
         }
-        if (language != "spanish" || language != "french"){
+        if (language != "spanish" || language != "french") {
             console.log('learnNewWord(): unsupported language');
             return null;
         }
@@ -212,7 +213,7 @@ class GameClient {
         if (username.length === 0 || language.length === 0 || word.length === 0) {
             return -1;
         }
-        if (language != "spanish" || language != "french"){
+        if (language != "spanish" || language != "french") {
             console.log('upProficiency(): unsupported language');
             return null;
         }
@@ -239,7 +240,7 @@ class GameClient {
         if (username.length === 0 || language.length === 0 || word.length === 0) {
             return -1;
         }
-        if (language != "spanish" || language != "french"){
+        if (language != "spanish" || language != "french") {
             console.log('downProficiency(): unsupported language');
             return null;
         }
@@ -261,9 +262,42 @@ class GameClient {
             default: return -1;
         }
     }
+    /**
+     * Get all available words in database within a certain category
+     * @param {*} username 
+     * @param {*} language 
+     * @param {*} word 
+     * @returns {Promise<number>} - A promise that resolves to:
+     *                               0 if the update is successful,
+     *                               1 if word not exist in database,
+     *                              -1 for any other error or unknown status code.
+     */
+    async getAllWordsByCategory(username, category) {
+        if (username.length === 0 || category.length === 0) {
+            return null;
+        }
+        const options = {
+            method: 'GET',
+            headers: {
+                'Username': username,
+                'Target-Asset': category
+            }
+        };
+        const response = await this.retrieveData(this.allDict, options);
+        this.printDebug(response);
+        if (response.status === 200) {
+            return await response.json();
+        } else {
+            return null; // Error or data not found
+        }
+    }
 
-    async getAllWordByCatagory(username, catagory) {
+    async getProgressPercentage(username, language) {
         if (username.length === 0 || language.length === 0) {
+            return null;
+        }
+        if (language != "spanish" || language != "french") {
+            console.log('upProficiency(): unsupported language');
             return null;
         }
         const options = {
@@ -271,20 +305,26 @@ class GameClient {
             headers: {
                 'Username': username,
                 'Game-Language': language,
-                'Target-Asset': catagory
+                'Target-Asset': 'progress'
             }
         };
-        const response = await this.retrieveData(this.allDict, options);
+        const response = await this.retrieveData(this.userProgress, options);
         this.printDebug(response);
         if (response.status === 200) {
-            return await response; 
+            return await response;
         } else {
             return null; // Error or data not found
         }
     }
 
-    async getProgressPercentage(username, language) {
-
+    async getTranslation(username, language){
+        if (username.length === 0 || language.length === 0) {
+            return null;
+        }
+        if (language != "spanish" || language != "french") {
+            console.log('upProficiency(): unsupported language');
+            return null;
+        }
     }
 
     // private function
