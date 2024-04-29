@@ -102,7 +102,7 @@ const handlePreviousPage = () => {
 
                 <div className = "welcome-user">
                     <h2>Welcome, {props.username}!</h2>
-                    <p>Dictionary Length: {Object.keys(userDictionary).length}</p>
+                    <p>Total Learned Words: {Object.keys(userDictionary).length}</p>
                 </div>
 
                 <br></br>
