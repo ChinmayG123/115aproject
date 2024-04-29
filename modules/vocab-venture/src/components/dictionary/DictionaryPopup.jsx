@@ -111,8 +111,9 @@ const handlePreviousPage = () => {
                 </div>
 
                 <br></br>
+
                 <div className = "learned-words">
-                  {userDictionary &&
+                  {/* {userDictionary &&
                     Object.entries(userDictionary).map(([key, value], index) => {
                       if (index >= currentPage * 2 && index < (currentPage + 1) * 2) {
                         return (
@@ -122,7 +123,24 @@ const handlePreviousPage = () => {
                         );
                       }
                       return null;
-                    })}
+                    })} */}
+
+
+{userDictionary &&
+      Object.entries(userDictionary).map(([key, value], index) => {
+        if (index >= currentPage * 2 && index < (currentPage + 1) * 2) {
+          return (
+            <div key={key} className="word-container">
+              <p style={{ marginTop: index === currentPage * 2 + 1 ? '-20px' : '0', marginLeft: index === currentPage * 2 + 1 ? '420px' : '0' }}>
+
+              {/* <p style={{ marginLeft: index === currentPage * 2 + 1 ? '450px' : '0' }}> */}
+                {key}: {value}
+              </p>
+            </div>
+          );
+        }
+        return null;
+      })}
                 </div>
 
 
