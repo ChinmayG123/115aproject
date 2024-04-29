@@ -35,20 +35,10 @@ function DictionaryPopup (props) {
   const [currentPage, setCurrentPage] = useState(0);
 
 
-
-
-// const handleNextPage = () => {
-//   setCurrentPage(current => Math.min(current + 1, Object.keys(userDictionary).length - 1));
-//   console.log("Current Page:", currentPage); // Print current page to console
-// };
-// const handleNextPage = () => {
-//   if (currentPage < Math.floor((Object.keys(userDictionary).length) / 2)) {
-//     setCurrentPage(current => Math.min(current + 1, (Object.keys(userDictionary).length)));
-//     console.log("Current Page:", currentPage); // Print current page to console
-//   } else {
-//     console.log("Cannot go to next page. Limit reached.");
-//   }
-// };
+const handleClose = () => {
+  props.setTrigger(false);
+  setCurrentPage(0); // Reset the current page to 0
+};
 
 
 const handleNextPage = () => {
@@ -97,8 +87,13 @@ const handlePreviousPage = () => {
             
             <button className= "button" id= "dictionary-menu-btn" onClick={goToMenu}>
               <img src={menuimg} /></button>
-            <button className= "button" id= "dictionary-close-btn" onClick={() => props.setTrigger(false)}>
-              <img src={closeimg} /></button>
+            {/* <button className= "button" id= "dictionary-close-btn" onClick={() => props.setTrigger(false)}>
+              <img src={closeimg} /></button> */}
+
+              <button className="button" id="dictionary-close-btn" onClick={handleClose}>
+              <img src={closeimg} />
+            </button>
+
             
           </div>
 
