@@ -92,33 +92,23 @@ const handlePreviousPage = () => {
 
            {/*LEFT PAGE DIV-------------------*/}
           <div className= "popup-page-left">
+            
             <div className = "welcome-user">
               <h2>Welcome, {props.username}!</h2>
               <p>Total Learned Words: {Object.keys(userDictionary).length}</p>
             </div>
 
             <br></br>
+            
 
-            <div className = "learned-words">
-              {/* {userDictionary &&
-                Object.entries(userDictionary).map(([key, value], index) => {
-                  if (index >= currentPage * 2 && index < (currentPage + 1) * 2) {
-                    return (
-                      <div key={key} className="word-container">
-                        <p>{key}: {value}</p>
-                      </div>
-                    );
-                  }
-                  return null;
-                })} */}
+              
+            <div className = "learned-words1">
               {userDictionary &&
                     Object.entries(userDictionary).map(([key, value], index) => {
                       if (index >= currentPage * 2 && index < (currentPage + 1) * 2) {
                         return (
                           <div key={key} className="word-container">
                             <p style={{ marginTop: index === currentPage * 2 + 1 ? '-20px' : '0', marginLeft: index === currentPage * 2 + 1 ? '420px' : '0' }}>
-
-                            {/* <p style={{ marginLeft: index === currentPage * 2 + 1 ? '450px' : '0' }}> */}
                               {key}: {value}
                             </p>
                           </div>
@@ -137,6 +127,21 @@ const handlePreviousPage = () => {
 
           {/*RIGHT PAGE DIV-------------------*/}
           <div className= "popup-page-right">
+          <div className = "learned-words2">
+            {userDictionary &&
+                Object.entries(userDictionary).map(([key, value], index) => {
+                  if (index === currentPage * 2 + 1) {
+                    return (
+                      <div key={key} className="word-container2">
+                        <p style={{ marginTop: '0px', marginLeft: '0px' }}>
+                          {key}: {value}
+                        </p>
+                      </div>
+                    );
+                  }
+                  return null;
+                })}
+          </div>
 
             <button className="button" id="next-page-btn" onClick={handleNextPage} 
               disabled={currentPage >= Math.floor((Object.keys(userDictionary).length - 1) / 2)}>
