@@ -14,23 +14,76 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
   }
 
-  .popup-pages {
-    
-    position:relative;
-    background-image: url('../../assets/dictionary-assets/Pagesfull.png');
+  
+  
+  .popup-inner {
+    background-image: url('../../assets/dictionary-assets/DictionaryBaseFull.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
+    position: relative;
+    width: 880px;
+    height: 630px;
+    display: flex;
+    margin:0;
+   
+    align-items: center;
+    justify-content: center;
+    border-style: solid;
+    
+    
+  }
 
-    width: 96%;
+  .popup-page-left {
+    
+    position:relative;
+    background-image: url('../../assets/dictionary-assets/DictPageLeft.PNG');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: left;
+   
+    width: 48%;
     height: 86%;
     display: flex;
     justify-self: center;
     align-self: center;
+    margin-left: 1.5%;   
+    margin-right: 1%;
+    margin-top: 5%;
+    margin-bottom: 5%;
+    
+
+    padding-left: 1.8%;
+
+    
+  }
+  .popup-page-right {
+    position:relative;
+    background-image: url('../../assets/dictionary-assets/DictPageRight.PNG');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: right;
+
+    width: 48%;
+    height: 86%;
+    display: flex;
+    justify-self: center;
+    align-self: center;
+
+    margin-left: 1%;   
+    margin-right: 1.5%;
+    margin-top: 5%;
+    margin-bottom: 5%;
+
+    padding-right: 1.8%;
+
+  }
+
        
-}
+
   #dictionary-menu-btn{
     width:15%;
     height:10px;
@@ -60,7 +113,7 @@
 
 
 #next-page-btn{
-  position: absolute;
+  position: relative;
   width: 189.5%;
   height: 980px;
   transform: scale(0.05); 
@@ -71,7 +124,7 @@
 } 
 
 #prvs-page-btn{
-  position: absolute;
+  position: relative;
   width: 10%;
   height: 980px;
   transform: scale(0.05); 
@@ -84,22 +137,6 @@
 
 
 
-  
-  .popup-inner {
-    background-image: url('../../assets/dictionary-assets/DictionaryBaseFull.png');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    position: relative;
-    width: 880px;
-    height: 630px;
-    display: flex;
-    margin:0;
-   
-    align-items: center;
-    justify-content: center;
-
-  }
 
  
 .button-row{
