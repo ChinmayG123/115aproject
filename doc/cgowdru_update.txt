@@ -36,3 +36,4 @@ I am able to save the selected language as well.
 04/28/2024:
 
 When the user clicks on the button, it loops through the words it has learned.
+Formatted the words correctly as well.
