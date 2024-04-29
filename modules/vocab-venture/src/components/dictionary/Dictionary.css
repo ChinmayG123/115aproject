@@ -49,11 +49,11 @@
     display: flex;
     justify-self: center;
     align-self: center;
-    margin-left: 1.5%;   
-    margin-right: 1%;
+    margin-left: 3%;   
     margin-top: 5%;
     margin-bottom: 5%;
     
+    border-style: solid;
 
     padding-left: 2.3%;
 
@@ -72,11 +72,11 @@
     justify-self: center;
     align-self: center;
 
-    margin-left: 1%;   
-    margin-right: 1.5%;
+    margin-right: 3%;
     margin-top: 5%;
     margin-bottom: 5%;
 
+    border-style: solid;
     padding-right: 2.3%;
 
   }
