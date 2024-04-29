@@ -32,3 +32,7 @@ I did the convo text for the artist page.
 
 I got the dictionary to receive the user's data from the database.
 I am able to save the selected language as well.
+
+04/28/2024:
+
+When the user clicks on the button, it loops through the words it has learned.
