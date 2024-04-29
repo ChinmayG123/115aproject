@@ -24,22 +24,25 @@ const Artist = function() {
 
     const location = useLocation();
     const username = location.state.username;
+    const selectedlanguage = location.state.language;
+
+
+    const greetings = {
+        'spanish': 'Hola',
+        'french': 'Bonjour',
+    };
+
+
+    const greeting = greetings[selectedlanguage] || 'Hello'; 
+
+
 
     const texts = [
-        `Bonjour ${username}!`,
+        `${greeting} ${username}!`,
         "We will learn about colors here!",
-        "Are you ready?"
+        "Let's begin!"
     ];
 
-
-    
-
-    // const [showText, setShowText] = useState(false);
-
-
-    // const showNpcText = () => {
-    //     setShowText(true);
-    // };
 
     const [currentTextIndex, setCurrentTextIndex] = useState(0);
 
@@ -88,9 +91,12 @@ const Artist = function() {
             {/* <button type= "button" id = "nextbutton" onClick= {goToMenu}>Next</button> */}
             {/* <button type="button" id="nextbutton" onClick={showNpcText}>Next</button> */}
 
-            <button type="button" id="nextbutton" onClick={showNextText}>Next</button>
+            {/* <button type="button" id="nextbutton" onClick={showNextText}>Next</button> */}
 
-
+            
+            <button type="button" id="nextbutton" onClick={showNextText}>
+                {currentTextIndex === texts.length - 1 ? "Start" : "Next"}
+            </button>
 
                   
         </div>
