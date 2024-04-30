@@ -1,0 +1,15 @@
+#schoolnpcimg{
+    position:absolute;
+    height: 80vh;
+    display:flex;
+    align-self: flex-end;
+    justify-self: flex-end;
+    right: 7%;
+}
+
+#deskimg{
+ position:absolute;
+   height: 35%;
+   bottom:-10px;
+    right:0px;
+}
