@@ -41,3 +41,4 @@ Formatted the words correctly as well.
 04/29/2024:
 
 Able to loop through the colors and shown on the artist page.
+Able to identify user text and if it is right or not.
