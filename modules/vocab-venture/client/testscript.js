@@ -2,7 +2,7 @@ const GameClient = require('./gameClient');  // Adjust the path to where your Ga
 
 async function testGetUserDictionary() {
     const username = "LanguageUserTest3";
-    const language = "spanish";
+    const language = "french";
 
     const client = new GameClient();
     try {
@@ -40,12 +40,25 @@ async function testupProficiency() {
     }
 }
 
+async function test_getAllWordsByCategory() {
+    const category = "locations"
+    const username = "TestApril232ndUser"
+    const client = new GameClient();
+    try {
+        const result = await client.getAllWordsByCategory(username, category);
+        console.log('test_getAllWordsByCategory()\'s result:\n', result);
+    } catch (error) {
+        console.error('Error during test:', error);
+    }
+}
+
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-testGetUserDictionary();
-sleep(1000);
-testlearnNewWord();
-sleep(1000);
-testupProficiency();
+// testGetUserDictionary();
+// sleep(1000);
+// testlearnNewWord();
+// sleep(1000);
+// testupProficiency();
+test_getAllWordsByCategory();

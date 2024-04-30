@@ -54,11 +54,9 @@ const handleNextPage = () => {
 };
 
 
-
-
-const handlePreviousPage = () => {
-  setCurrentPage(current => Math.max(current - 1, 0));
-};
+  const handlePreviousPage = () => {
+    setCurrentPage(current => Math.max(current - 1, 0));
+  };
 
   useEffect(() => {
     const fetchData = async () => {
