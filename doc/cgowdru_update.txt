@@ -37,3 +37,7 @@ I am able to save the selected language as well.
 
 When the user clicks on the button, it loops through the words it has learned.
 Formatted the words correctly as well.
+
+04/29/2024:
+
+Able to loop through the colors and shown on the artist page.
