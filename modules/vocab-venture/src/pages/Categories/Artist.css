@@ -97,7 +97,7 @@
     height: 15vh;
 
     margin-top: 85vh;
-    padding-top:5px;
+    padding-top:20px;
     padding-left: 25%;
     padding-right: 25%;
     padding-bottom: 5px;
@@ -131,7 +131,7 @@ input.learnInputBox{
     width: 10vw;
 
     top: 90%;
-    left: 13%;
+    left: 23%;
 }
 
 #previouswordbutton {
@@ -140,7 +140,16 @@ input.learnInputBox{
     width: 10vw;
 
     top: 90%;
-    left: 2%;
+    left: 12%;
+}
+
+#enterbutton {
+    position: absolute;
+    
+    width: 10vw;
+
+    top: 89%;
+    left: 77%;
 }
 
 

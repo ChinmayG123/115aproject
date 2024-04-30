@@ -69,6 +69,14 @@ const Artist = function() {
 
     const [currentTextIndex, setCurrentTextIndex] = useState(0);
 
+    const [startClicked, setStartClicked] = useState(false);
+
+
+    const [textInput, setTextInput] = useState(""); // State to hold the text input value
+
+    const [isLastWordCorrect, setIsLastWordCorrect] = useState(true); // Track if the last entered word was correct
+
+    const [showNpcContent, setShowNpcContent] = useState(true); // Track if the NPC content should be shown
 
 
     const showNextText = () => {
@@ -90,14 +98,56 @@ const Artist = function() {
     
 
 
-    const showPreviousWord = () => {
-        if (currentWordIndex > 0) {
-            setCurrentWordIndex(currentWordIndex - 1);
+    // const showPreviousWord = () => {
+    //     if (currentWordIndex > 0) {
+    //         setCurrentWordIndex(currentWordIndex - 1);
+    //     } else {
+    //         setCurrentWordIndex(fetchedWords.length - 1); // Go to the last word
+    //     }
+    // };
+
+
+    const handleStartClick = () => {
+        if (currentTextIndex < texts.length - 1) {
+            showNextText();
         } else {
-            setCurrentWordIndex(fetchedWords.length - 1); // Go to the last word
+            
+            setStartClicked(true);
+            setShowNpcContent(false); // Hide NPC content after clicking start
+
         }
     };
     
+
+
+    const handleInputChange = (event) => {
+        const newValue = event.target.value;
+        console.log("Text input value:", newValue); // Print the value every time it is set
+        setTextInput(newValue); // Update the text input value as the user types
+    };
+    
+    
+    // const handleEnterClick = () => {
+    //     if (textInput.toLowerCase() === fetchedWords[currentWordIndex].toLowerCase()) {
+    //         showNextWord();
+    //     } else {
+    //         console.log("Incorrect word. Try again!");
+    //     }
+    //     setTextInput(""); // Clear the text input after checking
+    // };
+
+
+    const handleEnterClick = () => {
+        if (textInput.toLowerCase() === fetchedWords[currentWordIndex].toLowerCase()) {
+            showNextWord();
+            setIsLastWordCorrect(true); // Set the state to true if the word is correct
+        } else {
+            console.log("Incorrect word. Try again!");
+            setIsLastWordCorrect(false); // Set the state to false if the word is incorrect
+        }
+        setTextInput(""); // Clear the text input after checking
+    };
+
     
 
     return(  
@@ -109,14 +159,6 @@ const Artist = function() {
 
             <div className="learn-content">
                 <img id="learnBG" src={learnBG} />
-                {/* <div className="learned-words">
-                    <h2>Words:</h2>
-                    <ul>
-                        {fetchedWords.map((word, index) => (
-                            <li key={index}>{word}</li>
-                        ))}
-                    </ul>
-                </div> */}
                 <div className="learned-words">
                     <h2>Words:</h2>
                     <ul>
@@ -126,41 +168,52 @@ const Artist = function() {
 
 
             </div>
-            <div className = "npc-content">
 
-                <p>{texts[currentTextIndex]}</p>
+            <div className="npc-content">
+                {!isLastWordCorrect && <p className="incorrect-message">Incorrect word. Try again!</p>}
+
+                {!startClicked && <p>{texts[currentTextIndex]}</p>}
                 <img id="npcTextbox" src={npcTextbox} alt="npc text box" />
                 <img id="npcimg" src={npcimg} alt="npc image" />
-                
+
             </div>
+
 
             <img id= "easelimg" src={easel}></img>
-            <div className= "textdiv">
-                <input type="text" className = "learnInputBox" placeholder='text'/>
-            </div>
 
-            <button type="button" id="nextbutton" onClick={showNextText}>
-                {currentTextIndex === texts.length - 1 ? "Start" : "Next"}
-            </button>
+            <div className="textdiv"></div>
 
-            <button
-                type="button"
-                id="wordbutton"
-                onClick={showNextWord}
-                disabled={currentWordIndex === fetchedWords.length - 1}
-            >
+            {startClicked ? (
+                <>
+                    <div className="textdiv">
+                        <input
+                            type="text"
+                            className="learnInputBox"
+                            placeholder="text"
+                            value={textInput}
+                            onChange={handleInputChange}
+                        />
+                    </div>
+                    <button type="button" id="enterbutton" onClick={handleEnterClick}>
+                        Enter
+                    </button>
+                </>
+            ) : (
+                <button type="button" id="nextbutton" onClick={handleStartClick}>
+                    {currentTextIndex === texts.length - 1 ? "Start" : "Next"}
+                </button>
+            )}
+
+{/* 
+
+            <button type="button" id="wordbutton" onClick={showNextWord} disabled={currentWordIndex === fetchedWords.length - 1}>
                 Next Word
             </button>
 
 
-            <button
-                type="button"
-                id="previouswordbutton"
-                onClick={showPreviousWord}
-                disabled={currentWordIndex === 0}
-            >
+            <button type="button" id="previouswordbutton" onClick={showPreviousWord} disabled={currentWordIndex === 0}>
                 Previous
-            </button>
+            </button> */}
 
                   
         </div>

@@ -115,6 +115,7 @@ const handleNextPage = () => {
                       return null;
                     })}
               </div>
+              
             <button className="button" id="prvs-page-btn" onClick={handlePreviousPage}>
                 <img src={prvsimg} />
             </button>
