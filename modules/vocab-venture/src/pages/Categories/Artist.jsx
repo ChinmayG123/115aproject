@@ -21,8 +21,10 @@ const Artist = function() {
 
     const navigate = useNavigate(); 
 
-    const goToMenu =() => {navigate('/home')};
-
+    const goToMap = () => {
+        navigate('/map', { state: { username } });
+    };
+    
 
     const location = useLocation();
     const username = location.state.username;
@@ -76,7 +78,7 @@ const Artist = function() {
 
     const [isLastWordCorrect, setIsLastWordCorrect] = useState(true); // Track if the last entered word was correct
 
-    const [showNpcContent, setShowNpcContent] = useState(true); // Track if the NPC content should be shown
+    const [congrats, setCongrats] = useState(false); // Track if the NPC content should be shown
 
 
     const showNextText = () => {
@@ -89,9 +91,7 @@ const Artist = function() {
     const showNextWord = () => {
         if (currentWordIndex < fetchedWords.length - 1) {
             setCurrentWordIndex(currentWordIndex + 1);
-        } else {
-            setCurrentWordIndex(0); // Reset to the first word
-        }
+        } 
     };
     
 
@@ -113,7 +113,6 @@ const Artist = function() {
         } else {
             
             setStartClicked(true);
-            setShowNpcContent(false); // Hide NPC content after clicking start
 
         }
     };
@@ -122,21 +121,10 @@ const Artist = function() {
 
     const handleInputChange = (event) => {
         const newValue = event.target.value;
-        console.log("Text input value:", newValue); // Print the value every time it is set
         setTextInput(newValue); // Update the text input value as the user types
     };
     
     
-    // const handleEnterClick = () => {
-    //     if (textInput.toLowerCase() === fetchedWords[currentWordIndex].toLowerCase()) {
-    //         showNextWord();
-    //     } else {
-    //         console.log("Incorrect word. Try again!");
-    //     }
-    //     setTextInput(""); // Clear the text input after checking
-    // };
-
-
     const handleEnterClick = () => {
         if (textInput.toLowerCase() === fetchedWords[currentWordIndex].toLowerCase()) {
             showNextWord();
@@ -145,10 +133,12 @@ const Artist = function() {
             console.log("Incorrect word. Try again!");
             setIsLastWordCorrect(false); // Set the state to false if the word is incorrect
         }
+
+        if (currentWordIndex === fetchedWords.length - 1) {
+            setCongrats(true); 
+        }
         setTextInput(""); // Clear the text input after checking
     };
-
-    
 
     return(  
 
@@ -171,7 +161,7 @@ const Artist = function() {
 
             <div className="npc-content">
                 {!isLastWordCorrect && <p className="incorrect-message">Incorrect word. Try again!</p>}
-
+                {congrats && isLastWordCorrect && <p className="congrats-message">Congrats! You're done!</p>}
                 {!startClicked && <p>{texts[currentTextIndex]}</p>}
                 <img id="npcTextbox" src={npcTextbox} alt="npc text box" />
                 <img id="npcimg" src={npcimg} alt="npc image" />
@@ -204,12 +194,18 @@ const Artist = function() {
                 </button>
             )}
 
-{/* 
+            {congrats && isLastWordCorrect && (
+                <button type="button" id="goToMapButton" onClick={goToMap}>
+                    Go to Map
+                </button>
 
+            )}
+
+
+{/* 
             <button type="button" id="wordbutton" onClick={showNextWord} disabled={currentWordIndex === fetchedWords.length - 1}>
                 Next Word
             </button>
-
 
             <button type="button" id="previouswordbutton" onClick={showPreviousWord} disabled={currentWordIndex === 0}>
                 Previous

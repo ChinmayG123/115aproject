@@ -153,6 +153,16 @@ input.learnInputBox{
 }
 
 
+#goToMapButton {
+    position: absolute;
+    
+    width: 10vw;
+
+    top: 89%;
+    left: 10%;
+}
+
+
 
 .words-category {
     position: relative;
