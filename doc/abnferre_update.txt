@@ -6,7 +6,7 @@ Completely redone UI for Login and Register pages by removing bootstrap and only
 Added a main page for user to select login or register, can switch between all 3 pages
 
 04-18-2024
-Added nagivation to the languages-select page and map page.  Added image to main page
+Added navigation to the languages-select page and map page.  Added image to main page
 
 04-23-2024
 Drew and coded in the assets for the Artist UI.  Formatted them with css to move/shrink based on window size.
@@ -15,9 +15,10 @@ Drew and coded in the assets for the Dictionary popup page.  When Dictionary fro
 the dictionary overlays the map page
 
 04-26-2024
-Drew and coded in the assets for the Market UI.  Edited some css from the artist page to be re-usable for most learning pages.
+Drew and coded in the assets for the Market UI. Edited some css from the artist page to be re-usable for most learning pages.
 
 04-29-2024
 Re-wrote some css so the dictionary pages are two separate divs to be able to fit the content of the pages easier
 
-
+04-30-2024
+Drew and coded in the assets for the School UI.
