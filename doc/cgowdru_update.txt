@@ -42,3 +42,12 @@ Formatted the words correctly as well.
 
 Able to loop through the colors and shown on the artist page.
 Able to identify user text and if it is right or not.
+
+04/30/2024:
+
+getting translations for each word and making sure the user types in the translation
+each new learned word gets added to the user dictionary
+
+05/01/2024:
+
+fixed the bug by sending language back to the map from the category
