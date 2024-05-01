@@ -112,7 +112,7 @@ class GameClient {
     async getUserDictionary(username, language) {
         if (username.length === 0 || language.length === 0) {
             return null;
-        }
+        } 
         console.log(language, language.length);
         console.log(typeof language);
 
