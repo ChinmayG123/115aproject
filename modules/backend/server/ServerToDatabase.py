@@ -171,6 +171,38 @@ class DatabaseAccess:
             print(f"An error occurred: {e}")
             return None
 
+    def get_translation(self, word, language):
+        """
+        Retrieve the translation of an English word for the specified language.
+    
+        :param word: The English word to translate.
+        :param language: The target language ('french' or 'spanish').
+        :return: The translation of the word or None if not found or in case of an error.
+        """
+        try:
+            # Reference to the document containing the word's translations
+            word_ref = self.db.collection('totalWords').document(word)
+            word_doc = word_ref.get()
+
+            if not word_doc.exists:
+                print(f"No translation found for the word: {word}")
+                return None
+
+            # Extract the word data
+            word_data = word_doc.to_dict()
+        
+            # Check and return the translation based on the specified language
+            translation = word_data.get(language)
+            if translation:
+                return translation
+            else:
+                print(f"No translation available for the word: '{word}' in the language: '{language}'.")
+                return None
+
+        except Exception as e:
+            print(f"An error occurred while retrieving the translation: {e}")
+            return None
+
     def update_user_dictionary(self, username, language, new_dict):
         """
         Advanced method to change a word's proficiency number to the user's learned list for a specified language.
@@ -292,6 +324,8 @@ if __name__ == '__main__':
     #test.groupWordsByCategory()
     #print(test.getAllWordsFromCategory("occupations"))
     print(test.retrieve_progress('TestApril232ndUser', 'french'))
+
+    print(test.get_translation('bird', 'spanish'))
 
 
 

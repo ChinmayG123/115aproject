@@ -18,3 +18,7 @@ users collections.
 Modified retrieve_user_data function to return dictionaries for french and spanish words (in english)
 along with their respective values for sorting the words. Also added a field within each document
 in the total words dictionary which contains which category the word is in for better sorting. 
+
+4/30/2024
+Created a get_translation function that retrieves the specfic translation for each word. It takes in
+the word document (the english word) and the language as arguements and returns the translation as a string. 
