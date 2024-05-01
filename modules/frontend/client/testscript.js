@@ -52,13 +52,27 @@ async function test_getAllWordsByCategory() {
     }
 }
 
+async function test_getTranslation() {
+    const username = "TestApril23";
+    const language = "spanish";
+    const word = "airport"
+    const client = new GameClient();
+    try {
+        const result = await client.getTranslation(username, language, word);
+        console.log('test_getTranslation()\'s result:\n', result);
+    } catch (error) {
+        console.error('Error during test:', error);
+    }
+}
+
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-// testGetUserDictionary();
-// sleep(1000);
+testGetUserDictionary();
+sleep(1000);
 // testlearnNewWord();
 // sleep(1000);
 // testupProficiency();
-test_getAllWordsByCategory();
+// test_getAllWordsByCategory();
+test_getTranslation();

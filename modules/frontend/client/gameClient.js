@@ -113,10 +113,7 @@ class GameClient {
         if (username.length === 0 || language.length === 0) {
             return null;
         }
-        if (language != "spanish" || language != "french") {
-            console.log('getUserDictionary(): unsupported language');
-            return null;
-        }
+
         const options = {
             method: 'GET',
             headers: {
@@ -317,13 +314,25 @@ class GameClient {
         }
     }
 
-    async getTranslation(username, language){
+    async getTranslation(username, language, word){
         if (username.length === 0 || language.length === 0) {
             return null;
         }
-        if (language != "spanish" || language != "french") {
-            console.log('upProficiency(): unsupported language');
-            return null;
+
+        const options = {
+            method: 'GET',
+            headers: {
+                'Username': username,
+                'Game-Language': language,
+                'Target-Word': word
+            },
+        };
+        const response = await this.retrieveData(this.allDict, options);
+        this.printDebug(response);
+        if (response.status === 200) {
+            return await response.json();
+        } else {
+            return null; // Error or data not found
         }
     }
 
