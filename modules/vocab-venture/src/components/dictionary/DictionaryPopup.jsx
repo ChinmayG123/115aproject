@@ -33,6 +33,8 @@ function DictionaryPopup (props) {
   const [userDictionary, setUserDictionary] = useState(null);
 
   const [currentPage, setCurrentPage] = useState(0);
+  const [translations, setTranslations] = useState({});
+
 
 
 const handleClose = () => {
@@ -62,17 +64,27 @@ const handleNextPage = () => {
     const fetchData = async () => {
         
         const result = await getTheUserInformation(props.username, selectedLanguage);
-        console.log("HELLO");
-        console.log(result);
-        console.log("BYE");
         setUserDictionary(result);
         setCurrentPage(0); 
+
+
+
+      // Fetch translations
+      const translationsObject = {};
+      for (const [key, _] of Object.entries(result)) {
+        console.log("key", key);
+        const translation = await gameClient.getTranslation(props.username, selectedLanguage, key);
+        console.log("translate", translation);
+        translationsObject[key] = translation;
+      }
+      setTranslations(translationsObject);
 
     }
     fetchData();
 }, [props.username, selectedLanguage]);
 
 
+  console.log("AYYYYY", translations);
   return (props.trigger) ? (
     <div className= "popup">      
         <div className= "popup-inner"> 
@@ -98,7 +110,7 @@ const handleNextPage = () => {
 
             <br></br>
             
-
+            
               
             <div className = "learned-words1">
               {userDictionary &&
@@ -107,8 +119,10 @@ const handleNextPage = () => {
                         return (
                           <div key={key} className="word-container">
                             <p style={{ marginTop: index === currentPage * 2 + 1 ? '-20px' : '0', marginLeft: index === currentPage * 2 + 1 ? '420px' : '0' }}>
-                              {key}: {value}
-                            </p>
+                              {/* {key}: {value} <br></br> */}
+                              {translations[key] ? `${key}: ${translations[key][key]}` : `${key}: ${value}`}
+
+                         </p>
                           </div>
                         );
                       }
@@ -133,7 +147,9 @@ const handleNextPage = () => {
                     return (
                       <div key={key} className="word-container2">
                         <p style={{ marginTop: '0px', marginLeft: '0px' }}>
-                          {key}: {value}
+                          {/* {key}: {value} */}
+                          {translations[key] ? `${key}: ${translations[key][key]}` : `${key}: ${value}`}
+
                         </p>
                       </div>
                     );
