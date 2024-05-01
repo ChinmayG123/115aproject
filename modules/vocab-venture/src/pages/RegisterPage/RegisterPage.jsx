@@ -8,7 +8,18 @@ const RegisterPage = function() {
     const navigate = useNavigate();
     const goToMainPage =() => {navigate('/home')};
 
-    const goToLanguage =() => {navigate('/language');}
+    // const goToLanguage =() => {navigate('/language');}
+
+
+    // const goToLanguage = () => {
+    //     const username = document.getElementById('username').value;
+    //     navigate('/language', { state: { username } });
+    // };
+    const goToLanguage = () => {
+        const username = document.getElementById('new-username').value;
+        navigate('/language', { state: { username } });
+    };
+    
 
 
 
