@@ -196,10 +196,10 @@ class GameClient {
         if (username.length === 0 || language.length === 0 || word.length === 0) {
             return -1;
         }
-        if (language != "spanish" || language != "french") {
-            console.log('learnNewWord(): unsupported language');
-            return null;
-        }
+        // if (language != "spanish" || language != "french") {
+        //     console.log('learnNewWord(): unsupported language');
+        //     return null;
+        // }
         const options = {
             method: 'PUT',
             headers: {
