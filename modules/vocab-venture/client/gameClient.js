@@ -110,9 +110,6 @@ class GameClient {
      * - null // If there is an error or data cannot be found.
      */
     async getUserDictionary(username, language) {
-        if (username.length === 0 || language.length === 0) {
-            return null;
-        }
 
         const options = {
             method: 'GET',
@@ -145,13 +142,7 @@ class GameClient {
      *                              -1 for any other error or unknown status code.
      */
     async updateUserDictionary(username, language, word, proficiency = 5) {
-        if (username.length === 0 || language.length === 0 || word.length === 0) {
-            return -1;
-        }
-        if (language != "spanish" || language != "french") {
-            console.log('updateUserDictionary(): unsupported language');
-            return null;
-        }
+
         const options = {
             method: 'POST',
             headers: {
@@ -180,13 +171,7 @@ class GameClient {
      *                              -1 for any other error or unknown status code.
      */
     async learnNewWord(username, language, word) {
-        if (username.length === 0 || language.length === 0 || word.length === 0) {
-            return -1;
-        }
-        if (language != "spanish" || language != "french") {
-            console.log('learnNewWord(): unsupported language');
-            return null;
-        }
+
         const options = {
             method: 'PUT',
             headers: {
@@ -207,13 +192,7 @@ class GameClient {
     }
 
     async upProficiency(username, language, word) {
-        if (username.length === 0 || language.length === 0 || word.length === 0) {
-            return -1;
-        }
-        if (language != "spanish" || language != "french") {
-            console.log('upProficiency(): unsupported language');
-            return null;
-        }
+
         const options = {
             method: 'PUT',
             headers: {
@@ -234,13 +213,7 @@ class GameClient {
     }
 
     async downProficiency(username, language, word) {
-        if (username.length === 0 || language.length === 0 || word.length === 0) {
-            return -1;
-        }
-        if (language != "spanish" || language != "french") {
-            console.log('downProficiency(): unsupported language');
-            return null;
-        }
+
         const options = {
             method: 'PUT',
             headers: {
@@ -270,9 +243,7 @@ class GameClient {
      *                              -1 for any other error or unknown status code.
      */
     async getAllWordsByCategory(username, category) {
-        if (username.length === 0 || category.length === 0) {
-            return null;
-        }
+
         const options = {
             method: 'GET',
             headers: {
@@ -290,35 +261,25 @@ class GameClient {
     }
 
     async getProgressPercentage(username, language) {
-        if (username.length === 0 || language.length === 0) {
-            return null;
-        }
-        if (language != "spanish" || language != "french") {
-            console.log('upProficiency(): unsupported language');
-            return null;
-        }
+
         const options = {
             method: 'GET',
             headers: {
                 'Username': username,
                 'Game-Language': language,
-                'Target-Asset': 'progress'
+                'Target-Asset': 'percentage'
             }
         };
         const response = await this.retrieveData(this.userProgress, options);
         this.printDebug(response);
         if (response.status === 200) {
-            return await response;
+            return await response.json();
         } else {
             return null; // Error or data not found
         }
     }
 
     async getTranslation(username, language, word){
-        console.log(username, language, word);
-        if (username.length === 0 || language.length === 0) {
-            return null;
-        }
 
         const options = {
             method: 'GET',

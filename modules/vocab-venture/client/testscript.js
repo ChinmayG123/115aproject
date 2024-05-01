@@ -13,6 +13,19 @@ async function testGetUserDictionary() {
     }
 }
 
+async function test_getProgressPercentage() {
+    const username = " TestApril232ndUser";
+    const language = "spanish";
+
+    const client = new GameClient();
+    try {
+        const result = await client.getProgressPercentage(username, language);
+        console.log('test_getProgressPercentage() result:', result);
+    } catch (error) {
+        console.error('Error during test:', error);
+    }
+}
+
 async function testlearnNewWord() {
     const username = "TestApril23";
     const language = "spanish";
@@ -69,10 +82,12 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-testGetUserDictionary();
-sleep(1000);
+//testGetUserDictionary();
+
 // testlearnNewWord();
 // sleep(1000);
 // testupProficiency();
 // test_getAllWordsByCategory();
-test_getTranslation();
+// test_getTranslation();
+sleep(5000);
+test_getProgressPercentage();

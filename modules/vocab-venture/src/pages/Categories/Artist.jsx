@@ -72,24 +72,25 @@ const Artist = function() {
                 console.log("Fetched words:", fetchedWords);
                 setFetchedWords(fetchedWords || []);
                 
-            // Fetch translations for each word
-            const translations = [];
-            for (let i = 0; i < fetchedWords.length; i++) {
-                const word = fetchedWords[i];
-                const translationResponse = await gameClient.getTranslation(username, selectedlanguage, word);
-                if (translationResponse) {
-                    translations.push(translationResponse.translation);
-                } else {
-                    translations.push("Translation not available");
-                }
+            // console.log("hi");
+            // // Fetch translations for each word
+            // const translations = [];
+            // for (let i = 0; i < fetchedWords.length; i++) {
+            //     const word = fetchedWords[i];
+            //     const translationResponse = await gameClient.getTranslation(username, selectedlanguage, word);
+            //     if (translationResponse) {
+            //         translations.push(translationResponse.translation);
+            //     } else {
+            //         translations.push("Translation not available");
+            //     }
 
-                // Check if we reached the end of fetchedWords
-                if (i === fetchedWords.length - 1) {
-                    console.log("Reached end of fetchedWords, skipping translation fetch.");
-                    break;
-                }
-            }
-            setTranslations(translations);
+            //     // Check if we reached the end of fetchedWords
+            //     if (i === fetchedWords.length - 1) {
+            //         console.log("Reached end of fetchedWords, skipping translation fetch.");
+            //         break;
+            //     }
+            // }
+            // setTranslations(translations);
 
             } catch (error) {
                 console.error("Error fetching words:", error);
