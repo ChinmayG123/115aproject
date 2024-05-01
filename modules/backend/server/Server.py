@@ -102,11 +102,23 @@ class Server:
                 
         elif target_db == "/progress":  # get user learned words
             self.username = self.Request["Headers"]["Username"]
-            # if self.username in self.activeAccount:
-            #     self.retrieve_user_dict(self.username)
-            # else:
-            #     self.Response["Body"] = "User not in session"
-            self.retrieve_user_dict(self.username)
+
+            if self.Request["Headers"]["Target-Asset"] == "learned":
+                self.retrieve_user_dict(self.username)
+            elif self.Request["Headers"]["Target-Asset"] == "percentage":
+                self.retrieve_user_percentage(self.username)
+
+        elif target_db == "/total":
+            try: 
+                self.retrieve_all_dict(self.Request["Headers"]["Target-Asset"])
+            except Exception as e:
+                pass
+            try:
+                self.retrieve_translation(self.Request["Headers"]["Target-Word"])
+            except Exception as e:
+                self.Response["StatusCode"] = "500"
+                self.Response["StatusLine"] = "Internal Server Error"
+                print(f"An error occurred: {e}")
 
     def retrieve_login(self, username):
         db_access = DatabaseAccess(database_dir_path)
@@ -139,6 +151,22 @@ class Server:
             self.Response["StatusCode"] = "500"
             self.Response["StatusLine"] = "Internal Server Error"
 
+    def retrieve_user_percentage(self, username):
+        db_access = DatabaseAccess(database_dir_path)
+        language = self.Request["Headers"]["Game-Language"]
+        try: 
+            db_access.calculate_progress(self.username, language)
+            result = db_access.retrieve_progress(self.username, language)
+            self.Response["Body"] = json.dumps(dict({username: result}))
+            self.Response["Headers"]["Content-Length"] = str(len(self.Response["Body"]))
+            self.Response["Headers"]["Content-Type"] = "application/json"
+            self.Response["StatusCode"] = "200"
+            self.Response["StatusLine"] = "OK"
+        except Exception as e:
+            self.Response["StatusCode"] = "500"
+            self.Response["StatusLine"] = "Internal Server Error"
+            print(f"An error occurred: {e}")
+            
     def retrieve_all_dict(self, catagory=''):
         db_access = DatabaseAccess(database_dir_path)
         db_access.groupWordsByCategory()
@@ -152,6 +180,23 @@ class Server:
         else:  # Handle error codes
             self.Response["StatusCode"] = "500"
             self.Response["StatusLine"] = "Internal Server Error"
+
+    def retrieve_translation(self, word):
+        db_access = DatabaseAccess(database_dir_path)
+        language = self.Request["Headers"]["Game-Language"]
+        try: 
+            result = db_access.get_translation(word, language)
+
+            self.Response["Body"] = json.dumps(dict({word:result}))
+            self.Response["Headers"]["Content-Length"] = str(len(self.Response["Body"]))
+            self.Response["Headers"]["Content-Type"] = "application/json"
+            self.Response["StatusCode"] = "200"
+            self.Response["StatusLine"] = "OK"
+        except Exception as e:
+            self.Response["StatusCode"] = "500"
+            self.Response["StatusLine"] = "Internal Server Error"
+            print(f"An error occurred: {e}")
+
     def update_data(self):
         """
         Setter function for all database access. May consist sensitive data. Will alter database.
@@ -260,7 +305,7 @@ class Server:
             ] = "GET, POST, PUT, OPTIONS"
             self.Response["Headers"][
                 "Access-Control-Allow-Headers"
-            ] = "Content-Type, Content-Length, Username, Password, Game-Language, Action, Target-Asset"
+            ] = "Content-Type, Content-Length, Username, Password, Game-Language, Action, Target-Asset, Target-Word"
             self.Response["Headers"]["Access-Control-Max-Age"] = "86400"
             self.Response["Headers"]["Content-Length"] = "0"
             self.Response["Headers"]["Connection"] = "close"
