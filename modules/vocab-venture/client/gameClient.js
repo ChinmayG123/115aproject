@@ -315,6 +315,7 @@ class GameClient {
     }
 
     async getTranslation(username, language, word){
+        console.log(username, language, word);
         if (username.length === 0 || language.length === 0) {
             return null;
         }
