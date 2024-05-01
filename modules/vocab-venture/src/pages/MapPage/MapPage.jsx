@@ -30,9 +30,15 @@ const Map = function() {
     const [buttonPopup, setButtonPopup] = useState(false);
 
     const navigate = useNavigate(); 
-    const goToSchool =() => {navigate('/school');}
+    // const goToSchool =() => {navigate('/school');}
 
 
+    // Navigate to the Artist component with the username as a prop
+    const goToSchool = () => {
+        // navigate('/artist', { state: { username } });
+        navigate('/school', { state: { username, language: selectedLanguage } });
+
+    };
     // Navigate to the Artist component with the username as a prop
     const goToArtist = () => {
         // navigate('/artist', { state: { username } });
@@ -40,10 +46,18 @@ const Map = function() {
 
     };
 
+
+    // Navigate to the Artist component with the username as a prop
+    const goToMarket = () => {
+        // navigate('/artist', { state: { username } });
+        navigate('/market', { state: { username, language: selectedLanguage } });
+
+    };
+
     // const goToArtist =() => {navigate('/artist');}
 
 
-    const goToMarket =() => {navigate('/market');}
+    // const goToMarket =() => {navigate('/market');}
     const goToOutskirts =() => {navigate('/outskirts');}
     const goToTailor =() => {navigate('/tailor');}
 

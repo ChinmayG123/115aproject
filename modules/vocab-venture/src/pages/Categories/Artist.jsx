@@ -34,6 +34,18 @@ const Artist = function() {
     const [currentWordIndex, setCurrentWordIndex] = useState(0); // Track current word index
 
 
+    const [currentTextIndex, setCurrentTextIndex] = useState(0);
+
+    const [startClicked, setStartClicked] = useState(false);
+
+
+    const [textInput, setTextInput] = useState(""); // State to hold the text input value
+
+    const [isLastWordCorrect, setIsLastWordCorrect] = useState(true); // Track if the last entered word was correct
+
+    const [congrats, setCongrats] = useState(false); // Track if the NPC content should be shown
+
+
     useEffect(() => {
         const fetchWords = async () => {
             try {
@@ -69,17 +81,6 @@ const Artist = function() {
     ];
 
 
-    const [currentTextIndex, setCurrentTextIndex] = useState(0);
-
-    const [startClicked, setStartClicked] = useState(false);
-
-
-    const [textInput, setTextInput] = useState(""); // State to hold the text input value
-
-    const [isLastWordCorrect, setIsLastWordCorrect] = useState(true); // Track if the last entered word was correct
-
-    const [congrats, setCongrats] = useState(false); // Track if the NPC content should be shown
-
 
     const showNextText = () => {
         if (currentTextIndex < texts.length - 1) {
@@ -94,17 +95,6 @@ const Artist = function() {
         } 
     };
     
-
-    
-
-
-    // const showPreviousWord = () => {
-    //     if (currentWordIndex > 0) {
-    //         setCurrentWordIndex(currentWordIndex - 1);
-    //     } else {
-    //         setCurrentWordIndex(fetchedWords.length - 1); // Go to the last word
-    //     }
-    // };
 
 
     const handleStartClick = () => {
@@ -201,20 +191,9 @@ const Artist = function() {
 
             )} */}
 
-<button type="button" id="goToMapButton" onClick={goToMap}>
+                <button type="button" id="goToMapButton" onClick={goToMap}>
                     Go to Map
                 </button>
-
-
-{/* 
-            <button type="button" id="wordbutton" onClick={showNextWord} disabled={currentWordIndex === fetchedWords.length - 1}>
-                Next Word
-            </button>
-
-            <button type="button" id="previouswordbutton" onClick={showPreviousWord} disabled={currentWordIndex === 0}>
-                Previous
-            </button> */}
-
                   
         </div>
     
