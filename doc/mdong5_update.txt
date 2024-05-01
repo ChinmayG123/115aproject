@@ -50,3 +50,8 @@ Second version of server is now deployed.
 Now supports retrieving user's learned words (user dictionary).
 Improved the concurrency of firebase access. 
 Non-reproducible error detected. Shall not affect functionalities, debugging postponed. 
+
+2024/04/30: major update
+Supports getting all words by category, get translation, and get progress percentage. 
+Server can host front end from now. 
+Maintaining cloud server. Responding to bug report. 
