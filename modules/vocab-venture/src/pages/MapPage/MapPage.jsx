@@ -131,25 +131,39 @@ const Map = function() {
 
             
             < form action ="">
-                <button type= "button" id= "schoolimg" onClick={goToSchool} onMouseEnter={handleSchoolMouseEnter} onMouseLeave={handleSchoolMouseLeave}>
-                    <img src={isSchoolHovered ? schoolHLImage : schoolImage} />
-                </button>
+            <div class = "mapbtndiv" id= "artist">
+                    <button type= "button" id= "artistimg" onClick={goToArtist} onMouseEnter={handleArtistMouseEnter} onMouseLeave={handleArtistMouseLeave}>
+                        <img src={isArtistHovered ? artistHLImage : artistImage} />
+                    </button>
+                    <p class = "descTxt">Learn about Colors</p>
+                </div>
+                <div class = "mapbtndiv" id = "outskirts">
+                    <button type= "button" id= "outskirtsimg" onClick={goToOutskirts} onMouseEnter={handleOutskirtsMouseEnter} onMouseLeave={handleOutskirtsMouseLeave}>
+                        <img src={isOutskirtsHovered ? outskirtsHLImage : outskirtsImage} />
+                    </button>
+                    <p class= "descTxt">Test your Understanding</p>
+                </div>
 
-                <button type= "button" id= "artistimg" onClick={goToArtist} onMouseEnter={handleArtistMouseEnter} onMouseLeave={handleArtistMouseLeave}>
-                    <img src={isArtistHovered ? artistHLImage : artistImage} />
-                </button>
+                <div class = "mapbtndiv" id = "market">
+                    <button type= "button" id= "marketimg" onClick={goToMarket} onMouseEnter={handleMarketMouseEnter} onMouseLeave={handleMarketMouseLeave}>
+                        <img src={isMarketHovered ? marketHLImage : marketImage} />
+                    </button>
+                    <p class = "descTxt">Learn about Food</p>
+                </div>
 
-                <button type= "button" id= "marketimg" onClick={goToMarket} onMouseEnter={handleMarketMouseEnter} onMouseLeave={handleMarketMouseLeave}>
-                    <img src={isMarketHovered ? marketHLImage : marketImage} />
-                </button>
+                <div class = "mapbtndiv" id= "school">
+                    <button type= "button" id= "schoolimg" onClick={goToSchool} onMouseEnter={handleSchoolMouseEnter} onMouseLeave={handleSchoolMouseLeave}>
+                        <img src={isSchoolHovered ? schoolHLImage : schoolImage} />
+                    </button>
+                    <p class = "descTxt">Learn about School</p>
+                </div>
 
-                <button type= "button" id= "outskirtsimg" onClick={goToOutskirts} onMouseEnter={handleOutskirtsMouseEnter} onMouseLeave={handleOutskirtsMouseLeave}>
-                    <img src={isOutskirtsHovered ? outskirtsHLImage : outskirtsImage} />
-                </button>
-
+                <div class = "mapbtndiv" id = "tailor">
                 <button type= "button" id= "tailorimg" onClick={goToTailor} onMouseEnter={handleTailorMouseEnter} onMouseLeave={handleTailorMouseLeave}>
                     <img src={isTailorHovered ? tailorHLImage : tailorImage} />
                 </button>
+                <p class = "descTxt">Learn about Clothing</p>
+                </div>
 
 
                 <button type="button" id="dictionaryimg" onClick= {() => setButtonPopup(true)}> 

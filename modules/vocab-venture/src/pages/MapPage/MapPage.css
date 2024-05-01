@@ -41,34 +41,20 @@ button[type="button"]:hover img {
 }
 
 #schoolimg {
-
-  position: absolute;
-  top: 25%; 
-  left: 80%;
-  transform: translate(-50%, -50%); 
-  
   border: none;  
   background-color: transparent; 
   padding: 0; 
-
-  width: 17%;
-  height: 36%;
-
-  /* position: absolute;
-  top: 50px; 
-  left: 1000px; 
-  
-  border: none;  
-  background-color: transparent; 
-  padding: 0; 
-
-  width: 250px;
-  height: 250px; */
-}
-
-#schoolimg img {
   max-width: 300px;
   max-height: 300px;
+  width: 100%;
+  
+
+}
+
+#school{
+  position:absolute;
+  left:4%;
+  bottom: 10%;
 }
 
 #schoolimg img:hover {
@@ -76,36 +62,20 @@ button[type="button"]:hover img {
 }
 
 #artistimg {
-
-  position: absolute;
-  top: 75%; 
-  left: 82%;
-  transform: translate(-50%, -50%); 
-  
   border: none;  
   background-color: transparent; 
   padding: 0; 
-
-  width: 10%;
-  height: 36%;
-
-  /* position: absolute;
-  top: 380px; 
-  left: 1080px; 
-  
-  border: none;  
-  background-color: transparent; 
-  padding: 0; 
-
-  width: 180px;
-  height: 250px; */
-}
-
-#artistimg img {
   max-width: 300px;
   max-height: 300px;
+  width: 100%;
+
 }
 
+#artist{
+  position:absolute;
+  left:10%;
+  top: 10%;
+}
 
 #artistimg img:hover {
   transform: scale(1.1); 
@@ -113,75 +83,39 @@ button[type="button"]:hover img {
 
 
 #marketimg {
-
-  position: absolute;
-  top: 75%; 
-  left: 15%;
-  transform: translate(-50%, -50%); 
-  
   border: none;  
   background-color: transparent; 
   padding: 0; 
-
-  width: 15%;
-  height: 35%;
-
-  
-  /* position: absolute;
-  top: 380px; 
-  left: 130px; 
-  
-  border: none;  
-  background-color: transparent; 
-  padding: 0; 
-
-  width: 240px;
-  height: 250px; */
-
-}
-
-#marketimg img {
   max-width: 300px;
   max-height: 300px;
+  width: 100%;
+
+
 }
 
-
+#market{
+  position:absolute;
+  right:9%;
+  top: 7%;
+}
 #marketimg img:hover {
   transform: scale(1.1); 
 }
 
 
 #outskirtsimg {
-
-  position: absolute;
-  top: 20%; 
-  left: 47%;
-  transform: translate(-50%, -50%); 
-  
   border: none;  
   background-color: transparent; 
   padding: 0; 
-
-  width: 20%;
-  height: 40%;
-  
-  /* position: absolute;
-  top: 50px;
-  left: 550px; 
-  
-  border: none;  
-  background-color: transparent; 
-  padding: 0; 
-
-
-  width: 290px;
-  height: 270px; */
-
-}
-
-#outskirtsimg img {
   max-width: 300px;
   max-height: 300px;
+  width: 100%;
+}
+
+#outskirts{
+  position:absolute;
+  left:40%;
+  top: 5%;
 }
 
 
@@ -190,56 +124,47 @@ button[type="button"]:hover img {
 }
 
 #tailorimg {
-
-  position: absolute;
-  top: 25%; 
-  left: 20%;
-  transform: translate(-50%, -50%); 
-  
   border: none;  
   background-color: transparent; 
   padding: 0; 
+  max-width: 100%;
 
-  width: 20%;
-  height: 40%;
-
-
-  /* position: absolute;
-  top: 50px; 
-  left: 160px; 
-  
-  border: none;  
-  background-color: transparent; 
-  padding: 0; 
-
-
-  width: 280px;
-  height: 270px; */
 
 }
 
-#tailorimg img {
-  max-width: 300px;
-  max-height: 300px;
+.descTxt{
+  font-weight: bold;
+  background-color: rgba(230, 233, 206, 0.5);
+  border-radius: 5px;
+ 
+  color:#274153;
+  padding-left: 5px;
+  padding-right: 5px;
+  text-align: center;
 }
 
+#tailor{
+  position:absolute;
+  right:6%;
+  bottom: 11%;
+}
 
 #tailorimg img:hover {
   transform: scale(1.1); 
 }
 
+.mapbtndiv{
 
-
-/* 
-#menubarimg {
   position: absolute;
-  top: -370px; 
-  left: 160px; 
-  width: 1000px;
-  height: 1000px;
-  transform: scale(1.1); 
-  pointer-events: none; 
-} */
+  display:flex;
+  flex-direction: column;
+  width: 20%;
+  align-items: center;;
+}
+
+
+
+
 
 
 #menubarimg {
@@ -252,33 +177,13 @@ button[type="button"]:hover img {
   pointer-events: none; 
 } 
 
-/* #menubarimg img {
-  max-width: 300px;
-  max-height: 300px;
-} */
 
 #menubarimg img {
   width: 100%;
   max-height: 1000px; /* Set your desired max-height */
 }
 
-/* 
 
-#menubarimg {
-  position: absolute;
-  top: 28%; 
-  left: 35%; 
-  width: 20vw; 
-  height: auto; 
-  transform: scale(5); 
-  pointer-events: none; 
-  z-index: 999;
-}
-
-#menubarimg img {
-  max-width: 100%; 
-  height: auto; 
-} */
 
 
 
