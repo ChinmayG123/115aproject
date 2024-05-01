@@ -28,6 +28,9 @@
     display:flex;
     justify-content: center;
 }
+
+
+
 #npcimg{ 
     
     position:absolute;
@@ -175,10 +178,9 @@ input.learnInputBox{
 
 
 
-
 .learned-words {
     position: absolute;
-    top: 0;
+    top: 20%; /* Adjust this value to move the section up or down */
     left: 0;
     z-index: 1; /* Ensure the words are above the background */
     width: 100%;
@@ -190,6 +192,21 @@ input.learnInputBox{
     color: black; /* Set the text color */
 }
 
+
+/* .learned-words {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1; 
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: black; 
+} */
+
 .learned-words ul {
     list-style-type: none;
     padding: 0;
@@ -198,3 +215,18 @@ input.learnInputBox{
 .learned-words ul li {
     margin: 5px;
 }
+
+
+
+#colorImage{
+    position:absolute;
+   
+
+    width:20vw;
+    /* height:30vh; */
+    top: 7%;
+
+    display:flex;
+    justify-content: center;
+}
+

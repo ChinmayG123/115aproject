@@ -7,6 +7,8 @@ import npcTextbox from '../../assets/artist-assets/ArtistTextbox.png';
 import easel from '../../assets/artist-assets/Easel.png';
 import artistbg from '../../assets/artist-assets/ArtistBG.png';
 import './Artist.css';
+import blue from '../../assets/dict-images/colors/blue.png';
+import black from '../../assets/dict-images/colors/red.png';
 
 // import { useLocation } from 'react-router-dom';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -130,6 +132,25 @@ const Artist = function() {
     };
     
 
+
+    // const getColorImageSrc = (colorWord) => {
+    //     // Construct the path to the image based on the color word
+    //     console.log(colorWord);
+    //     return `../../assets/dict-images/colors/${colorWord}.png`;
+    // };
+
+    const getColorImageSrc = (colorWord) => {
+        switch (colorWord) {
+            case 'black':
+                return black;
+            case 'blue':
+                return blue;
+            // Add other cases for different colors...
+            default:
+                return null;
+        }
+    };
+
     return(  
 
         <div className = "container">
@@ -140,11 +161,19 @@ const Artist = function() {
             <div className="learn-content">
                 <img id="learnBG" src={learnBG} />
                 <div className="learned-words">
-                    <h2>Words:</h2>
                     <ul>
-                        <li>{fetchedWords[currentWordIndex]}</li>
+                        <h1>{fetchedWords[currentWordIndex]}</h1>
                     </ul>
                 </div>
+
+                {fetchedWords[currentWordIndex] && (
+                <img
+                    id="colorImage"
+                    src={getColorImageSrc(fetchedWords[currentWordIndex])}
+                    alt={fetchedWords[currentWordIndex]}
+                />
+            )}
+
 
 
             </div>
