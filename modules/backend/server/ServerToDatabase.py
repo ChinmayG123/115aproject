@@ -17,6 +17,8 @@ class DatabaseAccess:
     USER_CONFLICT = 1
     USER_PASSWORD_INVALID = 2
 
+    ALREADY_LEARNED_WORD = -1
+
 
     def __init__(self, script_path):
         unique_name = f"firebaseApp-{threading.get_ident()}"
@@ -102,6 +104,11 @@ class DatabaseAccess:
         doc = doc_ref.get()
 
         if doc.exists:
+            data = doc.to_dict()
+            #print("This is the data:", data)
+            if data is not None and learnedWord in data[language]:
+                print("Word already has been learned by user")
+                return self.ALREADY_LEARNED_WORD
             field_value = doc.get(language)
             #print("This is the type:", type(field_value))
             field_value[learnedWord] = 5
@@ -323,7 +330,8 @@ if __name__ == '__main__':
 
     #test.groupWordsByCategory()
     #print(test.getAllWordsFromCategory("occupations"))
-    print(test.retrieve_progress('TestApril232ndUser', 'french'))
+    #print(test.retrieve_progress('TestApril232ndUser', 'french'))
+    #print(test.learn_new_word('TestApril232ndUser', 'french', 'testword55'))
 
     print(test.get_translation('bird', 'spanish'))
 
