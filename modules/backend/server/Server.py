@@ -109,16 +109,13 @@ class Server:
                 self.retrieve_user_percentage(self.username)
 
         elif target_db == "/total":
-            try: 
+            mode = 0
+            if "Target-Asset" in self.Request["Headers"]:
                 self.retrieve_all_dict(self.Request["Headers"]["Target-Asset"])
-            except Exception as e:
-                pass
-            try:
+            elif "Target-Word" in self.Request["Headers"]:
                 self.retrieve_translation(self.Request["Headers"]["Target-Word"])
-            except Exception as e:
-                self.Response["StatusCode"] = "500"
-                self.Response["StatusLine"] = "Internal Server Error"
-                print(f"An error occurred: {e}")
+
+            
 
     def retrieve_login(self, username):
         db_access = DatabaseAccess(database_dir_path)
@@ -167,12 +164,12 @@ class Server:
             self.Response["StatusLine"] = "Internal Server Error"
             print(f"An error occurred: {e}")
             
-    def retrieve_all_dict(self, catagory=''):
+    def retrieve_all_dict(self, category=''):
         db_access = DatabaseAccess(database_dir_path)
         db_access.groupWordsByCategory()
-        result = db_access.getAllWordsFromCategory(catagory)
+        result = db_access.getAllWordsFromCategory(category)
         if isinstance(result, list):  # Check if result is a dictionary
-            self.Response["Body"] = result
+            self.Response["Body"] = json.dumps(dict({category:result}))
             self.Response["Headers"]["Content-Length"] = str(len(self.Response["Body"]))
             self.Response["Headers"]["Content-Type"] = "application/json"
             self.Response["StatusCode"] = "200"

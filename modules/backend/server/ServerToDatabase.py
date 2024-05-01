@@ -251,8 +251,7 @@ class DatabaseAccess:
 
     def groupWordsByCategory(self):
         #groups words by category in a python dictionary called self.categoryData
-        db = firestore.client()
-        collection_ref = db.collection("totalWords")
+        collection_ref = self.db.collection("totalWords")
         docs = collection_ref.stream()
 
         for doc in docs:

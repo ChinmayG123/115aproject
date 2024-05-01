@@ -67,7 +67,7 @@ async function test_getAllWordsByCategory() {
 
 async function test_getTranslation() {
     const username = "TestApril23";
-    const language = "spanish";
+    const language = "french";
     const word = "airport"
     const client = new GameClient();
     try {
@@ -87,7 +87,8 @@ function sleep(ms) {
 // testlearnNewWord();
 // sleep(1000);
 // testupProficiency();
-// test_getAllWordsByCategory();
-// test_getTranslation();
-sleep(5000);
+test_getAllWordsByCategory();
+sleep(10000);
+test_getTranslation();
+sleep(10000);
 test_getProgressPercentage();
