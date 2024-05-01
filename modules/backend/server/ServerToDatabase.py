@@ -263,6 +263,24 @@ class DatabaseAccess:
             return self.SUCCESSFUL
         else:
             return self.USER_NAME_NOT_EXIST
+    
+
+    #function to retrieve progress percentage
+    def retrieve_progress(self, username, language):
+        collection_ref = self.db.collection(self.collection_name)
+        doc_ref = self.db.collection(self.collection_name).document(username)
+        doc = doc_ref.get()
+        if doc.exists:
+        # Extract the value of the field 'french_progress
+            data = doc.to_dict()
+            if data is not None:  # Check if the document data is not None
+                language_str = language + "_" + "progress"
+                progress = data.get(language_str, 'No category field')
+                return progress
+        else:
+            return self.USER_NAME_NOT_EXIST
+
+
         
 if __name__ == '__main__':
     script_path = os.path.abspath(__file__)
@@ -271,8 +289,10 @@ if __name__ == '__main__':
     database_dir_path = os.path.dirname(server_dir_path) + "/database"
     test = DatabaseAccess(database_dir_path)
 
-    test.groupWordsByCategory()
-    print(test.getAllWordsFromCategory("occupations"))
+    #test.groupWordsByCategory()
+    #print(test.getAllWordsFromCategory("occupations"))
+    print(test.retrieve_progress('TestApril232ndUser', 'french'))
+
 
 
 
