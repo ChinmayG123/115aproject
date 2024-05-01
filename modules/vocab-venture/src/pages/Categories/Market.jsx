@@ -30,8 +30,10 @@ const Market = function() {
     const username = location.state.username;
     const selectedlanguage = location.state.language;
 
+
     const [fetchedWords, setFetchedWords] = useState([]);
-    const [currentWordIndex, setCurrentWordIndex] = useState(0); // Track current word index
+    const [currentWordIndex, setCurrentWordIndex] = useState(0);
+    const [translatedWord, setTranslatedWord] = useState('');
 
 
     const [currentTextIndex, setCurrentTextIndex] = useState(0);
@@ -45,7 +47,6 @@ const Market = function() {
 
     const [congrats, setCongrats] = useState(false); // Track if the NPC content should be shown
 
-
     useEffect(() => {
         const fetchWords = async () => {
             try {
@@ -53,16 +54,52 @@ const Market = function() {
                 const fetchedWords = Object.values(response).flat();
                 console.log("Fetched words:", fetchedWords);
                 setFetchedWords(fetchedWords || []);
+
             } catch (error) {
                 console.error("Error fetching words:", error);
             }
         };
-        
 
         fetchWords();
     }, []);
-    
 
+    
+    // useEffect(() => {
+    //     const fetchTranslation = async () => {
+    //         if (currentWordIndex < fetchedWords.length) {
+    //             const translation = await gameClient.getTranslation(username, selectedlanguage, fetchedWords[currentWordIndex]);
+                
+    //             console.log(translation);
+    //             if (translation) {
+    //                 setTranslatedWord(translation[fetchedWords[currentWordIndex]]);
+    //             }
+    //             console.log(translation[fetchedWords[currentWordIndex]]);
+    //         }
+    //     };
+
+    //     fetchTranslation();
+    // }, [currentWordIndex, fetchedWords, selectedlanguage, username]);
+
+
+    useEffect(() => {
+        const fetchTranslation = async () => {
+            try {
+                if (currentWordIndex < fetchedWords.length) {
+                    const translation = await gameClient.getTranslation(username, selectedlanguage, fetchedWords[currentWordIndex]);
+                    console.log(translation);
+                    if (translation) {
+                        setTranslatedWord(translation[fetchedWords[currentWordIndex]]);
+                    }
+                }
+            } catch (error) {
+                console.error("Error fetching translation:", error);
+            }
+        };
+    
+        fetchTranslation();
+    }, [currentWordIndex, fetchedWords, selectedlanguage, username]);
+
+    
     const greetings = {
         'spanish': 'Hola',
         'french': 'Bonjour',
@@ -115,7 +152,7 @@ const Market = function() {
     };
     
     const handleEnterClick = async () => {
-        if (textInput.toLowerCase() === fetchedWords[currentWordIndex].toLowerCase()) {
+        if (textInput.toLowerCase() === translatedWord.toLowerCase()) {
             await gameClient.learnNewWord(username, selectedlanguage, fetchedWords[currentWordIndex]);
             showNextWord();
             setIsLastWordCorrect(true); // Set the state to true if the word is correct
@@ -130,6 +167,7 @@ const Market = function() {
         setTextInput(""); // Clear the text input after checking
     };
     
+    
     return(  
 
         <div className = "container">
@@ -139,10 +177,17 @@ const Market = function() {
 
             <div className="learn-content">
                 <img id="learnBG" src={learnBG} />
+                
                 <div className="learned-words">
-                    <h2>Words:</h2>
                     <ul>
-                        <li>{fetchedWords[currentWordIndex]}</li>
+                        <h1>English: {fetchedWords[currentWordIndex]}</h1>
+                        <br></br>
+                        {translatedWord !== null && (
+                        <h1>{selectedlanguage}: {translatedWord}</h1>
+                    )}
+
+                        {/* <h1>{selectedlanguage}: {translatedWord}</h1> */}
+                        {/* <p>{translations[fetchedWords[currentWordIndex]]}</p> */}
                     </ul>
                 </div>
 

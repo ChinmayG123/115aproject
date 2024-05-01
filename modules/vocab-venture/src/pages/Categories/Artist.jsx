@@ -46,8 +46,17 @@ const Artist = function() {
     const username = location.state.username;
     const selectedlanguage = location.state.language;
 
+    // const [fetchedWords, setFetchedWords] = useState([]);
+
+
+
     const [fetchedWords, setFetchedWords] = useState([]);
-    const [currentWordIndex, setCurrentWordIndex] = useState(0); // Track current word index
+    const [currentWordIndex, setCurrentWordIndex] = useState(0);
+    const [translatedWord, setTranslatedWord] = useState('');
+
+    // const [fetchedWords, setFetchedWords] = useState({ words: [], translations: {} });
+
+    // const [currentWordIndex, setCurrentWordIndex] = useState(0); // Track current word index
 
 
     const [currentTextIndex, setCurrentTextIndex] = useState(0);
@@ -61,9 +70,7 @@ const Artist = function() {
 
     const [congrats, setCongrats] = useState(false); // Track if the NPC content should be shown
 
-    const [translations, setTranslations] = useState({});
-
-
+    
     useEffect(() => {
         const fetchWords = async () => {
             try {
@@ -71,36 +78,31 @@ const Artist = function() {
                 const fetchedWords = Object.values(response).flat();
                 console.log("Fetched words:", fetchedWords);
                 setFetchedWords(fetchedWords || []);
-                
-            // console.log("hi");
-            // // Fetch translations for each word
-            // const translations = [];
-            // for (let i = 0; i < fetchedWords.length; i++) {
-            //     const word = fetchedWords[i];
-            //     const translationResponse = await gameClient.getTranslation(username, selectedlanguage, word);
-            //     if (translationResponse) {
-            //         translations.push(translationResponse.translation);
-            //     } else {
-            //         translations.push("Translation not available");
-            //     }
-
-            //     // Check if we reached the end of fetchedWords
-            //     if (i === fetchedWords.length - 1) {
-            //         console.log("Reached end of fetchedWords, skipping translation fetch.");
-            //         break;
-            //     }
-            // }
-            // setTranslations(translations);
 
             } catch (error) {
                 console.error("Error fetching words:", error);
             }
         };
-        
 
         fetchWords();
     }, []);
+
     
+    useEffect(() => {
+        const fetchTranslation = async () => {
+            if (currentWordIndex < fetchedWords.length) {
+                const translation = await gameClient.getTranslation(username, selectedlanguage, fetchedWords[currentWordIndex]);
+                
+                if (translation) {
+                    setTranslatedWord(translation[fetchedWords[currentWordIndex]]);
+                }
+                // console.log(translation[fetchedWords[currentWordIndex]]);
+            }
+        };
+
+        fetchTranslation();
+    }, [currentWordIndex, fetchedWords, selectedlanguage, username]);
+
 
     const greetings = {
         'spanish': 'Hola',
@@ -152,8 +154,9 @@ const Artist = function() {
         const newValue = event.target.value;
         setTextInput(newValue); // Update the text input value as the user types
     };
+    
     const handleEnterClick = async () => {
-        if (textInput.toLowerCase() === fetchedWords[currentWordIndex].toLowerCase()) {
+        if (textInput.toLowerCase() === translatedWord.toLowerCase()) {
             await gameClient.learnNewWord(username, selectedlanguage, fetchedWords[currentWordIndex]);
             showNextWord();
             setIsLastWordCorrect(true); // Set the state to true if the word is correct
@@ -168,13 +171,7 @@ const Artist = function() {
         setTextInput(""); // Clear the text input after checking
     };
     
-
-
-    // const getColorImageSrc = (colorWord) => {
-    //     // Construct the path to the image based on the color word
-    //     console.log(colorWord);
-    //     return `../../assets/dict-images/colors/${colorWord}.png`;
-    // };
+    
 
     const getColorImageSrc = (colorWord) => {
         switch (colorWord) {
@@ -199,6 +196,8 @@ const Artist = function() {
         }
     };
 
+    // console.log(translations);
+
     return(  
 
         <div className = "container">
@@ -208,11 +207,13 @@ const Artist = function() {
 
             <div className="learn-content">
                 <img id="learnBG" src={learnBG} />
+
                 <div className="learned-words">
                     <ul>
-                        <h1>{fetchedWords[currentWordIndex]}</h1>
-                        <p>{translations[fetchedWords[currentWordIndex]]}</p>
-
+                        <h1>English: {fetchedWords[currentWordIndex]}</h1>
+                        <br></br>
+                        <h1>{selectedlanguage}: {translatedWord}</h1>
+                        {/* <p>{translations[fetchedWords[currentWordIndex]]}</p> */}
                     </ul>
                 </div>
 
