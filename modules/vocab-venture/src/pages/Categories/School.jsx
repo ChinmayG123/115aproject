@@ -116,22 +116,22 @@ const School = function() {
         const newValue = event.target.value;
         setTextInput(newValue); // Update the text input value as the user types
     };
-    
-    
-    const handleEnterClick = () => {
+    const handleEnterClick = async () => {
         if (textInput.toLowerCase() === fetchedWords[currentWordIndex].toLowerCase()) {
+            await gameClient.learnNewWord(username, selectedlanguage, fetchedWords[currentWordIndex]);
             showNextWord();
             setIsLastWordCorrect(true); // Set the state to true if the word is correct
         } else {
             console.log("Incorrect word. Try again!");
             setIsLastWordCorrect(false); // Set the state to false if the word is incorrect
         }
-
+    
         if (currentWordIndex === fetchedWords.length - 1) {
             setCongrats(true); 
         }
         setTextInput(""); // Clear the text input after checking
     };
+    
 
 
     return(  
