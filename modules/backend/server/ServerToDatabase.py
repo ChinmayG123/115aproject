@@ -108,7 +108,7 @@ class DatabaseAccess:
             #print("This is the data:", data)
             if data is not None and learnedWord in data[language]:
                 print("Word already has been learned by user")
-                return self.ALREADY_LEARNED_WORD
+                return self.SUCCESSFUL #return successful status code even if word is already learned
             field_value = doc.get(language)
             #print("This is the type:", type(field_value))
             field_value[learnedWord] = 5

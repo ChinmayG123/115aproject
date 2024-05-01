@@ -34,3 +34,7 @@ Readded main function for testing purposes in ServerToDatabase.py
 
 Added retrieve_progress() function in ServerToDatabase.py 
 Fixed learn_words function to not allow duplicate learned words
+
+2024/05/01:
+
+Fixed status code being returned in retrieve_progress() function
