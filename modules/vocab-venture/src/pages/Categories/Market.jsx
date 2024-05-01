@@ -21,14 +21,20 @@ import React, { useState, useEffect } from 'react';
 const Market = function() {
     const navigate = useNavigate(); 
 
-    const goToMap = () => {
-        navigate('/map', { state: { username } });
-    };
+    // const goToMap = () => {
+    //     navigate('/map', { state: { username } });
+    // };
     
 
     const location = useLocation();
     const username = location.state.username;
     const selectedlanguage = location.state.language;
+
+
+    const goToMap = () => {
+        // navigate('/map', { state: { username } });
+        navigate('/map', { state: { username, language: selectedlanguage } });
+    };
 
 
     const [fetchedWords, setFetchedWords] = useState([]);
@@ -84,9 +90,9 @@ const Market = function() {
     useEffect(() => {
         const fetchTranslation = async () => {
             try {
+                
                 if (currentWordIndex < fetchedWords.length) {
                     const translation = await gameClient.getTranslation(username, selectedlanguage, fetchedWords[currentWordIndex]);
-                    console.log(translation);
                     if (translation) {
                         setTranslatedWord(translation[fetchedWords[currentWordIndex]]);
                     }

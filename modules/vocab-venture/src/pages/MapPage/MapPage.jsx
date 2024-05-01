@@ -123,6 +123,8 @@ const Map = function() {
         setIsTailorHovered(false);
     };
 
+    console.log("language", selectedLanguage);
+
 
     return(  
         <body className = "mapbackground">

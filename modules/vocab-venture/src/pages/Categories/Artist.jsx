@@ -30,9 +30,6 @@ const Artist = function() {
 
     const navigate = useNavigate(); 
 
-    const goToMap = () => {
-        navigate('/map', { state: { username } });
-    };
 
     // Navigate to the Artist component with the username as a prop
     // const goToMap = () => {
@@ -48,6 +45,10 @@ const Artist = function() {
 
     // const [fetchedWords, setFetchedWords] = useState([]);
 
+    const goToMap = () => {
+        // navigate('/map', { state: { username } });
+        navigate('/map', { state: { username, language: selectedlanguage } });
+    };
 
 
     const [fetchedWords, setFetchedWords] = useState([]);
@@ -90,9 +91,10 @@ const Artist = function() {
     
     useEffect(() => {
         const fetchTranslation = async () => {
+            
             if (currentWordIndex < fetchedWords.length) {
                 const translation = await gameClient.getTranslation(username, selectedlanguage, fetchedWords[currentWordIndex]);
-                
+
                 if (translation) {
                     setTranslatedWord(translation[fetchedWords[currentWordIndex]]);
                 }

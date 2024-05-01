@@ -24,9 +24,9 @@ const School = function() {
 
     const navigate = useNavigate(); 
 
-    const goToMap = () => {
-        navigate('/map', { state: { username } });
-    };
+    // const goToMap = () => {
+    //     navigate('/map', { state: { username } });
+    // };
     
 
     const location = useLocation();
@@ -35,13 +35,15 @@ const School = function() {
 
 
 
+    const goToMap = () => {
+        // navigate('/map', { state: { username } });
+        navigate('/map', { state: { username, language: selectedlanguage } });
+    };
+
+
     const [fetchedWords, setFetchedWords] = useState([]);
     const [currentWordIndex, setCurrentWordIndex] = useState(0);
     const [translatedWord, setTranslatedWord] = useState('');
-
-
-    // const [fetchedWords, setFetchedWords] = useState([]);
-    // const [currentWordIndex, setCurrentWordIndex] = useState(0); // Track current word index
 
 
     const [currentTextIndex, setCurrentTextIndex] = useState(0);
@@ -76,9 +78,14 @@ const School = function() {
     
     useEffect(() => {
         const fetchTranslation = async () => {
+            console.log("okay");
+
             if (currentWordIndex < fetchedWords.length) {
                 const translation = await gameClient.getTranslation(username, selectedlanguage, fetchedWords[currentWordIndex]);
-                
+                console.log(username, selectedlanguage, fetchedWords[currentWordIndex]);
+                console.log("hi", translation);
+                console.log("hello", translation[fetchedWords[currentWordIndex]]);
+                    
                 if (translation) {
                     setTranslatedWord(translation[fetchedWords[currentWordIndex]]);
                 }
