@@ -8,7 +8,14 @@ import easel from '../../assets/artist-assets/Easel.png';
 import artistbg from '../../assets/artist-assets/ArtistBG.png';
 import './Artist.css';
 import blue from '../../assets/dict-images/colors/blue.png';
-import black from '../../assets/dict-images/colors/red.png';
+import black from '../../assets/dict-images/colors/black.png';
+import brown from '../../assets/dict-images/colors/brown.png';
+import green from '../../assets/dict-images/colors/green.png';
+import orange from '../../assets/dict-images/colors/orange.png';
+import red from '../../assets/dict-images/colors/red.png';
+import white from '../../assets/dict-images/colors/white.png';
+import yellow from '../../assets/dict-images/colors/yellow.png';
+
 
 // import { useLocation } from 'react-router-dom';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -26,7 +33,14 @@ const Artist = function() {
     const goToMap = () => {
         navigate('/map', { state: { username } });
     };
-    
+
+    // Navigate to the Artist component with the username as a prop
+    // const goToMap = () => {
+    //     // navigate('/artist', { state: { username } });
+    //     navigate('/map', { state: { username, language: selectedLanguage } });
+
+    // };
+
 
     const location = useLocation();
     const username = location.state.username;
@@ -145,7 +159,18 @@ const Artist = function() {
                 return black;
             case 'blue':
                 return blue;
-            // Add other cases for different colors...
+            case 'brown':
+                return brown;
+            case 'red':
+                return red;
+            case 'yellow':
+                return yellow;
+            case 'green':
+                return green;
+            case 'white':
+                return white;
+            case 'orange':
+                return orange;
             default:
                 return null;
         }
@@ -220,10 +245,10 @@ const Artist = function() {
 
             )} */}
 
-                <button type="button" id="goToMapButton" onClick={goToMap}>
-                    Go to Map
-                </button>
-                  
+            <button type="button" id="goToMapButton" onClick={goToMap}>
+                Go to Map
+            </button>
+                
         </div>
     
      );
