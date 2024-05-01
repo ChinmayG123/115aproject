@@ -113,10 +113,20 @@ class GameClient {
         if (username.length === 0 || language.length === 0) {
             return null;
         }
-        if (language != "spanish" || language != "french") {
-            console.log('getUserDictionary(): unsupported language');
-            return null;
-        }
+        console.log(language, language.length);
+        console.log(typeof language);
+
+        // if (language != "spanish" || language != "french") {
+        //     console.log('getUserDictionary(): unsupported language');
+        //     return null;
+        // }
+
+
+        // if (language.length != 7 || language.length != 6) {
+        //     console.log("hi");
+        //     console.log('getUserDictionary(): unsupported language');
+        //     return null;
+        // }
         const options = {
             method: 'GET',
             headers: {

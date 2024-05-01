@@ -194,12 +194,16 @@ const Artist = function() {
                 </button>
             )}
 
-            {congrats && isLastWordCorrect && (
+            {/* {congrats && isLastWordCorrect && (
                 <button type="button" id="goToMapButton" onClick={goToMap}>
                     Go to Map
                 </button>
 
-            )}
+            )} */}
+
+<button type="button" id="goToMapButton" onClick={goToMap}>
+                    Go to Map
+                </button>
 
 
 {/* 
