@@ -1,0 +1,15 @@
+#sewingTable{
+    position:absolute;
+      height: 50%;
+      bottom: 0px;
+       right:0px;
+   }
+
+#tailornpcimg{
+    position:absolute;
+    height: 80vh;
+    display:flex;
+    align-self: flex-end;
+    justify-self: flex-end;
+    right: 20%;
+}
