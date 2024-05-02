@@ -17,7 +17,7 @@ import fish from '../../assets/dict-images/food/Fish.png';
 import juice from '../../assets/dict-images/food/Juice.png';
 import meat from '../../assets/dict-images/food/Meat.png';
 import milk from '../../assets/dict-images/food/Milk.png';
-// import yellow from '../../assets/mark-images/food/yellow.png';
+import water from '../../assets/dict-images/food/Water.png';
 
 
 
@@ -186,8 +186,8 @@ const Market = function() {
                 return meat;
             case 'milk':
                 return milk;
-            case 'orange':
-                return orange;
+            case 'water':
+                return water;
             default:
                 return null;
         }
