@@ -8,3 +8,18 @@
     align-self: flex-end;
     justify-self: flex-end;
 }
+
+
+
+
+#foodImage{
+    position:absolute;
+   
+
+    width:17vw;
+    /* height:30vh; */
+    top: 7%;
+
+    display:flex;
+    justify-content: center;
+}

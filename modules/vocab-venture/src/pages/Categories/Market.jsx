@@ -9,6 +9,18 @@ import marketbg from '../../assets/market-assets/MarketBG.png';
 import './Artist.css';
 import './Market.css';
 
+
+import apple from '../../assets/dict-images/food/Apple.png';
+import bread from '../../assets/dict-images/food/Bread.png';
+import eggs from '../../assets/dict-images/food/Eggs.png';
+import fish from '../../assets/dict-images/food/Fish.png';
+import juice from '../../assets/dict-images/food/Juice.png';
+import meat from '../../assets/dict-images/food/Meat.png';
+import milk from '../../assets/dict-images/food/Milk.png';
+// import yellow from '../../assets/mark-images/food/yellow.png';
+
+
+
 // import { useLocation } from 'react-router-dom';
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -70,23 +82,6 @@ const Market = function() {
     }, []);
 
     
-    // useEffect(() => {
-    //     const fetchTranslation = async () => {
-    //         if (currentWordIndex < fetchedWords.length) {
-    //             const translation = await gameClient.getTranslation(username, selectedlanguage, fetchedWords[currentWordIndex]);
-                
-    //             console.log(translation);
-    //             if (translation) {
-    //                 setTranslatedWord(translation[fetchedWords[currentWordIndex]]);
-    //             }
-    //             console.log(translation[fetchedWords[currentWordIndex]]);
-    //         }
-    //     };
-
-    //     fetchTranslation();
-    // }, [currentWordIndex, fetchedWords, selectedlanguage, username]);
-
-
     useEffect(() => {
         const fetchTranslation = async () => {
             try {
@@ -174,6 +169,31 @@ const Market = function() {
     };
     
     
+
+    const getFoodImageSrc = (foodWord) => {
+        switch (foodWord) {
+            case 'apple':
+                return apple;
+            case 'bread':
+                return bread;
+            case 'eggs':
+                return eggs;
+            case 'fish':
+                return fish;
+            case 'juice':
+                return juice;
+            case 'meat':
+                return meat;
+            case 'milk':
+                return milk;
+            case 'orange':
+                return orange;
+            default:
+                return null;
+        }
+    };
+
+
     return(  
 
         <div className = "container">
@@ -196,6 +216,16 @@ const Market = function() {
                         {/* <p>{translations[fetchedWords[currentWordIndex]]}</p> */}
                     </ul>
                 </div>
+
+
+                {fetchedWords[currentWordIndex] && (
+                <img
+                    id="foodImage"
+                    src={getFoodImageSrc(fetchedWords[currentWordIndex])}
+                    alt={fetchedWords[currentWordIndex]}
+                />
+            )}
+
 
 
             </div>
