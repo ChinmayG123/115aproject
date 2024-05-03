@@ -78,7 +78,7 @@ const Tailor = function() {
     useEffect(() => {
         const fetchWords = async () => {
             try {
-                const response = await gameClient.getAllWordsByCategory(username, "locations");
+                const response = await gameClient.getAllWordsByCategory(username, "clothing");
                 const fetchedWords = Object.values(response).flat();
                 console.log("Fetched words:", fetchedWords);
                 setFetchedWords(fetchedWords || []);

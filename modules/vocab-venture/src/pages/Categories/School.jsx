@@ -62,7 +62,7 @@ const School = function() {
     useEffect(() => {
         const fetchWords = async () => {
             try {
-                const response = await gameClient.getAllWordsByCategory(username, "occupations");
+                const response = await gameClient.getAllWordsByCategory(username, "school");
                 const fetchedWords = Object.values(response).flat();
                 console.log("Fetched words:", fetchedWords);
                 setFetchedWords(fetchedWords || []);

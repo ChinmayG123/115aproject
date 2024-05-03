@@ -12,7 +12,7 @@ import './Market.css';
 
 import apple from '../../assets/dict-images/food/Apple.png';
 import bread from '../../assets/dict-images/food/Bread.png';
-import eggs from '../../assets/dict-images/food/Eggs.png';
+import egg from '../../assets/dict-images/food/Eggs.png';
 import fish from '../../assets/dict-images/food/Fish.png';
 import juice from '../../assets/dict-images/food/Juice.png';
 import meat from '../../assets/dict-images/food/Meat.png';
@@ -68,7 +68,7 @@ const Market = function() {
     useEffect(() => {
         const fetchWords = async () => {
             try {
-                const response = await gameClient.getAllWordsByCategory(username, "animals");
+                const response = await gameClient.getAllWordsByCategory(username, "food");
                 const fetchedWords = Object.values(response).flat();
                 console.log("Fetched words:", fetchedWords);
                 setFetchedWords(fetchedWords || []);
@@ -153,6 +153,8 @@ const Market = function() {
     };
     
     const handleEnterClick = async () => {
+        // console.log("text input ", textInput.toLowerCase().length);
+        // console.log("translatedWord" , translatedWord.toLowerCase().length);
         if (textInput.toLowerCase() === translatedWord.toLowerCase()) {
             await gameClient.learnNewWord(username, selectedlanguage, fetchedWords[currentWordIndex]);
             showNextWord();
@@ -176,8 +178,8 @@ const Market = function() {
                 return apple;
             case 'bread':
                 return bread;
-            case 'eggs':
-                return eggs;
+            case 'egg':
+                return egg;
             case 'fish':
                 return fish;
             case 'juice':
