@@ -43,8 +43,7 @@ const Artist = function() {
     const username = location.state.username;
     const selectedlanguage = location.state.language;
 
-    // const [fetchedWords, setFetchedWords] = useState([]);
-
+  
     const goToMap = () => {
         // navigate('/map', { state: { username } });
         navigate('/map', { state: { username, language: selectedlanguage } });
@@ -52,12 +51,15 @@ const Artist = function() {
 
 
     const [fetchedWords, setFetchedWords] = useState([]);
+    const [seenWords, setSeenWords] = useState([]);
+    const [unseenWords, setUnseenWords] = useState([]);
+    const [texts, setTexts] = useState([]);
+
     const [currentWordIndex, setCurrentWordIndex] = useState(0);
     const [translatedWord, setTranslatedWord] = useState('');
-
-    // const [fetchedWords, setFetchedWords] = useState({ words: [], translations: {} });
-
-    // const [currentWordIndex, setCurrentWordIndex] = useState(0); // Track current word index
+    
+    //the user's dictionary 
+    const [userDictionary, setUserDictionary] = useState([]);
 
 
     const [currentTextIndex, setCurrentTextIndex] = useState(0);
@@ -71,12 +73,18 @@ const Artist = function() {
 
     const [congrats, setCongrats] = useState(false); // Track if the NPC content should be shown
 
-    
+   
+
     useEffect(() => {
         const fetchWords = async () => {
             try {
                 const response = await gameClient.getAllWordsByCategory(username, "colors");
                 const fetchedWords = Object.values(response).flat();
+
+                const fetchedUserDict = await gameClient.getUserDictionary(username, selectedlanguage);
+                setUserDictionary(fetchedUserDict || []);
+                console.log("Known words: ", fetchedUserDict);
+
                 console.log("Fetched words:", fetchedWords);
                 setFetchedWords(fetchedWords || []);
 
@@ -84,7 +92,6 @@ const Artist = function() {
                 console.error("Error fetching words:", error);
             }
         };
-
         fetchWords();
     }, []);
 
@@ -105,7 +112,33 @@ const Artist = function() {
         fetchTranslation();
     }, [currentWordIndex, fetchedWords, selectedlanguage, username]);
 
+    useEffect(() => {
+        const recordSeenAndUnseen = () => {
 
+            let unseenTemp = [];
+            let seenTemp = [];
+            const dictWords = Object.keys(userDictionary);
+            
+            for (const categoryWord of Object.values(fetchedWords)) {
+                //if the user has not seen this word 
+                if (dictWords.indexOf(categoryWord) == -1){
+                    unseenTemp.push(categoryWord);
+                    console.log("pushed ", categoryWord, " to unseen");
+                }
+                else{
+                    seenTemp.push(categoryWord);
+                    console.log("pushed ", categoryWord, " to seen");
+                }
+            } 
+            setUnseenWords(unseenTemp);
+            setSeenWords(seenTemp);
+        }
+        recordSeenAndUnseen();
+    }, [fetchedWords, username, selectedlanguage]);
+
+    //condition to decide whether to show the prompt 
+
+    
     const greetings = {
         'spanish': 'Hola',
         'french': 'Bonjour',
@@ -114,15 +147,46 @@ const Artist = function() {
 
     const greeting = greetings[selectedlanguage] || 'Hello'; 
 
+    useEffect(() =>{
+        const decideTextTree = () =>{
+            //if the user has seen all the words, 
+            //only greet the user
+            let t = [];
+            if(unseenWords.length == 0){
+                t = [`${greeting}! Getting some practice in?`];
+            }
+            //if user has never seen any of the words
+            else if(unseenWords.length == fetchedWords.length){
+                t = [
+                    `${greeting} ${username}!`,
+                    "We will learn about colors here!",
+                    "Let's begin!"
+                ];
+            }
+            //user has seen only some of the words
+            //ACTIVATE PROMPT 
+            else{
+                t = [`Welcome back ${username}! Would you like to practice or learn new words?`];
+            }
+            setTexts(t);
+            
+        }
+        decideTextTree();
+    }, [unseenWords, seenWords]);
 
 
 
+
+
+
+/*
     const texts = [
         `${greeting} ${username}!`,
         "We will learn about colors here!",
         "Let's begin!"
     ];
-
+*/
+  
 
 
     const showNextText = () => {
@@ -130,7 +194,7 @@ const Artist = function() {
             setCurrentTextIndex(currentTextIndex + 1);
         }
     };
-
+  
 
     const showNextWord = () => {
         if (currentWordIndex < fetchedWords.length - 1) {
@@ -206,12 +270,13 @@ const Artist = function() {
             
               
             <img id= "artistbg" src={artistbg}></img>
-
+            
+            {/*image display div*/}
             <div className="learn-content">
                 <img id="learnBG" src={learnBG} />
-
                 <div className="learned-words">
-                    <ul>
+                 <ul>
+                        
                         <h1>English: {fetchedWords[currentWordIndex]}</h1>
                         <br></br>
                         <h1>{selectedlanguage}: {translatedWord}</h1>
@@ -230,7 +295,8 @@ const Artist = function() {
 
 
             </div>
-
+            
+            {/*npc text div*/}
             <div className="npc-content">
                 {!isLastWordCorrect && <p className="incorrect-message">Incorrect word. Try again!</p>}
                 {congrats && isLastWordCorrect && <p className="congrats-message">Congrats! You're done!</p>}
@@ -244,6 +310,17 @@ const Artist = function() {
             <img id= "easelimg" src={easel}></img>
 
             <div className="textdiv"></div>
+            
+            
+            {/* TO BE IMPLEMENTED!!!! buttons for prompting user to practice old words or learn new ones*/}
+            {/*
+            <>
+                <div className="textdiv">
+                    <button type= "button" id="PracticeSeenWordsBtn">Practice</button>
+                    <button type= "button" id="LearnNewWordsBtn">Learn</button>
+                </div>
+            </>
+            */}
 
             {startClicked ? (
                 <>
