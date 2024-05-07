@@ -1,6 +1,5 @@
-// import { useNavigate } from 'react-router-dom/dist';
-// import { useNavigate } from 'react-router-dom';
-
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import npcimg from '../../assets/artist-assets/Artist.png';
 import learnBG from '../../assets/artist-assets/Contentbox.png';
 import npcTextbox from '../../assets/artist-assets/ArtistTextbox.png';
@@ -16,273 +15,163 @@ import red from '../../assets/dict-images/colors/red.png';
 import white from '../../assets/dict-images/colors/white.png';
 import yellow from '../../assets/dict-images/colors/yellow.png';
 
-
-// import { useLocation } from 'react-router-dom';
-import { useNavigate, useLocation } from 'react-router-dom';
-
-import React, { useState, useEffect } from 'react';
-
-// import React, { useState } from 'react';
-
-
-
-const Artist = function() {
-
-    const navigate = useNavigate(); 
-
-
-    // Navigate to the Artist component with the username as a prop
-    // const goToMap = () => {
-    //     // navigate('/artist', { state: { username } });
-    //     navigate('/map', { state: { username, language: selectedLanguage } });
-
-    // };
-
-
+const Artist = () => {
+    const navigate = useNavigate();
     const location = useLocation();
-    const username = location.state.username;
-    const selectedlanguage = location.state.language;
-
-    // const [fetchedWords, setFetchedWords] = useState([]);
-
-    const goToMap = () => {
-        // navigate('/map', { state: { username } });
-        navigate('/map', { state: { username, language: selectedlanguage } });
-    };
-
+    const { username, language: selectedLanguage } = location.state;
 
     const [fetchedWords, setFetchedWords] = useState([]);
     const [currentWordIndex, setCurrentWordIndex] = useState(0);
     const [translatedWord, setTranslatedWord] = useState('');
-
-    // const [fetchedWords, setFetchedWords] = useState({ words: [], translations: {} });
-
-    // const [currentWordIndex, setCurrentWordIndex] = useState(0); // Track current word index
-
-
-    const [currentTextIndex, setCurrentTextIndex] = useState(0);
-
+    const [textInput, setTextInput] = useState("");
+    const [isLastWordCorrect, setIsLastWordCorrect] = useState(true);
     const [startClicked, setStartClicked] = useState(false);
-
-
-    const [textInput, setTextInput] = useState(""); // State to hold the text input value
-
-    const [isLastWordCorrect, setIsLastWordCorrect] = useState(true); // Track if the last entered word was correct
-
+    const [resume, setResume] = useState(null);
     const [congrats, setCongrats] = useState(false); // Track if the NPC content should be shown
 
-    
     useEffect(() => {
-        const fetchWords = async () => {
+        const savedIndex = localStorage.getItem('currentWordIndex');
+        const initialIndex = savedIndex !== null && resume ? parseInt(savedIndex, 10) : 0;
+        const fetchWordsAndTranslations = async () => {
             try {
-                const response = await gameClient.getAllWordsByCategory(username, "colors");
-                const fetchedWords = Object.values(response).flat();
-                console.log("Fetched words:", fetchedWords);
-                setFetchedWords(fetchedWords || []);
-
+                const wordsResponse = await gameClient.getAllWordsByCategory(username, "colors");
+                const words = Object.values(wordsResponse).flat();
+                setFetchedWords(words);
+                setCurrentWordIndex(initialIndex);
+                if (words.length > 0) {
+                    const translation = await gameClient.getTranslation(username, selectedLanguage, words[initialIndex]);
+                    setTranslatedWord(translation[words[initialIndex]] || '');
+                }
             } catch (error) {
                 console.error("Error fetching words:", error);
             }
         };
+        fetchWordsAndTranslations();
+    }, [username, selectedLanguage, resume]);
 
-        fetchWords();
-    }, []);
-
-    
     useEffect(() => {
         const fetchTranslation = async () => {
-            
             if (currentWordIndex < fetchedWords.length) {
-                const translation = await gameClient.getTranslation(username, selectedlanguage, fetchedWords[currentWordIndex]);
-
-                if (translation) {
-                    setTranslatedWord(translation[fetchedWords[currentWordIndex]]);
-                }
-                // console.log(translation[fetchedWords[currentWordIndex]]);
+                const translation = await gameClient.getTranslation(username, selectedLanguage, fetchedWords[currentWordIndex]);
+                setTranslatedWord(translation[fetchedWords[currentWordIndex]] || '');
             }
         };
+        if (fetchedWords.length > 0) {
+            fetchTranslation();
+        }
+    }, [currentWordIndex, fetchedWords, selectedLanguage, username]);
 
-        fetchTranslation();
-    }, [currentWordIndex, fetchedWords, selectedlanguage, username]);
-
-
-    const greetings = {
-        'spanish': 'Hola',
-        'french': 'Bonjour',
-    };
-
-
-    const greeting = greetings[selectedlanguage] || 'Hello'; 
-
-
-
-
-    const texts = [
-        `${greeting} ${username}!`,
-        "We will learn about colors here!",
-        "Let's begin!"
-    ];
-
-
-
-    const showNextText = () => {
-        if (currentTextIndex < texts.length - 1) {
-            setCurrentTextIndex(currentTextIndex + 1);
+    const handleResumeChoice = (choice) => {
+        setResume(choice);
+        if (!choice) {
+            localStorage.removeItem('currentWordIndex');
+            setCurrentWordIndex(0);
         }
     };
-
-
-    const showNextWord = () => {
-        if (currentWordIndex < fetchedWords.length - 1) {
-            setCurrentWordIndex(currentWordIndex + 1);
-        } 
-    };
-    
-
-
-    const handleStartClick = () => {
-        if (currentTextIndex < texts.length - 1) {
-            showNextText();
-        } else {
-            
-            setStartClicked(true);
-
-        }
-    };
-    
-
 
     const handleInputChange = (event) => {
-        const newValue = event.target.value;
-        setTextInput(newValue); // Update the text input value as the user types
+        setTextInput(event.target.value);
     };
-    
+
     const handleEnterClick = async () => {
         if (textInput.toLowerCase() === translatedWord.toLowerCase()) {
-            await gameClient.learnNewWord(username, selectedlanguage, fetchedWords[currentWordIndex]);
-            showNextWord();
-            setIsLastWordCorrect(true); // Set the state to true if the word is correct
+            await gameClient.learnNewWord(username, selectedLanguage, fetchedWords[currentWordIndex]);
+            setIsLastWordCorrect(true);
+            if (currentWordIndex < fetchedWords.length - 1) {
+                const newIndex = currentWordIndex + 1;
+                setCurrentWordIndex(newIndex);
+                localStorage.setItem('currentWordIndex', newIndex.toString());
+            }
         } else {
-            console.log("Incorrect word. Try again!");
-            setIsLastWordCorrect(false); // Set the state to false if the word is incorrect
+            setIsLastWordCorrect(false);
         }
-    
         if (currentWordIndex === fetchedWords.length - 1) {
             setCongrats(true); 
         }
-        setTextInput(""); // Clear the text input after checking
-    };
-    
-    
-
-    const getColorImageSrc = (colorWord) => {
-        switch (colorWord) {
-            case 'black':
-                return black;
-            case 'blue':
-                return blue;
-            case 'brown':
-                return brown;
-            case 'red':
-                return red;
-            case 'yellow':
-                return yellow;
-            case 'green':
-                return green;
-            case 'white':
-                return white;
-            case 'orange':
-                return orange;
-            default:
-                return null;
-        }
+        setTextInput("");
     };
 
-    // console.log(translations);
+    const goToMap = () => {
+        navigate('/map', { state: { username, language: selectedLanguage } });
+    };
 
-    return(  
-
-        <div className = "container">
-            
-              
-            <img id= "artistbg" src={artistbg}></img>
-
-            <div className="learn-content">
-                <img id="learnBG" src={learnBG} />
-
-                <div className="learned-words">
-                    <ul>
-                        <h1>English: {fetchedWords[currentWordIndex]}</h1>
-                        <br></br>
-                        <h1>{selectedlanguage}: {translatedWord}</h1>
-                        {/* <p>{translations[fetchedWords[currentWordIndex]]}</p> */}
-                    </ul>
-                </div>
-
-                {fetchedWords[currentWordIndex] && (
-                <img
-                    id="colorImage"
-                    src={getColorImageSrc(fetchedWords[currentWordIndex])}
-                    alt={fetchedWords[currentWordIndex]}
-                />
-            )}
-
-
-
+    if (resume === null) {
+        return (
+            <div className="resume-choice">
+                <h2>Welcome back, {username}! Would you like to continue where you left off or start learning from the beginning?</h2>
+                <button onClick={() => handleResumeChoice(true)}>Continue</button>
+                <button onClick={() => handleResumeChoice(false)}>Start Over</button>
             </div>
+        );
+    }
 
+    return (
+        <div className="container">
+            <img id="artistbg" src={artistbg} alt="Artist background" />
+            <div className="learn-content">
+                <img id="learnBG" src={learnBG} alt="Learning background" />
+                {fetchedWords.length > 0 && (
+                    <div className="learned-words">
+                        <h1>English: {fetchedWords[currentWordIndex]}</h1>
+                        <h1>{selectedLanguage}: {translatedWord}</h1>
+                        <img
+                            id="colorImage"
+                            src={getColorImageSrc(fetchedWords[currentWordIndex])}
+                            alt={fetchedWords[currentWordIndex]}
+                        />
+                    </div>
+                )}
+            </div>
             <div className="npc-content">
                 {!isLastWordCorrect && <p className="incorrect-message">Incorrect word. Try again!</p>}
                 {congrats && isLastWordCorrect && <p className="congrats-message">Congrats! You're done!</p>}
-                {!startClicked && <p>{texts[currentTextIndex]}</p>}
-                <img id="npcTextbox" src={npcTextbox} alt="npc text box" />
-                <img id="npcimg" src={npcimg} alt="npc image" />
-
+                <img id="npcTextbox" src={npcTextbox} alt="NPC Textbox" />
+                <img id="npcimg" src={npcimg} alt="NPC" />
             </div>
-
-
-            <img id= "easelimg" src={easel}></img>
-
-            <div className="textdiv"></div>
-
-            {startClicked ? (
-                <>
-                    <div className="textdiv">
+            <img id="easelimg" src={easel} alt="Easel" />
+            <div className="textdiv">
+                {startClicked && (
+                    <>
                         <input
                             type="text"
                             className="learnInputBox"
-                            placeholder="text"
+                            placeholder="Enter translation"
                             value={textInput}
                             onChange={handleInputChange}
                         />
-                    </div>
-                    <button type="button" id="enterbutton" onClick={handleEnterClick}>
-                        Enter
-                    </button>
-                </>
-            ) : (
-                <button type="button" id="nextbutton" onClick={handleStartClick}>
-                    {currentTextIndex === texts.length - 1 ? "Start" : "Next"}
-                </button>
-            )}
-
-            {/* {congrats && isLastWordCorrect && ( 
-                <button type="button" id="goToMapButton" onClick={goToMap}>
-                    Go to Map
-                </button>
-
-            )} */}
-
-            <button type="button" id="goToMapButton" onClick={goToMap}>
-                Go to Map
-            </button>
-                
+                        <button type="button" id="enterbutton" onClick={handleEnterClick}>Enter</button>
+                    </>
+                )}
+                {!startClicked && (
+                    <button type="button" id="nextbutton" onClick={() => setStartClicked(true)}>Start Learning</button>
+                )}
+            </div>
+            <button type="button" id="goToMapButton" onClick={goToMap}>Go to Map</button>
         </div>
-    
-     );
+    );
 };
 
 export default Artist;
 
-
-
+function getColorImageSrc(colorWord) {
+    switch (colorWord) {
+        case 'black':
+            return black;
+        case 'blue':
+            return blue;
+        case 'brown':
+            return brown;
+        case 'red':
+            return red;
+        case 'yellow':
+            return yellow;
+        case 'green':
+            return green;
+        case 'white':
+            return white;
+        case 'orange':
+            return orange;
+        default:
+            return null;
+    }
+}
