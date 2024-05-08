@@ -42,19 +42,18 @@ const Artist = function() {
     const location = useLocation();
     const username = location.state.username;
     const selectedlanguage = location.state.language;
-
   
     const goToMap = () => {
         // navigate('/map', { state: { username } });
         navigate('/map', { state: { username, language: selectedlanguage } });
     };
 
-
+    const [chosenWords, setChosenWords] = useState([]);
     const [fetchedWords, setFetchedWords] = useState([]);
     const [seenWords, setSeenWords] = useState([]);
     const [unseenWords, setUnseenWords] = useState([]);
     const [texts, setTexts] = useState([]);
-
+    const [promptTrigger, setPromptTrigger] = useState(false);
     const [currentWordIndex, setCurrentWordIndex] = useState(0);
     const [translatedWord, setTranslatedWord] = useState('');
     
@@ -66,6 +65,8 @@ const Artist = function() {
 
     const [startClicked, setStartClicked] = useState(false);
 
+    //if the user should see new words or practice old ones 
+    const [userChoice, setUserChoice] = useState("");
 
     const [textInput, setTextInput] = useState(""); // State to hold the text input value
 
@@ -73,7 +74,6 @@ const Artist = function() {
 
     const [congrats, setCongrats] = useState(false); // Track if the NPC content should be shown
 
-   
 
     useEffect(() => {
         const fetchWords = async () => {
@@ -99,18 +99,18 @@ const Artist = function() {
     useEffect(() => {
         const fetchTranslation = async () => {
             
-            if (currentWordIndex < fetchedWords.length) {
-                const translation = await gameClient.getTranslation(username, selectedlanguage, fetchedWords[currentWordIndex]);
+            if (currentWordIndex < chosenWords.length) {
+                const translation = await gameClient.getTranslation(username, selectedlanguage, chosenWords[currentWordIndex]);
 
                 if (translation) {
-                    setTranslatedWord(translation[fetchedWords[currentWordIndex]]);
+                    setTranslatedWord(translation[chosenWords[currentWordIndex]]);
                 }
-                // console.log(translation[fetchedWords[currentWordIndex]]);
+                
             }
         };
 
         fetchTranslation();
-    }, [currentWordIndex, fetchedWords, selectedlanguage, username]);
+    }, [currentWordIndex, fetchedWords, chosenWords, selectedlanguage, username]);
 
     useEffect(() => {
         const recordSeenAndUnseen = () => {
@@ -144,7 +144,7 @@ const Artist = function() {
         'french': 'Bonjour',
     };
 
-
+    
     const greeting = greetings[selectedlanguage] || 'Hello'; 
 
     useEffect(() =>{
@@ -154,6 +154,8 @@ const Artist = function() {
             let t = [];
             if(unseenWords.length == 0){
                 t = [`${greeting}! Getting some practice in?`];
+                setUserChoice("both");    //show fetchedWords 
+                
             }
             //if user has never seen any of the words
             else if(unseenWords.length == fetchedWords.length){
@@ -162,31 +164,22 @@ const Artist = function() {
                     "We will learn about colors here!",
                     "Let's begin!"
                 ];
+                setUserChoice("learn")
+
             }
             //user has seen only some of the words
             //ACTIVATE PROMPT 
             else{
-                t = [`Welcome back ${username}! Would you like to practice or learn new words?`];
+                t = [`Welcome back ${username}!`,
+                `Would you like to practice old words, learn new words, or both?`];
+                setUserChoice("prompt");
             }
             setTexts(t);
             
         }
         decideTextTree();
-    }, [unseenWords, seenWords]);
+    }, [unseenWords, seenWords, username, selectedlanguage]);
 
-
-
-
-
-
-/*
-    const texts = [
-        `${greeting} ${username}!`,
-        "We will learn about colors here!",
-        "Let's begin!"
-    ];
-*/
-  
 
 
     const showNextText = () => {
@@ -197,33 +190,94 @@ const Artist = function() {
   
 
     const showNextWord = () => {
-        if (currentWordIndex < fetchedWords.length - 1) {
+        if (currentWordIndex < chosenWords.length - 1) {
             setCurrentWordIndex(currentWordIndex + 1);
         } 
     };
     
+    
+   
 
 
     const handleStartClick = () => {
-        if (currentTextIndex < texts.length - 1) {
+        if (currentTextIndex == texts.length - 2){
+            console.log("prompt condition check");
+            if(userChoice.localeCompare("prompt") == 0){
+                showNextText();
+                setPromptTrigger(true);
+            }    
+        }
+        else if (currentTextIndex < texts.length - 1) {
             showNextText();
-        } else {
+        } 
+        else if(currentTextIndex == texts.length -1){
             
+            setPromptTrigger(false);
             setStartClicked(true);
 
         }
     };
     
 
-
     const handleInputChange = (event) => {
         const newValue = event.target.value;
         setTextInput(newValue); // Update the text input value as the user types
     };
+
     
+   const randomizeWords = (array) =>{
+        // Create a copy of the array
+        const shuffledArray = array.slice();
+        // Shuffle the copy
+        for (let i = shuffledArray.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+        }
+        // Update state with the shuffled array
+        setChosenWords(shuffledArray);
+   }
+   useEffect(() => {
+    //console.log("SHUFFLED ",chosenWords);
+    if(currentTextIndex > 0){
+        console.log("shuffled words: ", chosenWords);
+        handleStartClick();
+    }
+   },[chosenWords])
+
+
+    useEffect(() => {
+
+        console.log("user choice changed: ", userChoice);
+        if(userChoice.localeCompare("practice") == 0){
+            //setChosenWords(seenWords);
+            randomizeWords(seenWords);
+        }
+        else if(userChoice.localeCompare("learn") == 0){
+            //setChosenWords(unseenWords);
+            randomizeWords(unseenWords);
+        }
+        else{
+            randomizeWords(fetchedWords);
+            //setChosenWords(fetchedWords);
+        }
+
+
+    }, [userChoice]);
+    
+        
+    const changeToPractice = () => {
+        setUserChoice("practice");
+    }
+    const changeToBoth = () => {
+        setUserChoice("both");
+    }
+    const changeToLearn = () => {
+        setUserChoice("learn");
+        //console.log(userChoice);
+    }
     const handleEnterClick = async () => {
         if (textInput.toLowerCase() === translatedWord.toLowerCase()) {
-            await gameClient.learnNewWord(username, selectedlanguage, fetchedWords[currentWordIndex]);
+            await gameClient.learnNewWord(username, selectedlanguage, chosenWords[currentWordIndex]);
             showNextWord();
             setIsLastWordCorrect(true); // Set the state to true if the word is correct
         } else {
@@ -231,12 +285,11 @@ const Artist = function() {
             setIsLastWordCorrect(false); // Set the state to false if the word is incorrect
         }
     
-        if (currentWordIndex === fetchedWords.length - 1) {
+        if (currentWordIndex === chosenWords.length - 1) {
             setCongrats(true); 
         }
         setTextInput(""); // Clear the text input after checking
     };
-    
     
 
     const getColorImageSrc = (colorWord) => {
@@ -277,18 +330,17 @@ const Artist = function() {
                 <div className="learned-words">
                  <ul>
                         
-                        <h1>English: {fetchedWords[currentWordIndex]}</h1>
+                        <h1>English: {chosenWords[currentWordIndex]}</h1>
                         <br></br>
                         <h1>{selectedlanguage}: {translatedWord}</h1>
-                        {/* <p>{translations[fetchedWords[currentWordIndex]]}</p> */}
                     </ul>
                 </div>
 
-                {fetchedWords[currentWordIndex] && (
+                {chosenWords[currentWordIndex] && (
                 <img
                     id="colorImage"
-                    src={getColorImageSrc(fetchedWords[currentWordIndex])}
-                    alt={fetchedWords[currentWordIndex]}
+                    src={getColorImageSrc(chosenWords[currentWordIndex])}
+                    alt={chosenWords[currentWordIndex]}
                 />
             )}
 
@@ -298,30 +350,41 @@ const Artist = function() {
             
             {/*npc text div*/}
             <div className="npc-content">
-                {!isLastWordCorrect && <p className="incorrect-message">Incorrect word. Try again!</p>}
-                {congrats && isLastWordCorrect && <p className="congrats-message">Congrats! You're done!</p>}
-                {!startClicked && <p>{texts[currentTextIndex]}</p>}
-                <img id="npcTextbox" src={npcTextbox} alt="npc text box" />
-                <img id="npcimg" src={npcimg} alt="npc image" />
-
+                
+                    <div className= "textboxWrapper">
+        
+                            {!isLastWordCorrect && <p className="incorrect-message">Incorrect word. Try again!</p>}
+                            {congrats && isLastWordCorrect && <p className="congrats-message">Congrats! You're done!</p>}
+                            {!startClicked && <p>{texts[currentTextIndex]}</p>}
+                    </div>
+                <div className= "npcWrapper">
+                    <img id="npcimg" src={npcimg} alt="npc image" />
+                </div>
+                    <img id= "easelimg" src={easel}></img>
             </div>
 
-
-            <img id= "easelimg" src={easel}></img>
+            
 
             <div className="textdiv"></div>
             
             
             {/* TO BE IMPLEMENTED!!!! buttons for prompting user to practice old words or learn new ones*/}
             {/*
+            
             <>
                 <div className="textdiv">
                     <button type= "button" id="PracticeSeenWordsBtn">Practice</button>
                     <button type= "button" id="LearnNewWordsBtn">Learn</button>
                 </div>
+
+                <button type= "button" id="PracticeSeenWordsBtn" onClick= {setUserChoice("practice")} >Practice </button>
+                    <button type= "button" id="LearnNewWordsBtn" onClick= {setUserChoice("learn")}>Learn</button>
+                    <button type= "button" id="BothBtn"onClick= {setUserChoice("both")}>Both</button>
             </>
             */}
-
+            
+            
+            
             {startClicked ? (
                 <>
                     <div className="textdiv">
@@ -337,10 +400,20 @@ const Artist = function() {
                         Enter
                     </button>
                 </>
-            ) : (
-                <button type="button" id="nextbutton" onClick={handleStartClick}>
-                    {currentTextIndex === texts.length - 1 ? "Start" : "Next"}
-                </button>
+            ) : ( promptTrigger ? (
+                
+                <div className="textdiv">
+                    <button type= "button" id="PracticeSeenWordsBtn" onClick = {changeToPractice} >Practice</button>
+                    <button type= "button" id="LearnNewWordsBtn" onClick = {changeToLearn}>Learn</button>
+                    <button type= "button" id="BothBtn"onClick= {changeToBoth}>Both</button>
+
+                </div>
+
+            ): 
+            
+            <button type= "button" id="nextbutton" onClick = {handleStartClick}>Next</button>
+
+                
             )}
 
             {/* {congrats && isLastWordCorrect && ( 
