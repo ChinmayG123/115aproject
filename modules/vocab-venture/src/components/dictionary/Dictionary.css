@@ -172,3 +172,26 @@
   left: 20px; /* Adjust the left position as needed */
   transform: scale(1);
 }
+
+
+
+#wordImage1 {
+  position: absolute;
+  height: 66%;
+  top: 5%;
+  transform: translateX(80px); 
+  display: flex;
+  justify-content: center;
+}
+
+
+
+#wordImage2 {
+  position: absolute;
+  height: 66%;
+  top: 5%;
+  left: 80px; 
+  display: flex;
+  justify-content: center;
+}
+
