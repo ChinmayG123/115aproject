@@ -12,6 +12,65 @@ import baseimg from '../../assets/dictionary-assets/DictionaryBaseFull.png'
 import { useNavigate } from 'react-router-dom'; // Import useNavigate from react-router-dom
 
 
+import blue from '../../assets/dict-images/colors/blue.png';
+import black from '../../assets/dict-images/colors/black.png';
+import brown from '../../assets/dict-images/colors/brown.png';
+import green from '../../assets/dict-images/colors/green.png';
+import orange from '../../assets/dict-images/colors/orange.png';
+import red from '../../assets/dict-images/colors/red.png';
+import white from '../../assets/dict-images/colors/white.png';
+import yellow from '../../assets/dict-images/colors/yellow.png';
+
+import apple from '../../assets/dict-images/food/Apple.png';
+import bread from '../../assets/dict-images/food/Bread.png';
+import egg from '../../assets/dict-images/food/Eggs.png';
+import fish from '../../assets/dict-images/food/Fish.png';
+import juice from '../../assets/dict-images/food/Juice.png';
+import meat from '../../assets/dict-images/food/Meat.png';
+import milk from '../../assets/dict-images/food/Milk.png';
+import water from '../../assets/dict-images/food/Water.png';
+
+
+
+const getWordImageSrc = (wordImage) => {
+  switch (wordImage) {
+      case 'black':
+          return black;
+      case 'blue':
+          return blue;
+      case 'brown':
+          return brown;
+      case 'red':
+          return red;
+      case 'yellow':
+          return yellow;
+      case 'green':
+          return green;
+      case 'white':
+          return white;
+      case 'orange':
+          return orange;
+      case 'apple':
+        return apple;
+      case 'bread':
+          return bread;
+      case 'egg':
+          return egg;
+      case 'fish':
+          return fish;
+      case 'juice':
+          return juice;
+      case 'meat':
+          return meat;
+      case 'milk':
+          return milk;
+      case 'water':
+          return water;
+      default:
+          return null;
+  }
+};
+
 const getTheUserInformation = async (username, language) => {
   try {
       const result = await gameClient.getUserDictionary(username, language);
@@ -110,20 +169,35 @@ const handleNextPage = () => {
 
             <br></br>
             
-            
-              
-            <div className = "learned-words1">
+          
+            <div className = "learned-words1" >
               {userDictionary &&
                     Object.entries(userDictionary).map(([key, value], index) => {
-                      if (index >= currentPage * 2 && index < (currentPage + 1) * 2) {
+                        if (index % 2 === 0 && index === currentPage * 2) {
+                      // if (index >= currentPage * 2 && index < (currentPage + 1) * 2) {
                         return (
                           <div key={key} className="word-container">
-                            <p style={{ marginTop: index === currentPage * 2 + 1 ? '-20px' : '0', marginLeft: index === currentPage * 2 + 1 ? '420px' : '0' }}>
-                              {/* {key}: {value} <br></br> */}
-                              {translations[key] ? `${key}: ${translations[key][key]}` : `${key}: ${value}`}
+    {/*                             
+                                <h1 style={{ marginTop: index === currentPage * 2 + 1 ? '-20px' : '0'}}>
+                                  {translations[key] ? `${key}: ${translations[key][key]}` : `${key}: ${value}`}
+                              </h1> */}
+                              
 
-                         </p>
-                          </div>
+                              <div className="image-container">
+                                {getWordImageSrc(key) && (
+                                  <img
+                                    id="wordImage1"
+                                    src={getWordImageSrc(key)}
+                                    alt={key}
+                                  />
+                                )}
+                              </div>
+
+                              <div className="word-info">
+                                <h1 style={{ marginTop: '270px', marginLeft: '100px' }} >English: {key}</h1>
+                                <h1 style={{marginLeft: '100px'}}>{selectedLanguage}: {translations[key] ? translations[key][key] : value}</h1>
+              </div>
+                            </div>
                         );
                       }
                       return null;
@@ -140,23 +214,32 @@ const handleNextPage = () => {
           {/* testing */}
           {/*RIGHT PAGE DIV-------------------*/}
           <div className= "popup-page-right">
-          <div className = "learned-words2">
-            {userDictionary &&
-                Object.entries(userDictionary).map(([key, value], index) => {
-                  if (index === currentPage * 2 + 1) {
-                    return (
-                      <div key={key} className="word-container2">
-                        <p style={{ marginTop: '0px', marginLeft: '0px' }}>
-                          {/* {key}: {value} */}
-                          {translations[key] ? `${key}: ${translations[key][key]}` : `${key}: ${value}`}
 
-                        </p>
-                      </div>
-                    );
-                  }
-                  return null;
-                })}
-          </div>
+            <div className = "learned-words2">
+              {userDictionary &&
+                  Object.entries(userDictionary).map(([key, value], index) => {
+                    if (index === currentPage * 2 + 1) {
+                      return (
+                        <div key={key} className="word-container2">
+                            <div className="image-container">
+                                  {getWordImageSrc(key) && (
+                                    <img
+                                      id="wordImage2"
+                                      src={getWordImageSrc(key)}
+                                      alt={key}
+                                    />
+                                  )}
+                                </div>
+                            <div className="word-info2">
+                              <h1 style={{ marginTop: '270px', marginLeft: '80px' }} >English: {key}</h1>
+                              <h1 style={{marginLeft: '80px'}}>{selectedLanguage}: {translations[key] ? translations[key][key] : value}</h1>
+                          </div>
+                        </div>
+                      );
+                    }
+                    return null;
+                  })}
+            </div>
 
             <button className="button" id="next-page-btn" onClick={handleNextPage} 
               disabled={currentPage >= Math.floor((Object.keys(userDictionary).length - 1) / 2)}>
