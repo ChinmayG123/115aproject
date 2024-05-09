@@ -164,7 +164,7 @@ const Artist = function() {
                     "We will learn about colors here!",
                     "Let's begin!"
                 ];
-                setUserChoice("learn")
+                setUserChoice("learn");
 
             }
             //user has seen only some of the words
@@ -200,22 +200,24 @@ const Artist = function() {
 
 
     const handleStartClick = () => {
-        if (currentTextIndex == texts.length - 2){
+        if(currentTextIndex == texts.length -1){
+            
+            setPromptTrigger(false);
+            setStartClicked(true);
+        }
+        else if (currentTextIndex == texts.length - 2){
+
             console.log("prompt condition check");
+            showNextText();
             if(userChoice.localeCompare("prompt") == 0){
-                showNextText();
+                
                 setPromptTrigger(true);
             }    
         }
         else if (currentTextIndex < texts.length - 1) {
             showNextText();
         } 
-        else if(currentTextIndex == texts.length -1){
-            
-            setPromptTrigger(false);
-            setStartClicked(true);
-
-        }
+        
     };
     
 
@@ -235,11 +237,11 @@ const Artist = function() {
         }
         // Update state with the shuffled array
         setChosenWords(shuffledArray);
+        console.log("shuffled words: ", shuffledArray);
    }
    useEffect(() => {
     //console.log("SHUFFLED ",chosenWords);
     if(currentTextIndex > 0){
-        console.log("shuffled words: ", chosenWords);
         handleStartClick();
     }
    },[chosenWords])
@@ -262,7 +264,7 @@ const Artist = function() {
         }
 
 
-    }, [userChoice]);
+    }, [userChoice, unseenWords, seenWords, fetchedWords]);
     
         
     const changeToPractice = () => {
@@ -349,6 +351,8 @@ const Artist = function() {
             </div>
             
             {/*npc text div*/}
+             
+            {/*npc text div*/}
             <div className="npc-content">
                 
                     <div className= "textboxWrapper">
@@ -367,21 +371,6 @@ const Artist = function() {
 
             <div className="textdiv"></div>
             
-            
-            {/* TO BE IMPLEMENTED!!!! buttons for prompting user to practice old words or learn new ones*/}
-            {/*
-            
-            <>
-                <div className="textdiv">
-                    <button type= "button" id="PracticeSeenWordsBtn">Practice</button>
-                    <button type= "button" id="LearnNewWordsBtn">Learn</button>
-                </div>
-
-                <button type= "button" id="PracticeSeenWordsBtn" onClick= {setUserChoice("practice")} >Practice </button>
-                    <button type= "button" id="LearnNewWordsBtn" onClick= {setUserChoice("learn")}>Learn</button>
-                    <button type= "button" id="BothBtn"onClick= {setUserChoice("both")}>Both</button>
-            </>
-            */}
             
             
             
