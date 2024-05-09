@@ -194,8 +194,8 @@ const handleNextPage = () => {
                               </div>
 
                               <div className="word-info">
-                                <h1 style={{ marginTop: '270px', marginLeft: '100px' }} >English: {key}</h1>
-                                <h1 style={{marginLeft: '100px'}}>{selectedLanguage}: {translations[key] ? translations[key][key] : value}</h1>
+                                <h1 style={{ marginTop: '270px', marginLeft: '50px' }} >English: {key}</h1>
+                                <h1 style={{marginLeft: '50px'}}>{selectedLanguage}: {translations[key] ? translations[key][key] : value}</h1>
               </div>
                             </div>
                         );
@@ -231,8 +231,8 @@ const handleNextPage = () => {
                                   )}
                                 </div>
                             <div className="word-info2">
-                              <h1 style={{ marginTop: '270px', marginLeft: '80px' }} >English: {key}</h1>
-                              <h1 style={{marginLeft: '80px'}}>{selectedLanguage}: {translations[key] ? translations[key][key] : value}</h1>
+                              <h1 style={{ marginTop: '270px', marginLeft: '40px' }} >English: {key}</h1>
+                              <h1 style={{marginLeft: '40px'}}>{selectedLanguage}: {translations[key] ? translations[key][key] : value}</h1>
                           </div>
                         </div>
                       );
