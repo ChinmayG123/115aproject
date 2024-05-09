@@ -66,8 +66,18 @@ const Map = function() {
     // const goToArtist =() => {navigate('/artist');}
 
 
-    // const goToMarket =() => {navigate('/market');}
-    const goToOutskirts =() => {navigate('/outskirts');}
+    // // const goToMarket =() => {navigate('/market');}
+    // const goToOutskirts =() => {navigate('/outskirts');}
+
+
+    // Navigate to the Artist component with the username as a prop
+    const goToOutskirts = () => {
+        // navigate('/artist', { state: { username } });
+        navigate('/outskirts', { state: { username, language: selectedLanguage } });
+
+    };
+
+
     // const goToTailor =() => {navigate('/tailor');}
 
     const goToMenu =() => {navigate('/home')};
