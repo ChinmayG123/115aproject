@@ -1,0 +1,25 @@
+
+#enterbutton {
+    position: absolute;
+    
+    width: 10vw;
+
+    top: 89%;
+    left: 77%;
+}
+
+#wordImage1 {
+    position: absolute;
+    height: 150%;
+    top: -50%;
+    /* transform: translateX(100px);  */
+    display: flex;
+    justify-content: center;
+  }
+  
+
+  #word-info {
+
+    position: absolute;
+    top: 20%;
+  }
