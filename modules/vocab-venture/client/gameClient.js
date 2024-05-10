@@ -334,8 +334,11 @@ class GameClient {
 
     async getFourChoices(username, language) {
         const filePath = path.join(process.cwd(), 'key.txt');
-        const secretKey = '2f656606276a0c6f3bdeeb8bf22fd39f';
-        const encryptedText = (await fs.readFile(filePath, 'utf8')).trim();
+        const fileContents = (await fs.readFile(filePath, 'utf8')).trim();
+        // Split the file into lines
+        const lines = fileContents.split(/\r?\n/);
+        const encryptedText = lines[0].trim();
+        const secretKey = lines[1].trim();
         console.log('Encrypted Text:', encryptedText);
 
         const decryptedText = decrypt(encryptedText, secretKey); // Decrypt the file contents
