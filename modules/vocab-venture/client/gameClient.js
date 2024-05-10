@@ -11,6 +11,9 @@
  */
 
 import OpenAI from "openai";
+import crypto from 'crypto';
+import fs from 'fs/promises';
+import path from 'path';
 
 class GameClient {
     // Private fields
@@ -330,11 +333,18 @@ class GameClient {
     }
 
     async getFourChoices(username, language) {
+        const filePath = path.join(process.cwd(), 'key.txt');
+        const secretKey = '2f656606276a0c6f3bdeeb8bf22fd39f';
+        const encryptedText = (await fs.readFile(filePath, 'utf8')).trim();
+        console.log('Encrypted Text:', encryptedText);
+
+        const decryptedText = decrypt(encryptedText, secretKey); // Decrypt the file contents
+
         const word = await this.getUserQuiz(username, language);
         const translate_word = await this.getTranslation(username, language, word);
         // if(this.#DEBUG)
         console.log(`Quiz about ${translate_word[word]}(${word})`);
-        const openai = new OpenAI({ apiKey: "sk-proj-QmwblDAKv7hLHZjGGZ7xT3BlbkFJr8B6TSMrgO8EpVDEXSJ3" });
+        const openai = new OpenAI({ apiKey: decryptedText });
         const completion = await openai.chat.completions.create({
             messages: [{
                 role: "system",
@@ -385,6 +395,26 @@ class GameClient {
     }
 
 }
+
+// Function to decrypt a string
+function decrypt(encryptedData, secretKey) {
+    const iv = Buffer.from('cae8a612f89d03300bbe4a3b892cf0d2', 'hex');
+
+    // Ensure the IV is exactly 16 bytes (for AES-256-CBC)
+    if (iv.length !== 16) {
+        throw new Error('Invalid IV length, expected 16 bytes.');
+    }
+
+    // Create a decipher using the secret key and the initialization vector
+    const decipher = crypto.createDecipheriv('aes-128-cbc', Buffer.from(secretKey, 'hex'), iv);
+
+    // Decrypt the text
+    let decrypted = decipher.update(encryptedData, 'hex', 'utf8');
+    decrypted += decipher.final('utf8');
+
+    return decrypted;
+}
+
 
 // Export for Node.js (CommonJS)
 if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
