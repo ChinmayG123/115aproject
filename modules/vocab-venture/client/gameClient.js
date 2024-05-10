@@ -14,6 +14,7 @@ class GameClient {
     #HOST = '149.28.199.169';
     // #HOST = '127.0.0.1';
     #PORT = 8080;
+    #DEBUG = false;
 
     constructor() {
         this.baseURL = `http://${this.#HOST}:${this.#PORT}`;
@@ -120,7 +121,8 @@ class GameClient {
             }
         };
         const response = await this.retrieveData(this.userProgress, options);
-        this.printDebug(response);
+        if (this.#DEBUG)
+            this.printDebug(response);
         if (response.status === 200) {
             return await response.json(); // Assuming JSON response
         } else {
@@ -279,7 +281,7 @@ class GameClient {
         }
     }
 
-    async getTranslation(username, language, word){
+    async getTranslation(username, language, word) {
 
         const options = {
             method: 'GET',
@@ -298,13 +300,39 @@ class GameClient {
         }
     }
 
+    async getUserQuiz(username, language) {
+        const learned_words = await this.getUserDictionary(username, language);
+        if (this.#DEBUG)
+            console.log('The user has learned: \n', learned_words, "\n\n");
+        const keys = Object.keys(learned_words);
+        const weights = Object.values(learned_words);
+        const cumulativeWeights = [];
+        let totalWeight = 0;
+        for (let weight of weights) {
+            totalWeight += weight;
+            cumulativeWeights.push(totalWeight);
+        }
+
+        // Generate a random number between 0 and the total weight
+        const randomNum = Math.random() * totalWeight;
+
+        // Find the corresponding item using linear search
+        for (let i = 0; i < cumulativeWeights.length; i++) {
+            if (randomNum < cumulativeWeights[i]) {
+                return keys[i];
+            }
+        }
+
+        return null; // Should not occur unless there's an error in the data
+    }
+
     // private function
     async retrieveData(target, options) {
-        // Create a promise that rejects in 3000 milliseconds (3 seconds)
+        // Create a promise that rejects in 5000 milliseconds (5 seconds)
         const timeoutPromise = new Promise((_, reject) => {
             setTimeout(() => {
                 reject(new Error('Request timed out')); // Reject with an error when timeout is reached
-            }, 3000); // Timeout set to 3 seconds
+            }, 5000); // Timeout set to 5 seconds
         });
 
         try {
@@ -334,10 +362,15 @@ class GameClient {
 
 }
 
-// Check if the environment is Node.js (CommonJS)
+// Export for Node.js (CommonJS)
 if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
     module.exports = GameClient;
 } else {
-    // If not Node.js, assign to global window object for the browser
-    window.GameClient = GameClient;
+    // Export for Browser (attach to window object)
+    if (typeof window !== 'undefined') {
+        window.GameClient = GameClient;
+    }
 }
+
+// ES Module export (supports `import` syntax)
+export default GameClient;
