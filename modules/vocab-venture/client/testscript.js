@@ -89,6 +89,19 @@ async function test_getUserQuiz(){
         console.error('Error during test:', error);
     }
 }
+
+async function test_getFourChoices(){
+    const username = "TestApril232ndUser";
+    const language = "spanish";
+    const client = new GameClient();
+    try {
+        const result = await client.getFourChoices(username, language);
+        console.log(`test_getFourChoices()\'s result: ${result}`);
+    } catch (error) {
+        console.error('Error during test:', error);
+    }
+}
+
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -104,7 +117,8 @@ function sleep(ms) {
 // sleep(10000);
 // test_getProgressPercentage();
 
-test_getUserQuiz();
-for (let i = 0; i < 10; i++){
-    await test_getUserQuiz();
-}
+// test_getUserQuiz();
+// for (let i = 0; i < 10; i++){
+//     await test_getUserQuiz();
+// }
+test_getFourChoices();

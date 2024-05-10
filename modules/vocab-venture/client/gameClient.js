@@ -9,6 +9,9 @@
  * upProficiency(username, language, word);
  * downProficiency(username, language, word);
  */
+
+import OpenAI from "openai";
+
 class GameClient {
     // Private fields
     #HOST = '149.28.199.169';
@@ -324,6 +327,27 @@ class GameClient {
         }
 
         return null; // Should not occur unless there's an error in the data
+    }
+
+    async getFourChoices(username, language) {
+        const word = await this.getUserQuiz(username, language);
+        const translate_word = await this.getTranslation(username, language, word);
+        // if(this.#DEBUG)
+        console.log(`Quiz about ${translate_word[word]}(${word})`);
+        const openai = new OpenAI({ apiKey: "sk-proj-QmwblDAKv7hLHZjGGZ7xT3BlbkFJr8B6TSMrgO8EpVDEXSJ3" });
+        const completion = await openai.chat.completions.create({
+            messages: [{
+                role: "system",
+                content: `Please generate 3 words that looks similar to ${translate_word[word]}, but doesn't mean anything. I am quizing someone. Use the format of {word}newline{word}newline{word}. `
+            }],
+            model: "gpt-3.5-turbo",
+        });
+        // console.log(completion.choices[0]['message']['content']);
+        const fake_word_list = completion.choices[0]['message']['content'].trim().split(/\s*\r?\n\s*/);;
+        const word_list = [translate_word[word]];
+        word_list.push(...fake_word_list);
+        return word_list;
+
     }
 
     // private function
