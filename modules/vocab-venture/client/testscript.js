@@ -1,4 +1,5 @@
-const GameClient = require('./gameClient');  // Adjust the path to where your GameClient class is defined
+// const GameClient = require('./gameClient.js');  // Adjust the path to where your GameClient class is defined
+import GameClient from './gameClient.js'; // Adjust the path as needed
 
 async function testGetUserDictionary() {
     const username = "LanguageUserTest3";
@@ -77,7 +78,17 @@ async function test_getTranslation() {
         console.error('Error during test:', error);
     }
 }
-
+async function test_getUserQuiz(){
+    const username = "TestApril232ndUser";
+    const language = "spanish";
+    const client = new GameClient();
+    try {
+        const result = await client.getUserQuiz(username, language);
+        console.log(`test_getUserQuiz()\'s result: ${result}`);
+    } catch (error) {
+        console.error('Error during test:', error);
+    }
+}
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -87,8 +98,13 @@ function sleep(ms) {
 // testlearnNewWord();
 // sleep(1000);
 // testupProficiency();
-test_getAllWordsByCategory();
-sleep(10000);
-test_getTranslation();
-sleep(10000);
-test_getProgressPercentage();
+// test_getAllWordsByCategory();
+// sleep(10000);
+// test_getTranslation();
+// sleep(10000);
+// test_getProgressPercentage();
+
+test_getUserQuiz();
+for (let i = 0; i < 10; i++){
+    await test_getUserQuiz();
+}
