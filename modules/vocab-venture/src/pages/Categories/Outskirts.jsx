@@ -21,6 +21,8 @@ const Outskirts = function() {
 
     const goToType = () => {
         // navigate('/map', { state: { username } });
+        console.log("usernameeeee", username);
+        console.log("languageeeee", selectedlanguage);
         navigate('/type', { state: { username, language: selectedlanguage } });
     };
 

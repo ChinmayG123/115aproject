@@ -102,6 +102,7 @@ const Type = function() {
     const [translatedWord, setTranslatedWord] = useState('');
 
 
+
   const [translations, setTranslations] = useState({});
 
     
@@ -140,8 +141,16 @@ const Type = function() {
                 }
 
                 console.log("result", result);
+
+
+                // Shuffle the entries (key-value pairs) in the dictionary
+                const shuffledEntries = Object.entries(result).sort(() => Math.random() - 0.5);
+                const shuffledDictionary = Object.fromEntries(shuffledEntries);
+
+                console.log("shuffledDictionary", shuffledDictionary);
+
     
-                setUserDictionary(result);
+                setUserDictionary(shuffledDictionary);
             } catch (error) {
                 console.error('An error occurred while fetching user information:', error);
             }
@@ -167,6 +176,21 @@ const Type = function() {
         setTextInput(newValue); // Update the text input value as the user types
         // console.log(newValue);
     };
+
+
+   const randomizeWords = (array) =>{
+        // Create a copy of the array
+        const shuffledArray = array.slice();
+        // Shuffle the copy
+        for (let i = shuffledArray.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+        }
+        // Update state with the shuffled array
+        setChosenWords(shuffledArray);
+        console.log("shuffled words: ", shuffledArray);
+    }
+
 
 
     const handleEnterClick = async (key) => {
