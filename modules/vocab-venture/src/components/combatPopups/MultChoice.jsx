@@ -6,7 +6,7 @@ import learnBG from '../../assets/artist-assets/Contentbox.png';
 import npcTextbox from '../../assets/artist-assets/ArtistTextbox.png';
 import easel from '../../assets/artist-assets/Easel.png';
 import artistbg from '../../assets/artist-assets/ArtistBG.png';
-import './MultChoice.css';
+// import './MultChoice.css';
 
 
 
