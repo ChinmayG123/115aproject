@@ -93,7 +93,10 @@ function DictionaryPopup (props) {
 
   const [currentPage, setCurrentPage] = useState(0);
   const [translations, setTranslations] = useState({});
+  const [translatedWord, setTranslatedWord] = useState('');
 
+
+  const [translatedWord2, setTranslatedWord2] = useState('');
 
 
 const handleClose = () => {
@@ -128,22 +131,37 @@ const handleNextPage = () => {
 
 
 
-      // Fetch translations
-      const translationsObject = {};
-      for (const [key, _] of Object.entries(result)) {
-        console.log("key", key);
-        const translation = await gameClient.getTranslation(props.username, selectedLanguage, key);
-        console.log("translate", translation);
-        translationsObject[key] = translation;
-      }
-      setTranslations(translationsObject);
+      // // Fetch translations
+      // const translationsObject = {};
+      // for (const [key, _] of Object.entries(result)) {
+      //   // console.log("key", key);
+      //   const translation = await gameClient.getTranslation(props.username, selectedLanguage, key);
+      //   // console.log("translate", translation);
+      //   translationsObject[key] = translation;
+      // }
+      // setTranslations(translationsObject);
 
     }
     fetchData();
 }, [props.username, selectedLanguage]);
 
 
-  console.log("AYYYYY", translations);
+
+  const showTranslation1 = async (key) => {
+    const translation = await gameClient.getTranslation(props.username, selectedLanguage, key);
+
+    setTranslatedWord(translation[key]);
+    
+};
+
+const showTranslation2 = async (key) => {
+  const translation = await gameClient.getTranslation(props.username, selectedLanguage, key);
+
+  setTranslatedWord2(translation[key]);
+  
+};
+
+
   return (props.trigger) ? (
     <div className= "popup">      
         <div className= "popup-inner"> 
@@ -169,20 +187,16 @@ const handleNextPage = () => {
 
             <br></br>
             
+            
           
             <div className = "learned-words1" >
               {userDictionary &&
                     Object.entries(userDictionary).map(([key, value], index) => {
                         if (index % 2 === 0 && index === currentPage * 2) {
-                      // if (index >= currentPage * 2 && index < (currentPage + 1) * 2) {
+                          showTranslation1(key);
                         return (
-                          <div key={key} className="word-container">
-    {/*                             
-                                <h1 style={{ marginTop: index === currentPage * 2 + 1 ? '-20px' : '0'}}>
-                                  {translations[key] ? `${key}: ${translations[key][key]}` : `${key}: ${value}`}
-                              </h1> */}
-                              
 
+                          <div key={key} className="word-container">
                               <div className="image-container">
                                 {getWordImageSrc(key) && (
                                   <img
@@ -192,10 +206,12 @@ const handleNextPage = () => {
                                   />
                                 )}
                               </div>
+                              
 
                               <div className="word-info">
                                 <h1 style={{ marginTop: '270px', marginLeft: '50px' }} >English: {key}</h1>
-                                <h1 style={{marginLeft: '50px'}}>{selectedLanguage}: {translations[key] ? translations[key][key] : value}</h1>
+                                <h1 style={{ marginTop: '0px', marginLeft: '50px' }} > {selectedLanguage}: {translatedWord}</h1>
+                                {/* <h1 style={{marginLeft: '50px'}}>{selectedLanguage}: {translations[key] ? translations[key][key] : value}</h1> */}
               </div>
                             </div>
                         );
@@ -219,6 +235,7 @@ const handleNextPage = () => {
               {userDictionary &&
                   Object.entries(userDictionary).map(([key, value], index) => {
                     if (index === currentPage * 2 + 1) {
+                      showTranslation2(key);
                       return (
                         <div key={key} className="word-container2">
                             <div className="image-container">
@@ -232,7 +249,8 @@ const handleNextPage = () => {
                                 </div>
                             <div className="word-info2">
                               <h1 style={{ marginTop: '270px', marginLeft: '40px' }} >English: {key}</h1>
-                              <h1 style={{marginLeft: '40px'}}>{selectedLanguage}: {translations[key] ? translations[key][key] : value}</h1>
+                              <h1 style={{ marginTop: '0px', marginLeft: '40px' }} > {selectedLanguage}: {translatedWord2}</h1>
+                              {/* <h1 style={{marginLeft: '40px'}}>{selectedLanguage}: {translations[key] ? translations[key][key] : value}</h1> */}
                           </div>
                         </div>
                       );

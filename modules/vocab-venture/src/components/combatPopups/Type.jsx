@@ -211,9 +211,12 @@ const Type = function() {
             showNextWord();
             setIsLastWordCorrect(true); // Set the state to true if the word is correct
             console.log("page", currentWordIndex);
+            // upProficiency(username, selectedlanguage, key);
+            await gameClient.upProficiency(username, selectedlanguage, key);
         } else {
             console.log("Incorrect word. Try again!");
             setIsLastWordCorrect(false); // Set the state to false if the word is incorrect
+            await gameClient.downProficiency(username, selectedlanguage, key);
         }
     
         setTextInput(""); // Clear the text input after checking
