@@ -11,8 +11,7 @@
     display:flex;
     overflow: hidden;
 }
-
-
+ 
 #artistbg{
     position:absolute;
     width: 100%;
@@ -32,56 +31,35 @@
 
 
 
+#npcimg{ 
+    
+    position:absolute;
+    
+    width:38vw;
+    display:flex;
+    left: 10%;
+    align-self: flex-end;
+    justify-self: flex-end;
+    
+}
+#npcTextbox{
+    position: absolute;
+    
+    width: 40vw;
+    
+}
 
 .npc-content{
+    padding-top: 5px;
     position:relative;
     width:60vw;
     display:flex;
-    flex-direction: column;
-    justify-content: space-between;
-align-items: flex-start;    
+    justify-content: flex-start;
     
-}
-.textboxWrapper p{
-    font-size: 25px; /* Example font size */
-    font-family: Helvetica, sans-serif; /* Example font family */
-    /* Add other styles as needed */
-    color: black; /* Example text color */
-
-}
-.textboxWrapper{
-    padding-right: 10px;
-    padding-left: 10px;
-    padding-top: 5px;
-    padding-bottom: 50px;
-    z-index: 1;
-    background-image: url('../../assets/artist-assets/ArtistTextbox.png'); 
-    background-size: 100% 100%; 
-    position: static;
-   
-    width: 40vw;
-    display:inline-block;
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-    flex-basis:150px;
-    flex-grow:.5;
-}
 
 
-.npcWrapper{
-    width: 40vw;
+}
 
-    flex-shrink:.5;
-    position: static;
-    height:50vw;
-    min-height: 300px;
-    
-}
-.npcWrapper img{
-    height:100%;
-}
- 
 
 /* .npc-content img {
     position: absolute;
@@ -90,21 +68,25 @@ align-items: flex-start;
 } */
 
 
-/*
-.npcTextBox{
-    border-style: solid;
-    position:absolute;
+.npc-content p {
+    /* Position the text */
+    position: absolute;
     z-index: 1;
-    text-align: center;    
-    
-    padding: 2%;
-    font-size: 25px; 
-    font-family: Helvetica, sans-serif;
-    color: rgb(45, 37, 39); 
-}*/
 
-
-
+    top: 2%; /* Example top position */
+    right: 26%; /* Example left position */
+    width: 75%;
+    height: 20%;
+    /* Set font size and family */
+    font-size: 25px; /* Example font size */
+    font-family: Helvetica, sans-serif; /* Example font family */
+    justify-self: center;
+    align-self: center;
+    text-align: center;
+    vertical-align: middle;
+    /* Add other styles as needed */
+    color: black; /* Example text color */
+}
 
 #easelimg{
     position:absolute;
@@ -139,6 +121,15 @@ input.learnInputBox{
     padding-left: 10px;
 }
 
+
+#nextbutton {
+    position: absolute;
+    
+    width: 10vw;
+
+    top: 90%;
+    left: 80%;
+}
 
 #PracticeSeenWordsBtn{
     position: absolute;
@@ -253,6 +244,7 @@ input.learnInputBox{
 .learned-words ul li {
     margin: 5px;
 }
+
 
 
 

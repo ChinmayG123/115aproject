@@ -353,19 +353,16 @@ const Artist = function() {
             {/*npc text div*/}
              
             {/*npc text div*/}
-            <div className="npc-content">
-                
-                    <div className= "textboxWrapper">
-        
+            <div className="npc-content">   
+            <img id="npcimg" src={npcimg} alt="npc image" />
+
                             {!isLastWordCorrect && <p className="incorrect-message">Incorrect word. Try again!</p>}
                             {congrats && isLastWordCorrect && <p className="congrats-message">Congrats! You're done!</p>}
                             {!startClicked && <p>{texts[currentTextIndex]}</p>}
-                    </div>
-                <div className= "npcWrapper">
-                    <img id="npcimg" src={npcimg} alt="npc image" />
-                </div>
-                    <img id= "easelimg" src={easel}></img>
+                            <img id="npcTextbox" src={npcTextbox} alt="NPC Textbox" />
             </div>
+            <img id= "easelimg" src={easel}></img>
+
 
             
 
