@@ -14,7 +14,15 @@ import OpenAI from "openai";
 import crypto from 'crypto';
 import fs from 'fs/promises';
 import path from 'path';
+import dotenv from 'dotenv';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
 
+// Determine the directory of the current module file
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+// Configure dotenv with the path to your .env file
+dotenv.config({ path: `${__dirname}/../.env` });
 class GameClient {
     // Private fields
     #HOST = '149.28.199.169';
@@ -333,21 +341,20 @@ class GameClient {
     }
 
     async getFourChoices(username, language) {
-        const filePath = path.join(process.cwd(), 'key.txt');
-        const fileContents = (await fs.readFile(filePath, 'utf8')).trim();
-        // Split the file into lines
-        const lines = fileContents.split(/\r?\n/);
-        const encryptedText = lines[0].trim();
-        const secretKey = lines[1].trim();
-        console.log('Encrypted Text:', encryptedText);
-
-        const decryptedText = decrypt(encryptedText, secretKey); // Decrypt the file contents
+        // const filePath = path.join(process.cwd(), 'key.txt');
+        // const fileContents = (await fs.readFile(filePath, 'utf8')).trim();
+        // // Split the file into lines
+        // const lines = fileContents.split(/\r?\n/);
+        // const encryptedText = lines[0].trim();
+        // const secretKey = lines[1].trim();
+        // console.log('Encrypted Text:', encryptedText);
+        // const decryptedText = decrypt(encryptedText, secretKey); // Decrypt the file contents
 
         const word = await this.getUserQuiz(username, language);
         const translate_word = await this.getTranslation(username, language, word);
         // if(this.#DEBUG)
         console.log(`Quiz about ${translate_word[word]}(${word})`);
-        const openai = new OpenAI({ apiKey: decryptedText });
+        const openai = new OpenAI({ apiKey: process.env.API_KEY });
         const completion = await openai.chat.completions.create({
             messages: [{
                 role: "system",
