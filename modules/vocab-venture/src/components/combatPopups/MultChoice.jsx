@@ -40,6 +40,8 @@ const Type = function() {
     const [currentWordIndex, setCurrentWordIndex] = useState(0);
     const [translatedWord, setTranslatedWord] = useState([]);
 
+    const [correctMessage, setCorrectMessage] = useState(""); // Define the state for displaying the message
+
 
 
   const [translations, setTranslations] = useState({});
@@ -171,51 +173,47 @@ let wordChoices = translatedWord.slice(currentWordIndex, currentWordIndex + 4); 
 
 
     const handleEnterClick = async (key) => {
-        
-
-        console.log(textInput);
-        console.log("key", key);
-
         const translation = await gameClient.getTranslation(username, selectedlanguage, key);
-        console.log("translationnnn", translation);
-        console.log("keyyy", translation[key]);
-
-        if (translation) {
-            setTranslatedWord(translation[key]);
-        }
-
-        if (textInput.toLowerCase() === translation[key].toLowerCase()) {
-            showNextWord();
-            setIsLastWordCorrect(true); // Set the state to true if the word is correct
-            console.log("page", currentWordIndex);
-            // upProficiency(username, selectedlanguage, key);
+        console.log("This is the desired output:", translation[key].toLowerCase());
+        console.log("This is the user input", textInput.toLowerCase())
+        //console.log("Current word at index:", translatedWord[currentWordIndex])
+        //console.log("Current word at 4th word:", translatedWord[currentWordIndex+3])
+        if (translatedWord[currentWordIndex].toLowerCase() === translation[key].toLowerCase()) {
+            setCorrectMessage("Correct!"); // Set the correct message
+            setTimeout(() => {
+                showNextWord();
+                setCorrectMessage(""); // Clear the message after some time
+            }, 1500); // Delay for showing the message
+            setIsLastWordCorrect(true);
             await gameClient.upProficiency(username, selectedlanguage, key);
         } else {
-            console.log("Incorrect word. Try again!");
-            setIsLastWordCorrect(false); // Set the state to false if the word is incorrect
+            setIsLastWordCorrect(false);
+            setCorrectMessage("Try again!"); // Message for incorrect attempt
+            setTimeout(() => {
+                setCorrectMessage(""); // Clear the message after some time
+            }, 1500); // Delay for showing the message
             await gameClient.downProficiency(username, selectedlanguage, key);
         }
-    
-        setTextInput(""); // Clear the text input after checking
+        setTextInput("");
     };
 
-    console.log("page", currentWordIndex);
+    //console.log("page", currentWordIndex);
+    console.log("This is the message", correctMessage);
     
 
     return(  
 
         <div className = "container">
             
-
-            <div className="textdiv">
-                <input
-                    type="text"
-                    className="learnInputBox"
-                    placeholder="text"
-                    value={textInput}
-                    onChange={handleInputChange}
-                />
+            
+            
+            {/* Message Display */}
+        {correctMessage && (
+            <div className="message-display">
+                <p>{correctMessage}</p>
             </div>
+        )}
+
 
             <div className="word-buttons">
     {wordChoices.map((spanishWord, index) => (
