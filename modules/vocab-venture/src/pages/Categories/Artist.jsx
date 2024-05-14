@@ -4,8 +4,8 @@
 import npcimg from '../../assets/artist-assets/Artist.png';
 import learnBG from '../../assets/artist-assets/Contentbox.png';
 import npcTextbox from '../../assets/artist-assets/ArtistTextbox.png';
-import easel from '../../assets/artist-assets/Easel.png';
-import artistbg from '../../assets/artist-assets/ArtistBG.png';
+import overlayIMG from '../../assets/artist-assets/Easel.png';
+import bg from '../../assets/artist-assets/ArtistBG.png';
 import './Artist.css';
 import blue from '../../assets/dict-images/colors/blue.png';
 import black from '../../assets/dict-images/colors/black.png';
@@ -324,7 +324,7 @@ const Artist = function() {
         <div className = "container">
             
               
-            <img id= "artistbg" src={artistbg}></img>
+            <img id= "bg" src={bg}></img>
             
             {/*image display div*/}
             <div className="learn-content">
@@ -361,13 +361,9 @@ const Artist = function() {
                             {!startClicked && <p>{texts[currentTextIndex]}</p>}
                             <img id="npcTextbox" src={npcTextbox} alt="NPC Textbox" />
             </div>
-            <img id= "easelimg" src={easel}></img>
-
-
-            
-
+            <img id= "easelimg" src={overlayIMG}></img>
             <div className="textdiv"></div>
-            
+
             
             
             

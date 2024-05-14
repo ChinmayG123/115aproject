@@ -12,13 +12,14 @@
     overflow: hidden;
 }
  
-#artistbg{
+#bg{
     position:absolute;
     width: 100%;
     height: 100vh
 }
 
 .learn-content{
+    z-index: 1;
     position:relative;
    
 
@@ -55,12 +56,11 @@
     width:60vw;
     display:flex;
     justify-content: flex-start;
-    
-
-
 }
 
-
+#npcTextbox{
+    z-index:1;
+}
 /* .npc-content img {
     position: absolute;
     top: 0;
@@ -71,9 +71,9 @@
 .npc-content p {
     /* Position the text */
     position: absolute;
-    z-index: 1;
+    z-index: 2;
 
-    top: 2%; /* Example top position */
+    top: 4%; /* Example top position */
     right: 26%; /* Example left position */
     width: 75%;
     height: 20%;
