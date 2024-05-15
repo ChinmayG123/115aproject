@@ -134,6 +134,10 @@ const MultChoice = ({ questionType }) => {
 
 
 
+    const [timer, setTimer] = useState(10); // Initial timer value in seconds
+
+
+
     const getTheUserInformation = async (username, language) => {
         try {
             const result = await gameClient.getUserDictionary(username, language);
@@ -272,14 +276,24 @@ const MultChoice = ({ questionType }) => {
         console.log("This is the desired output:", translation[englishword]);
         console.log("CLICKED", clickedWord);
         if (clickedWord === translation[englishword]) {
-            console.log("correct");
+            // console.log("correct");
             setCorrectMessage("Correct!");
             setTimeout(() => {
                 showNextWord();
                 setCorrectMessage("");
             }, 1500);
             setIsLastWordCorrect(true);
-            await gameClient.upProficiency(username, selectedlanguage, englishword);
+            // setTimer(10); // Reset the timer to 10 seconds
+            // await gameClient.upProficiency(username, selectedlanguage, englishword);
+
+
+
+            // Wait 2 seconds before moving to the next word
+            setTimeout(() => {
+                showNextWord();
+                gameClient.downProficiency(username, selectedlanguage, englishword); // Call downProficiency()
+                setTimer(10); // Reset timer to initial value
+            }, 2000);
         } else {
             console.log("wrong");
             setIsLastWordCorrect(false);
@@ -288,12 +302,43 @@ const MultChoice = ({ questionType }) => {
                 setCorrectMessage("");
             }, 1500);
             await gameClient.downProficiency(username, selectedlanguage, englishword);
+            setTimer(10);
         }
         setTextInput("");
 
-        navigate('/outskirts', { state: { username, language: selectedlanguage, questionType: "type" } });
+        // navigate('/outskirts', { state: { username, language: selectedlanguage, questionType: "type" } });
 
     };
+
+
+
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setTimer((prevTimer) => {
+                if (prevTimer > 0 && !correctMessage) {
+                    return prevTimer - 1;
+                } 
+                else if (prevTimer > 0 && correctMessage) {
+                    return prevTimer;
+                } else {
+                    // Timer expired
+                    clearInterval(interval); // Stop the interval
+                    setTimeout(() => {
+                        showNextWord(); // Move to the next word after 2 seconds
+                        gameClient.downProficiency(username, selectedlanguage, englishword); // Call downProficiency()
+                        setTimer(10); // Reset timer to initial value
+                    }, 2000);
+                    return 0; // Set timer to 0 to display "Time is up!"
+                }
+            });
+        }, 1000); // Update timer every second
+    
+        // Clean up interval on component unmount
+        return () => clearInterval(interval);
+    }, [currentWordIndex, showNextWord, username, selectedlanguage, englishword]); // Re-run effect when necessary dependencies change
+
+
     
 
 
@@ -301,6 +346,16 @@ const MultChoice = ({ questionType }) => {
 
         <div className = "container">
             
+
+            <div className='timer'>
+                
+                {/* <h1>Timer: {timer}</h1> */}
+
+                <h1>Timer: {timer === 0 ? "Time is up!" : timer}</h1>
+
+
+            </div>
+
 
 
             <div className = "learned-words1" >

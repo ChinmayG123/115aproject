@@ -23,3 +23,32 @@
     position: absolute;
     top: 20%;
   }
+
+  #timer {
+    position: absolute;
+    left: 100%;
+  }
+
+
+  /* .message-display {
+    position: absolute;
+    top: 20px;
+    right: -400px; 
+    background-color: rgba(255, 255, 255, 0.8); 
+    padding: 10px; 
+    border-radius: 5px;
+    font-size: 50px;
+  }
+   */
+
+
+   .message-display {
+    position: absolute;
+    top: 20px; /* Adjust the top position as needed */
+    right: 20px; /* Adjust the right position as needed */
+    background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+    padding: 10px; /* Add padding around the text */
+    border-radius: 5px; /* Add rounded corners */
+    font-size: 50px; /* Adjust the font size as needed */
+    z-index: 999; /* Ensure the message is displayed on top */
+}

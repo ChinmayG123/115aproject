@@ -105,6 +105,10 @@ const Type = function() {
 
   const [translations, setTranslations] = useState({});
 
+
+  const [correctMessage, setCorrectMessage] = useState(""); // Define the state for displaying the message
+
+
     
     // the user's dictionary 
     const [userDictionary, setUserDictionary] = useState([]);
@@ -119,6 +123,9 @@ const Type = function() {
 
     const [isLastWordCorrect, setIsLastWordCorrect] = useState(true); // Track if the last entered word was correct
 
+
+
+    const [timer, setTimer] = useState(10); // Initial timer value in seconds
 
 
     const getTheUserInformation = async (username, language) => {
@@ -162,12 +169,12 @@ const Type = function() {
     // const [englishword, setEnglishWord] = useState('');
 
     let englishword = Object.keys(userDictionary)[currentWordIndex];
+
     const showNextWord = () => {
         if (currentWordIndex < Object.keys(userDictionary).length - 1) {
             setCurrentWordIndex(currentWordIndex + 1);
             englishword = Object.keys(userDictionary)[currentWordIndex + 1];
             console.log("englishword", englishword);
-            // setEnglishWord(Object.keys(userDictionary)[currentWordIndex + 1]);
         }
     };
     
@@ -208,21 +215,74 @@ const Type = function() {
         }
 
         if (textInput.toLowerCase() === translation[key].toLowerCase()) {
-            showNextWord();
-            setIsLastWordCorrect(true); // Set the state to true if the word is correct
-            console.log("page", currentWordIndex);
+            // showNextWord();
+            // setIsLastWordCorrect(true); // Set the state to true if the word is correct
+            // console.log("page", currentWordIndex);
             // upProficiency(username, selectedlanguage, key);
-            await gameClient.upProficiency(username, selectedlanguage, key);
+            // setTimer(10); // Reset the timer to 10 seconds
+            // await gameClient.upProficiency(username, selectedlanguage, key);
+
+            // console.log("correct");
+            setCorrectMessage("Correct!");
+            setTimeout(() => {
+                // showNextWord();
+                setCorrectMessage("");
+            }, 1500);
+            setIsLastWordCorrect(true);
+
+
+            // Wait 2 seconds before moving to the next word
+            setTimeout(() => {
+                showNextWord();
+                gameClient.downProficiency(username, selectedlanguage, englishword); // Call downProficiency()
+                setTimer(10); // Reset timer to initial value
+            }, 2000);
         } else {
             console.log("Incorrect word. Try again!");
+            setCorrectMessage("Try again!");
+            setTimeout(() => {
+                setCorrectMessage("");
+            }, 1500);
             setIsLastWordCorrect(false); // Set the state to false if the word is incorrect
             await gameClient.downProficiency(username, selectedlanguage, key);
+            setTimer(10);
         }
     
         setTextInput(""); // Clear the text input after checking
     };
 
     console.log("page", currentWordIndex);
+
+
+
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setTimer((prevTimer) => {
+                if (prevTimer > 0 && !correctMessage) {
+                    return prevTimer - 1;
+                } 
+                else if (prevTimer > 0 && correctMessage) {
+                    return prevTimer;
+                } else {
+                    // Timer expired
+                    clearInterval(interval); // Stop the interval
+                    setTimeout(() => {
+                        showNextWord(); // Move to the next word after 2 seconds
+                        gameClient.downProficiency(username, selectedlanguage, englishword); // Call downProficiency()
+                        setTimer(10); // Reset timer to initial value
+                    }, 2000);
+                    return 0; // Set timer to 0 to display "Time is up!"
+                }
+            });
+        }, 1000); // Update timer every second
+    
+        // Clean up interval on component unmount
+        return () => clearInterval(interval);
+    }, [currentWordIndex, showNextWord, username, selectedlanguage, englishword]); // Re-run effect when necessary dependencies change
+
+
+    console.log("CORRECT MESSAGE", correctMessage);
     
 
     return(  
@@ -244,6 +304,22 @@ const Type = function() {
             <button type="button"  id="enterbutton" onClick={() => handleEnterClick(englishword)}>
                 Enter
             </button> */}
+
+            <div className='timer'>
+                
+                {/* <h1>Timer: {timer}</h1> */}
+
+                <h1>Timer: {timer === 0 ? "Time is up!" : timer}</h1>
+
+
+            </div>
+
+                
+            {correctMessage && (
+                <div className="message-display">
+                    <p>{correctMessage}</p>
+                </div>
+            )}
 
 
             <div className = "learned-words1" >
@@ -280,6 +356,9 @@ const Type = function() {
                       return null;
                     })}
               </div>
+
+                
+
             
             <button type="button"  id="enterbutton" onClick={() => handleEnterClick(englishword)}>
                 Enter
