@@ -325,7 +325,7 @@ const Type = function() {
                     ))}
                 </div>
 
-
+                            
                 {correctMessage && (
                             <div className="message-display">
                                 <p>{correctMessage}</p>
