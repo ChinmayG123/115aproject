@@ -87,7 +87,11 @@ const Type = function() {
     const location = useLocation();
     const username = location.state.username;
     const selectedlanguage = location.state.language;
+
+    const difficulty = location.state.difficulty;
   
+    console.log("DIFFICULTY", difficulty);
+    
     const goToMap = () => {
         navigate('/map', { state: { username, language: selectedlanguage } });
     };
@@ -125,9 +129,25 @@ const Type = function() {
 
 
 
-    const [timer, setTimer] = useState(10); // Initial timer value in seconds
+    const getInitialTimer = (difficulty) => {
+        switch (difficulty) {
+            case 'easy':
+                return 15; // Set timer to 15 seconds for easy difficulty
+            case 'medium':
+                return 10; // Set timer to 10 seconds for medium difficulty
+            case 'hard':
+                return 5; // Set timer to 5 seconds for hard difficulty
+            default:
+                return 10; // Default to 10 seconds
+        }
+    };
 
 
+    const initialTimer = getInitialTimer(difficulty); // Calculate initial timer value outside the useEffect hook
+
+    const [timer, setTimer] = useState(initialTimer); // Initial timer value in seconds
+
+    
     const getTheUserInformation = async (username, language) => {
         try {
             const result = await gameClient.getUserDictionary(username, language);
@@ -205,6 +225,7 @@ const Type = function() {
 
         console.log(textInput);
         console.log("key", key);
+        const initialTimer = getInitialTimer(difficulty);
 
         const translation = await gameClient.getTranslation(username, selectedlanguage, key);
         console.log("translationnnn", translation);
@@ -235,7 +256,7 @@ const Type = function() {
             setTimeout(() => {
                 showNextWord();
                 gameClient.downProficiency(username, selectedlanguage, englishword); // Call downProficiency()
-                setTimer(10); // Reset timer to initial value
+                setTimer(initialTimer); // Reset timer to initial value
             }, 2000);
         } else {
             console.log("Incorrect word. Try again!");
@@ -245,7 +266,7 @@ const Type = function() {
             }, 1500);
             setIsLastWordCorrect(false); // Set the state to false if the word is incorrect
             await gameClient.downProficiency(username, selectedlanguage, key);
-            setTimer(10);
+            setTimer(initialTimer);
         }
     
         setTextInput(""); // Clear the text input after checking
@@ -256,7 +277,10 @@ const Type = function() {
 
 
 
+
     useEffect(() => {
+        const initialTimer = getInitialTimer(difficulty);
+        console.log("NEW TIMERRR", initialTimer);
         const interval = setInterval(() => {
             setTimer((prevTimer) => {
                 if (prevTimer > 0 && !correctMessage) {
@@ -270,7 +294,7 @@ const Type = function() {
                     setTimeout(() => {
                         showNextWord(); // Move to the next word after 2 seconds
                         gameClient.downProficiency(username, selectedlanguage, englishword); // Call downProficiency()
-                        setTimer(10); // Reset timer to initial value
+                        setTimer(initialTimer); // Reset timer to initial value
                     }, 2000);
                     return 0; // Set timer to 0 to display "Time is up!"
                 }
@@ -279,12 +303,10 @@ const Type = function() {
     
         // Clean up interval on component unmount
         return () => clearInterval(interval);
-    }, [currentWordIndex, showNextWord, username, selectedlanguage, englishword]); // Re-run effect when necessary dependencies change
+    }, [currentWordIndex, showNextWord, username, selectedlanguage, englishword, correctMessage, difficulty, initialTimer]); // Re-run effect when necessary dependencies change
 
 
-    console.log("CORRECT MESSAGE", correctMessage);
     
-
     return(  
 
         <div className = "container">
