@@ -14,6 +14,7 @@ import MarketPage from "./pages/Categories/Market";
 import OutskirtsPage from "./pages/Categories/Outskirts";
 import TailorPage from "./pages/Categories/Tailor";
 import TypePage from "./components/combatPopups/Type";
+import MCPage from "./components/combatPopups/MultChoice";
 
 export default function App() {
   
@@ -33,7 +34,8 @@ export default function App() {
         <Route exact path= "/outskirts" element={<OutskirtsPage></OutskirtsPage>}/>
         <Route exact path= "/tailor" element={<TailorPage></TailorPage>}/>
         <Route exact path= "/type" element={<TypePage></TypePage>}/>
-
+        <Route exact path= "/multiplechoice" element={<MCPage></MCPage>}/>
+        
 
 
         </Routes>

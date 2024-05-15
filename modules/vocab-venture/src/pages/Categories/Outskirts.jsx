@@ -27,6 +27,13 @@ const Outskirts = function() {
     };
 
 
+    const multipleChoice = () => {
+        // navigate('/map', { state: { username } });
+        console.log("user", username);
+        console.log("language", selectedlanguage);
+        navigate('/multiplechoice', { state: { username, language: selectedlanguage } });
+    };
+
 
     return(  
         <body className = "mapbackground">
@@ -36,6 +43,12 @@ const Outskirts = function() {
             <button type="button" id="goToTypeButton" onClick={goToType}>
                 Go to Type
             </button>
+
+            <button type="button" id="MultipleChoiceButton" onClick={multipleChoice}>
+                MultipleChoice
+            </button>
+
+
                 
 
         </body>
