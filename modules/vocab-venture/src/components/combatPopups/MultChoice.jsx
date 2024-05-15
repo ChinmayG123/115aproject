@@ -56,6 +56,7 @@ const Type = function() {
     const [userChoice, setUserChoice] = useState("");
 
     const [textInput, setTextInput] = useState(""); 
+    const [wordChoices, setWordChoices] = useState([]);
 
 
     const [isLastWordCorrect, setIsLastWordCorrect] = useState(true); // Track if the last entered word was correct
@@ -80,16 +81,8 @@ const Type = function() {
                     console.error('User dictionary is empty or undefined.');
                     return;
                 }
-
-                console.log("result", result);
-
-
-                // Shuffle the entries (key-value pairs) in the dictionary
                 const shuffledEntries = Object.entries(result).sort(() => Math.random() - 0.5);
                 const shuffledDictionary = Object.fromEntries(shuffledEntries);
-
-                console.log("shuffledDictionary", shuffledDictionary);
-
     
                 setUserDictionary(shuffledDictionary);
             } catch (error) {
@@ -101,41 +94,73 @@ const Type = function() {
 
     let englishword = Object.keys(userDictionary)[currentWordIndex];
     let wordChoice = Object.keys(userDictionary).slice(currentWordIndex, currentWordIndex + 4); // assuming you have a translation available
-    useEffect(() => {
-        let temp = [];
-        const fetchTranslation = async () => {
-            //console.log("Inside of useffect");
-            for( const dictWord of wordChoice){
-                    const translation = await gameClient.getTranslation(username, selectedlanguage, dictWord);
-                    console.log("TRANSLATION", translation);
-                    if (translation) {
-                        //setTranslatedWord(translation[wordChoice[currentWordIndex+i]]);
-                        console.log("This is the word:", translation[dictWord]);
-                        temp.push(translation[dictWord]);
-                       // setTranslatedWord(translation[dictWord]);
-                        //translatedWordChoice.push(translation[dictWord]);
-                    }
+    // console.log("english word", englishword);
+    // console.log("wordchoice", wordChoice);
+    // useEffect(() => {
+    //     let temp = [];
+    //     const fetchTranslation = async () => {
+    //         //console.log("Inside of useffect");
+    //         for( const dictWord of wordChoice){
+    //                 const translation = await gameClient.getTranslation(username, selectedlanguage, dictWord);
+    //                 console.log("TRANSLATION", translation);
+    //                 if (translation) {
+    //                     //setTranslatedWord(translation[wordChoice[currentWordIndex+i]]);
+    //                     // console.log("This is the word:", translation[dictWord]);
+    //                     temp.push(translation[dictWord]);
+    //                    // setTranslatedWord(translation[dictWord]);
+    //                     //translatedWordChoice.push(translation[dictWord]);
+    //                 }
                     
+    //         }
+    //         setTranslatedWord(temp);
+
+    //     };
+    
+
+    //     fetchTranslation();
+    // }, [currentWordIndex, chosenWords, selectedlanguage, username, userDictionary]);
+
+    // // console.log("This is the translated words:", translatedWord);
+    // let wordChoices = translatedWord.slice(currentWordIndex, currentWordIndex + 4); // assuming you have a translation available
+    useEffect(() => {
+        const fetchTranslations = async () => {
+            let temp = [];
+            for (const dictWord of wordChoice) {
+                const translation = await gameClient.getTranslation(username, selectedlanguage, dictWord);
+                // console.log("TRANSLATION", translation);
+                if (translation) {
+                    temp.push(translation[dictWord]);
+                } else {
+                    temp.push(""); // Push an empty string if the translation is missing
+                }
             }
             setTranslatedWord(temp);
+    
+            // Generate word choices from translated words
+            let choices = temp.slice(0, 4); // Get the first 4 translations
+            // while (choices.length < 4) {
+            //     choices.push(""); // Fill up the choices array with empty strings if there are less than 4 choices
+            // }
+            console.log("before", choices);
+            const shuffledchoices = Object.entries(choices).sort(() => Math.random() - 0.5 + Math.random() - 0.5).map(([key, value]) => value);
+            console.log("shuffled", shuffledchoices);
+            setWordChoices(shuffledchoices);
 
         };
     
-
-        fetchTranslation();
-    }, [currentWordIndex, chosenWords, selectedlanguage, username, userDictionary]);
-
-    console.log("This is the translated words:", translatedWord);
-let wordChoices = translatedWord.slice(currentWordIndex, currentWordIndex + 4); // assuming you have a translation available
-
+        fetchTranslations();
+    }, [currentWordIndex, selectedlanguage, userDictionary, username]);
+    
+    
+    // console.log("translated choices", wordChoices);
 
 
     // const [englishword, setEnglishWord] = useState('');
 
-    console.log("This is the user dictionary:", userDictionary);
-    console.log("This is the fetched:", fetchedWords);
-    console.log("This is the chosen:", chosenWords);
-    console.log("This is the keys:", Object.keys(userDictionary));
+    // console.log("This is the user dictionary:", userDictionary);
+    // console.log("This is the fetched:", fetchedWords);
+    // console.log("This is the chosen:", chosenWords);
+    // console.log("This is the keys:", Object.keys(userDictionary));
    // let englishword = Object.keys(userDictionary)[currentWordIndex];
    // let wordChoices = Object.keys(userDictionary).slice(currentWordIndex, currentWordIndex + 4); // assuming you have a translation available
 
@@ -145,7 +170,7 @@ let wordChoices = translatedWord.slice(currentWordIndex, currentWordIndex + 4); 
         if (currentWordIndex < Object.keys(userDictionary).length - 1) {
             setCurrentWordIndex(currentWordIndex + 1);
             englishword = Object.keys(userDictionary)[currentWordIndex + 1];
-            console.log("englishword", englishword);
+            // console.log("englishword", englishword);
             // setEnglishWord(Object.keys(userDictionary)[currentWordIndex + 1]);
         }
     };
@@ -167,66 +192,48 @@ let wordChoices = translatedWord.slice(currentWordIndex, currentWordIndex + 4); 
         }
         // Update state with the shuffled array
         setChosenWords(shuffledArray);
-        console.log("shuffled words: ", shuffledArray);
+        // console.log("shuffled words: ", shuffledArray);
     }
 
-
-
-    const handleEnterClick = async (key) => {
-        const translation = await gameClient.getTranslation(username, selectedlanguage, key);
-        console.log("This is the desired output:", translation[key].toLowerCase());
-        console.log("This is the user input", textInput.toLowerCase())
-        //console.log("Current word at index:", translatedWord[currentWordIndex])
-        //console.log("Current word at 4th word:", translatedWord[currentWordIndex+3])
-        if (translatedWord[currentWordIndex].toLowerCase() === translation[key].toLowerCase()) {
-            setCorrectMessage("Correct!"); // Set the correct message
+    const handleEnterClick = async (clickedWord) => {
+        const translation = await gameClient.getTranslation(username, selectedlanguage, englishword);
+        console.log("ENGLISH", englishword);
+        console.log("This is the desired output:", translation[englishword]);
+        console.log("CLICKED", clickedWord);
+        if (clickedWord === translation[englishword]) {
+            console.log("correct");
+            setCorrectMessage("Correct!");
             setTimeout(() => {
                 showNextWord();
-                setCorrectMessage(""); // Clear the message after some time
-            }, 1500); // Delay for showing the message
+                setCorrectMessage("");
+            }, 1500);
             setIsLastWordCorrect(true);
-            await gameClient.upProficiency(username, selectedlanguage, key);
+            await gameClient.upProficiency(username, selectedlanguage, englishword);
         } else {
+            console.log("wrong");
             setIsLastWordCorrect(false);
-            setCorrectMessage("Try again!"); // Message for incorrect attempt
+            setCorrectMessage("Try again!");
             setTimeout(() => {
-                setCorrectMessage(""); // Clear the message after some time
-            }, 1500); // Delay for showing the message
-            await gameClient.downProficiency(username, selectedlanguage, key);
+                setCorrectMessage("");
+            }, 1500);
+            await gameClient.downProficiency(username, selectedlanguage, englishword);
         }
         setTextInput("");
     };
-
-    //console.log("page", currentWordIndex);
-    console.log("This is the message", correctMessage);
     
+
 
     return(  
 
         <div className = "container">
             
             
-            
-            {/* Message Display */}
         {correctMessage && (
             <div className="message-display">
                 <p>{correctMessage}</p>
             </div>
         )}
 
-
-            <div className="word-buttons">
-    {wordChoices.map((spanishWord, index) => (
-        <button key={`${spanishWord}-${index}`} className="word-button" onClick={() => handleEnterClick(englishword)}>
-            {spanishWord}
-        </button>
-    ))}
-</div>
-
-{/* 
-            <button type="button"  id="enterbutton" onClick={() => handleEnterClick(englishword)}>
-                Enter
-            </button> */}
 
 
             <div className = "learned-words1" >
@@ -235,29 +242,25 @@ let wordChoices = translatedWord.slice(currentWordIndex, currentWordIndex + 4); 
                         // englishword = key;
                         if (index === currentWordIndex)
                         return (
-                          
                           <div key={key} className="word-container">
-                            
-
                               <div className="word-info">
                                 <h1 style={{ marginTop: '250px', marginLeft: '200px' }} >English: {key}</h1>
                                 </div>
-
-                            {/* <button type="button" style={{ position: 'fixed'}} id="enterbutton" onClick={() => handleEnterClick(key)}>
-                                Enter
-                            </button> */}
-                            
                         </div>
                         );
-                      
                       return null;
                     })}
-              </div>
-            
-            <button type="button"  id="enterbutton" onClick={() => handleEnterClick(englishword)}>
-                Enter
-            </button>
 
+
+                <div className="word-buttons">
+                    {wordChoices.map((spanishWord, index) => (
+                        <button key={`${spanishWord}-${index}`} className="word-button" onClick={() => handleEnterClick(spanishWord)}>
+                            {spanishWord}
+                        </button>
+                    ))}
+                </div>
+
+              </div>
 
             <button type="button" id="goToMapButton" onClick={goToMap}> Go to Map</button>
             

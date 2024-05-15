@@ -1,4 +1,5 @@
 const gameClient = new GameClient();
+// import gameClient from '../client/gameClient.js';
 
 
 document.addEventListener('DOMContentLoaded', function () {
