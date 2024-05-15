@@ -15,6 +15,7 @@ import OutskirtsPage from "./pages/Categories/Outskirts";
 import TailorPage from "./pages/Categories/Tailor";
 import TypePage from "./components/combatPopups/Type";
 import MCPage from "./components/combatPopups/MultChoice";
+import QuizPage from "./components/combatPopups/Quiz";
 
 export default function App() {
   
@@ -35,7 +36,8 @@ export default function App() {
         <Route exact path= "/tailor" element={<TailorPage></TailorPage>}/>
         <Route exact path= "/type" element={<TypePage></TypePage>}/>
         <Route exact path= "/multiplechoice" element={<MCPage></MCPage>}/>
-        
+        <Route exact path= "/quiz" element={<QuizPage></QuizPage>}/>
+
 
 
         </Routes>

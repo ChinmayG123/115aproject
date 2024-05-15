@@ -77,7 +77,9 @@ const getWordImageSrc = (wordImage) => {
   };
   
 
-const Type = function() {
+const MultChoice = ({ questionType }) => {
+
+// const MultChoice = function() {
 
 //   const { selectedLanguage } = props;
 
@@ -88,6 +90,16 @@ const Type = function() {
     const location = useLocation();
     const username = location.state.username;
     const selectedlanguage = location.state.language;
+    // const questionType = location.state.questionType;
+
+    // const MultChoice = ({ questionType }) => {
+    //     // Use the questionType prop wherever needed
+    //     console.log("HEREEE", questionType);
+    // };
+    
+    // MultChoice(questionType);
+
+    console.log("QUESTION TYPE", questionType);
   
     const goToMap = () => {
         navigate('/map', { state: { username, language: selectedlanguage } });
@@ -278,6 +290,9 @@ const Type = function() {
             await gameClient.downProficiency(username, selectedlanguage, englishword);
         }
         setTextInput("");
+
+        navigate('/outskirts', { state: { username, language: selectedlanguage, questionType: "type" } });
+
     };
     
 
@@ -343,7 +358,7 @@ const Type = function() {
      );
 };
 
-export default Type;
+export default MultChoice;
 
 
 
