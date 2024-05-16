@@ -11,8 +11,8 @@
  */
 class GameClient {
     // Private fields
-    // #HOST = '149.28.199.169';
-    #HOST = '127.0.0.1';
+    #HOST = '149.28.199.169';
+    // #HOST = '127.0.0.1';
     #PORT = 8080;
     #DEBUG = false;
 
@@ -194,7 +194,7 @@ class GameClient {
         }
     }
 
-    async downProficiency(username, language, word) {
+    async upProficiency(username, language, word) {
 
         const options = {
             method: 'PUT',
@@ -215,7 +215,7 @@ class GameClient {
         }
     }
 
-    async upProficiency(username, language, word) {
+    async downProficiency(username, language, word) {
         const options = {
             method: 'PUT',
             headers: {
