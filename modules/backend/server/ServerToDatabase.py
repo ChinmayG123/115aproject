@@ -241,7 +241,7 @@ class DatabaseAccess:
             #print("This is the type:", type(field_value))
             
             #only update if it is within the bounds
-            if 0 <= (field_value[word] + action) <= 10:
+            if 0 < (field_value[word] + action) < 10:
                 field_value[word] = field_value[word] + action
             doc_ref.update({language: field_value})
             return self.SUCCESSFUL
