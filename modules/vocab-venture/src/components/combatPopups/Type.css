@@ -10,8 +10,9 @@
 
 #wordImage1 {
     position: absolute;
-    height: 150%;
-    top: -50%;
+    height: 280%;
+    top: -100%;
+    left: 38%;
     /* transform: translateX(100px);  */
     display: flex;
     justify-content: center;
@@ -29,17 +30,6 @@
     left: 100%;
   }
 
-
-  /* .message-display {
-    position: absolute;
-    top: 20px;
-    right: -400px; 
-    background-color: rgba(255, 255, 255, 0.8); 
-    padding: 10px; 
-    border-radius: 5px;
-    font-size: 50px;
-  }
-   */
 
 
    .message-display {

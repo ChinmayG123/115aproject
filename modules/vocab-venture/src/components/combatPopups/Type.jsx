@@ -365,7 +365,7 @@ const Type = function() {
                               </div>
 
                               <div className="word-info">
-                                <h1 style={{ marginTop: '250px', marginLeft: '200px' }} >English: {key}</h1>
+                                <h1 style={{ marginTop: '250px', marginLeft: '600px' }} >English: {key}</h1>
                                 </div>
 
                             {/* <button type="button" style={{ position: 'fixed'}} id="enterbutton" onClick={() => handleEnterClick(key)}>
