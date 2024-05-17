@@ -18,6 +18,11 @@
   
 }
 
+.timer{
+  position:absolute;
+  left:20px;
+  top:20px;
+}
 .type-image-container {
   position:absolute;
   width:100%;

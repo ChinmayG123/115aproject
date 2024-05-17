@@ -166,8 +166,8 @@ const Match = () => {
     };
 
     return (
-        <div className="container">
-            <div className="learned-words1">
+        <div className="match-container">
+            <div className="matchCONTENT">
                 <div className="word-column">
                     {currentWords.map((englishWord) => (
                         <button
@@ -191,7 +191,7 @@ const Match = () => {
                     ))}
                 </div>
                 {correctMessage && (
-                    <div className="message-display">
+                    <div className="match-message-display">
                         <p>{correctMessage}</p>
                     </div>
                 )}
