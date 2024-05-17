@@ -1,9 +1,8 @@
-
-
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import MultChoice from '../../components/combatPopups/MultChoice';
 import Type from '../../components/combatPopups/Type';
+
 
 const Outskirts = function() {
     const navigate = useNavigate();
@@ -12,9 +11,7 @@ const Outskirts = function() {
     const selectedlanguage = location.state.language;
 
     const [questionType, setQuestionType] = useState('MultChoice'); // Default to 'MultChoice'
-
     const [difficulty, setDifficulty] = useState('easy'); // Default difficulty level
-
 
     const goToType = () => {
         navigate('/type', { state: { username, language: selectedlanguage, questionType, difficulty } });
@@ -23,7 +20,10 @@ const Outskirts = function() {
     const multipleChoice = () => {
         navigate('/multiplechoice', { state: { username, language: selectedlanguage, questionType, difficulty } });
     };
-    
+
+    const match = () => {
+        navigate('/match', { state: { username, language: selectedlanguage, questionType, difficulty } });
+    };
 
     const quiz = () => {
         navigate('/quiz', { state: { username, language: selectedlanguage, questionType } });
@@ -41,20 +41,14 @@ const Outskirts = function() {
                     <option value="hard">Hard</option>
                 </select>
             </div>
-            {/* <div>
-                <select value={questionType} onChange={(e) => setQuestionType(e.target.value)}>
-                    <option value="MultChoice">Multiple Choice</option>
-                    <option value="Type">Type</option>
-                </select>
-                <p>{questionType}</p>
-                {questionType === 'MultChoice' && <MultChoice questionType="MultChoice" />}
-                {questionType === 'Type' && <Type questionType="Type" />}
-            </div> */}
             <button type="button" id="goToTypeButton" onClick={goToType}>
                 Go to Type
             </button>
             <button type="button" id="MultipleChoiceButton" onClick={multipleChoice}>
                 MultipleChoice
+            </button>
+            <button type="button" id="MatchButton" onClick={match}>
+                Match
             </button>
             <button type="button" id="QuizButton" onClick={quiz}>
                 Quiz
