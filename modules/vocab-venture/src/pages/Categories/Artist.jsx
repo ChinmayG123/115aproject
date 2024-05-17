@@ -1,3 +1,5 @@
+
+
 // import { useNavigate } from 'react-router-dom/dist';
 // import { useNavigate } from 'react-router-dom';
 
@@ -198,6 +200,7 @@ const Artist = function() {
     
    
 
+
     const handleStartClick = () => {
         if(currentTextIndex == texts.length -1){
             
@@ -325,36 +328,12 @@ const Artist = function() {
               
             <img id= "bg" src={bg}></img>
             
-            {/*image display div*/}
             <div className="learn-content">
                 <img id="learnBG" src={learnBG} />
-                <div className= "learnCONTENT">
-
-                <div className="learned-words">
-                 <ul>
-                        
-                        <h1>English: {chosenWords[currentWordIndex]}</h1>
-                        <br></br>
-                        <h1>{selectedlanguage}: {translatedWord}</h1>
-                    </ul>
+                <div className="learnCONTENT">
                 </div>
-
-                {chosenWords[currentWordIndex] && (
-                <img
-                    id="colorImage"
-                    src={getColorImageSrc(chosenWords[currentWordIndex])}
-                    alt={chosenWords[currentWordIndex]}
-                />
-                
-            )}
-
-            </div>
-
             </div>
             
-            {/*npc text div*/}
-             
-            {/*npc text div*/}
             <div className="npc-content">   
             <img id="npcimg" src={npcimg} alt="npc image" />
 
@@ -383,6 +362,24 @@ const Artist = function() {
                     <button type="button" id="enterbutton" onClick={handleEnterClick}>
                         Enter
                     </button>
+
+
+                        <div className="learned-words">
+                        <ul>
+                                
+                                <h1>English: {chosenWords[currentWordIndex]}</h1>
+                                <br></br>
+                                <h1>{selectedlanguage}: {translatedWord}</h1>
+                            </ul>
+                        </div>
+
+                        {chosenWords[currentWordIndex] && (
+                        <img
+                            id="colorImage"
+                            src={getColorImageSrc(chosenWords[currentWordIndex])}
+                            alt={chosenWords[currentWordIndex]}
+                        />
+                    )}
                 </>
             ) : ( promptTrigger ? (
                 
@@ -417,6 +414,7 @@ const Artist = function() {
 };
 
 export default Artist;
+
 
 
 
