@@ -76,7 +76,7 @@ import React, { useState, useEffect } from 'react';
 
 
 
-const Type = function() {
+const Type = function(props) {
 
 //   const { selectedLanguage } = props;
 
@@ -125,7 +125,6 @@ const Type = function() {
 
 
 
-    const [timer, setTimer] = useState(10); // Initial timer value in seconds
 
 
     const getTheUserInformation = async (username, language) => {
@@ -235,9 +234,10 @@ const Type = function() {
             setTimeout(() => {
                 showNextWord();
                 gameClient.downProficiency(username, selectedlanguage, englishword); // Call downProficiency()
-                setTimer(10); // Reset timer to initial value
+                props.setTimer(10); // Reset timer to initial value
             }, 2000);
         } else {
+            props.setIsHit(true);
             console.log("Incorrect word. Try again!");
             setCorrectMessage("Try again!");
             setTimeout(() => {
@@ -245,7 +245,7 @@ const Type = function() {
             }, 1500);
             setIsLastWordCorrect(false); // Set the state to false if the word is incorrect
             await gameClient.downProficiency(username, selectedlanguage, key);
-            setTimer(10);
+            props.setTimer(10);
         }
     
         setTextInput(""); // Clear the text input after checking
@@ -257,8 +257,9 @@ const Type = function() {
 
 
     useEffect(() => {
+    
         const interval = setInterval(() => {
-            setTimer((prevTimer) => {
+            props.setTimer((prevTimer) => {
                 if (prevTimer > 0 && !correctMessage) {
                     return prevTimer - 1;
                 } 
@@ -270,11 +271,12 @@ const Type = function() {
                     setTimeout(() => {
                         showNextWord(); // Move to the next word after 2 seconds
                         gameClient.downProficiency(username, selectedlanguage, englishword); // Call downProficiency()
-                        setTimer(10); // Reset timer to initial value
+                        props.setTimer(10); // Reset timer to initial value
                     }, 2000);
                     return 0; // Set timer to 0 to display "Time is up!"
                 }
             });
+            
         }, 1000); // Update timer every second
     
         // Clean up interval on component unmount
@@ -285,7 +287,7 @@ const Type = function() {
     console.log("CORRECT MESSAGE", correctMessage);
     
 
-    return(  
+    return(props.trigger) ?(  
 
         <div className = "container">
             
@@ -309,7 +311,7 @@ const Type = function() {
                 
                 {/* <h1>Timer: {timer}</h1> */}
 
-                <h1>Timer: {timer === 0 ? "Time is up!" : timer}</h1>
+                <h1>Timer: {props.timer === 0 ? "Time is up!" : props.timer}</h1>
 
 
             </div>
@@ -323,6 +325,8 @@ const Type = function() {
 
 
             <div className = "learned-words1" >
+                
+            {/*<img id="learnBG" src={learnBG} />*/}
               {userDictionary &&
                     Object.entries(userDictionary).map(([key, value], index) => {
                         // englishword = key;
@@ -330,7 +334,7 @@ const Type = function() {
                         return (
                           
                           <div key={key} className="word-container">
-                            
+                           
                             
                               <div className="image-container">
                                 {getWordImageSrc(key) && (
@@ -343,7 +347,7 @@ const Type = function() {
                               </div>
 
                               <div className="word-info">
-                                <h1 style={{ marginTop: '250px', marginLeft: '200px' }} >English: {key}</h1>
+                                <h1 >English: {key}</h1>
                                 </div>
 
                             {/* <button type="button" style={{ position: 'fixed'}} id="enterbutton" onClick={() => handleEnterClick(key)}>
@@ -370,10 +374,7 @@ const Type = function() {
                 
         </div>
     
-     );
+     ):"";
 };
 
 export default Type;
-
-
-
