@@ -19,6 +19,9 @@ import QuizPage from "./components/combatPopups/Quiz";
 import MatchPage from "./components/combatPopups/Match";
 
 
+import TypeOGPage from "./components/combatPopups/TypeOG";
+import MCOGPage from "./components/combatPopups/MultChoiceOG";
+
 export default function App() {
   
   return(
@@ -40,6 +43,9 @@ export default function App() {
         <Route exact path= "/multiplechoice" element={<MCPage></MCPage>}/>
         <Route exact path= "/quiz" element={<QuizPage></QuizPage>}/>
         <Route exact path= "/match" element={<MatchPage></MatchPage>}/>
+
+        <Route exact path= "/typeOG" element={<TypeOGPage></TypeOGPage>}/>
+        <Route exact path= "/multiplechoiceOG" element={<MCOGPage></MCOGPage>}/>
 
 
 
