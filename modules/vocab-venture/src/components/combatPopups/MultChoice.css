@@ -40,12 +40,16 @@
 
 #wordImage1 {
     position: absolute;
-    height: 75%;
+    height: 60%;
     top: -20%;
-    left: 60%;
+    left: 35%;
     /* transform: translateX(100px);  */
     display: flex;
     justify-content: center;
+    /* max-width: 30%; 
+    max-height: 30%; */
+    transform: scale(0.3); /* Scale the image down to 50% of its original size */
+
   }
   
   .message-display {

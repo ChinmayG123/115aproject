@@ -362,15 +362,17 @@ const MultChoice = ({ questionType }) => {
                     ))}
                 </div>
 
-                            
-                {correctMessage && (
+                      
+
+              </div>
+
+                    
+              {correctMessage && (
                             <div className="message-display">
                                 <p>{correctMessage}</p>
                             </div>
                         )}
 
-
-              </div>
 
             <button type="button" id="goToMapButton" onClick={goToMap}> Go to Map</button>
             
