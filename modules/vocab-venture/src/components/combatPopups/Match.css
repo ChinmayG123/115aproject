@@ -1,0 +1,51 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.learned-words1 {
+  display: flex;
+  justify-content: space-around;
+  width: 80%;
+}
+
+.word-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.word-button {
+  height: 50px;
+  width: 200px;
+  text-align: center;
+  padding: 15px;
+  background-color: #62ae48;
+  border: 2.5px solid #81aed3;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.message-display {
+  position: absolute;
+  top: 270px;
+  left: 60%;
+  transform: translateX(-50%);
+  background-color: #ebe35ccc;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 30px;
+}
+
+.instruction-box {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #ebe35ccc;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 20px;
+  color: black;
+  border: 1px solid #ccc;
+}
