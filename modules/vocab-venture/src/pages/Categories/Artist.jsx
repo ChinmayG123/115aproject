@@ -198,7 +198,6 @@ const Artist = function() {
     
    
 
-
     const handleStartClick = () => {
         if(currentTextIndex == texts.length -1){
             
@@ -329,6 +328,8 @@ const Artist = function() {
             {/*image display div*/}
             <div className="learn-content">
                 <img id="learnBG" src={learnBG} />
+                <div className= "learnCONTENT">
+
                 <div className="learned-words">
                  <ul>
                         
@@ -344,9 +345,10 @@ const Artist = function() {
                     src={getColorImageSrc(chosenWords[currentWordIndex])}
                     alt={chosenWords[currentWordIndex]}
                 />
+                
             )}
 
-
+            </div>
 
             </div>
             
