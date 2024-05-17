@@ -9,20 +9,6 @@
  * upProficiency(username, language, word);
  * downProficiency(username, language, word);
  */
-
-import OpenAI from "openai";
-import crypto from 'crypto';
-import fs from 'fs/promises';
-import path from 'path';
-import dotenv from 'dotenv';
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
-
-// Determine the directory of the current module file
-const __dirname = dirname(fileURLToPath(import.meta.url));
-
-// Configure dotenv with the path to your .env file
-dotenv.config({ path: `${__dirname}/../.env` });
 class GameClient {
     // Private fields
     #HOST = '149.28.199.169';
@@ -35,6 +21,7 @@ class GameClient {
         this.userTable = '/userlist';
         this.userProgress = '/progress'
         this.allDict = '/total'
+        this.ai = "/chatgpt"
     }
 
 
@@ -229,7 +216,6 @@ class GameClient {
     }
 
     async downProficiency(username, language, word) {
-
         const options = {
             method: 'PUT',
             headers: {
@@ -306,7 +292,8 @@ class GameClient {
             },
         };
         const response = await this.retrieveData(this.allDict, options);
-        this.printDebug(response);
+        if (this.#DEBUG)
+            this.printDebug(response);
         if (response.status === 200) {
             return await response.json();
         } else {
@@ -314,15 +301,39 @@ class GameClient {
         }
     }
 
-    async getUserQuiz(username, language) {
+    /**
+     * Generates a quiz question word based on the user's learned words and the specified difficulty.
+     * 
+     * @param username - The username to identify the user.
+     * @param language - The language context of the user.
+     * @param difficulty - The difficulty level for selecting the word (0-3).
+     *  - 0: Weighted difficulty not applied (all weights are 1).
+     *  - 1-3: The higher the number, the more the weights impact the selection.
+     * 
+     * @returns {Promise<string | null>} A promise that resolves to the selected word based on the given difficulty, or null if there is an error.
+     */
+    async getQuestionWord(username, language, difficulty) {
         const learned_words = await this.getUserDictionary(username, language);
-        if (this.#DEBUG)
+        if (this.#DEBUG) {
             console.log('The user has learned: \n', learned_words, "\n\n");
+        }
+
         const keys = Object.keys(learned_words);
         const weights = Object.values(learned_words);
+
+        let adjustedWeights;
+        if (difficulty === 0) {
+            // If difficulty is 0, treat all weights equally as 1
+            adjustedWeights = weights.map(() => 1);
+        } else {
+            // Adjust weights based on the difficulty
+            adjustedWeights = weights.map(weight => Math.pow(weight, difficulty));
+        }
+
         const cumulativeWeights = [];
         let totalWeight = 0;
-        for (let weight of weights) {
+
+        for (let weight of adjustedWeights) {
             totalWeight += weight;
             cumulativeWeights.push(totalWeight);
         }
@@ -339,35 +350,39 @@ class GameClient {
 
         return null; // Should not occur unless there's an error in the data
     }
-
-    async getFourChoices(username, language) {
-        // const filePath = path.join(process.cwd(), 'key.txt');
-        // const fileContents = (await fs.readFile(filePath, 'utf8')).trim();
-        // // Split the file into lines
-        // const lines = fileContents.split(/\r?\n/);
-        // const encryptedText = lines[0].trim();
-        // const secretKey = lines[1].trim();
-        // console.log('Encrypted Text:', encryptedText);
-        // const decryptedText = decrypt(encryptedText, secretKey); // Decrypt the file contents
-
-        const word = await this.getUserQuiz(username, language);
+    /**
+     * Generates a multiple-choice question for a given word based on the user's learned words and language context.
+     *
+     * @param username - The username to identify the user.
+     * @param language - The language context of the user.
+     * @param word - The word for which to generate multiple-choice options.
+     * @returns A promise that resolves to a JSON string containing the correct answer index and an array of choices, or null if there is an error.
+     */
+    async getMultipleChoice(username, language, word) {
         const translate_word = await this.getTranslation(username, language, word);
-        // if(this.#DEBUG)
-        console.log(`Quiz about ${translate_word[word]}(${word})`);
-        const openai = new OpenAI({ apiKey: process.env.API_KEY });
-        const completion = await openai.chat.completions.create({
-            messages: [{
-                role: "system",
-                content: `Please generate 3 words that looks similar to ${translate_word[word]}, but doesn't mean anything. I am quizing someone. Use the format of {word}newline{word}newline{word}. `
-            }],
-            model: "gpt-3.5-turbo",
-        });
-        // console.log(completion.choices[0]['message']['content']);
-        const fake_word_list = completion.choices[0]['message']['content'].trim().split(/\s*\r?\n\s*/);;
-        const word_list = [translate_word[word]];
-        word_list.push(...fake_word_list);
-        return word_list;
+        console.log("Picked word: ", translate_word);
+        const options = {
+            method: 'GET',
+            headers: {
+                'Username': username,
+                'Game-Language': language,
+                'Target-Word': word,
+                'Action': "fake"
+            },
+        };
+        const response = await this.retrieveData(this.ai, options);
+        if (this.#DEBUG)
+            this.printDebug(response);
+        if (response.status !== 200) {
+            return null; // Error or data not found
+        }
+        const text_response = await response.text();
 
+        let choices = text_response.trim().split(/\s*\r?\n\s*/);
+        const answer = Math.floor(Math.random() * 4);
+        choices.splice(answer, 0, translate_word[word]);
+        let ret = [answer, choices];
+        return ret;
     }
 
     // private function
@@ -406,26 +421,6 @@ class GameClient {
 
 }
 
-// Function to decrypt a string
-function decrypt(encryptedData, secretKey) {
-    const iv = Buffer.from('cae8a612f89d03300bbe4a3b892cf0d2', 'hex');
-
-    // Ensure the IV is exactly 16 bytes (for AES-256-CBC)
-    if (iv.length !== 16) {
-        throw new Error('Invalid IV length, expected 16 bytes.');
-    }
-
-    // Create a decipher using the secret key and the initialization vector
-    const decipher = crypto.createDecipheriv('aes-128-cbc', Buffer.from(secretKey, 'hex'), iv);
-
-    // Decrypt the text
-    let decrypted = decipher.update(encryptedData, 'hex', 'utf8');
-    decrypted += decipher.final('utf8');
-
-    return decrypted;
-}
-
-
 // Export for Node.js (CommonJS)
 if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
     module.exports = GameClient;
@@ -437,4 +432,4 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
 }
 
 // ES Module export (supports `import` syntax)
-export default GameClient;
+// export default GameClient;

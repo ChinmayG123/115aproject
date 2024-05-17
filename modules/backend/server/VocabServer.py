@@ -27,7 +27,7 @@ def check_and_install(package):
         print(f"{package} is already installed")
 
 
-packages = ["pyzipper", "firebase", "firebase-admin"]
+packages = ["pyzipper", "firebase", "firebase-admin", "openai", "python-dotenv"]
 for package in packages:
     check_and_install(package)
 

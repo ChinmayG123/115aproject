@@ -14,12 +14,14 @@ class GameClient {
     // #HOST = '149.28.199.169';
     #HOST = '127.0.0.1';
     #PORT = 8080;
+    #DEBUG = false;
 
     constructor() {
         this.baseURL = `http://${this.#HOST}:${this.#PORT}`;
         this.userTable = '/userlist';
         this.userProgress = '/progress'
         this.allDict = '/total'
+        this.ai = "/chatgpt"
     }
 
 
@@ -120,7 +122,8 @@ class GameClient {
             }
         };
         const response = await this.retrieveData(this.userProgress, options);
-        this.printDebug(response);
+        if (this.#DEBUG)
+            this.printDebug(response);
         if (response.status === 200) {
             return await response.json(); // Assuming JSON response
         } else {
@@ -191,7 +194,7 @@ class GameClient {
         }
     }
 
-    async upProficiency(username, language, word) {
+    async downProficiency(username, language, word) {
 
         const options = {
             method: 'PUT',
@@ -212,8 +215,7 @@ class GameClient {
         }
     }
 
-    async downProficiency(username, language, word) {
-
+    async upProficiency(username, language, word) {
         const options = {
             method: 'PUT',
             headers: {
@@ -279,7 +281,7 @@ class GameClient {
         }
     }
 
-    async getTranslation(username, language, word){
+    async getTranslation(username, language, word) {
 
         const options = {
             method: 'GET',
@@ -290,7 +292,8 @@ class GameClient {
             },
         };
         const response = await this.retrieveData(this.allDict, options);
-        this.printDebug(response);
+        if (this.#DEBUG)
+            this.printDebug(response);
         if (response.status === 200) {
             return await response.json();
         } else {
@@ -298,13 +301,97 @@ class GameClient {
         }
     }
 
+    /**
+     * Generates a quiz question word based on the user's learned words and the specified difficulty.
+     * 
+     * @param username - The username to identify the user.
+     * @param language - The language context of the user.
+     * @param difficulty - The difficulty level for selecting the word (0-3).
+     *  - 0: Weighted difficulty not applied (all weights are 1).
+     *  - 1-3: The higher the number, the more the weights impact the selection.
+     * 
+     * @returns {Promise<string | null>} A promise that resolves to the selected word based on the given difficulty, or null if there is an error.
+     */
+    async getQuestionWord(username, language, difficulty) {
+        const learned_words = await this.getUserDictionary(username, language);
+        if (this.#DEBUG) {
+            console.log('The user has learned: \n', learned_words, "\n\n");
+        }
+
+        const keys = Object.keys(learned_words);
+        const weights = Object.values(learned_words);
+
+        let adjustedWeights;
+        if (difficulty === 0) {
+            // If difficulty is 0, treat all weights equally as 1
+            adjustedWeights = weights.map(() => 1);
+        } else {
+            // Adjust weights based on the difficulty
+            adjustedWeights = weights.map(weight => Math.pow(weight, difficulty));
+        }
+
+        const cumulativeWeights = [];
+        let totalWeight = 0;
+
+        for (let weight of adjustedWeights) {
+            totalWeight += weight;
+            cumulativeWeights.push(totalWeight);
+        }
+
+        // Generate a random number between 0 and the total weight
+        const randomNum = Math.random() * totalWeight;
+
+        // Find the corresponding item using linear search
+        for (let i = 0; i < cumulativeWeights.length; i++) {
+            if (randomNum < cumulativeWeights[i]) {
+                return keys[i];
+            }
+        }
+
+        return null; // Should not occur unless there's an error in the data
+    }
+    /**
+     * Generates a multiple-choice question for a given word based on the user's learned words and language context.
+     *
+     * @param username - The username to identify the user.
+     * @param language - The language context of the user.
+     * @param word - The word for which to generate multiple-choice options.
+     * @returns A promise that resolves to a JSON string containing the correct answer index and an array of choices, or null if there is an error.
+     */
+    async getMultipleChoice(username, language, word) {
+        const translate_word = await this.getTranslation(username, language, word);
+        console.log("Picked word: ", translate_word);
+        const options = {
+            method: 'GET',
+            headers: {
+                'Username': username,
+                'Game-Language': language,
+                'Target-Word': word,
+                'Action': "fake"
+            },
+        };
+        const response = await this.retrieveData(this.ai, options);
+        if (this.#DEBUG)
+            this.printDebug(response);
+        if (response.status !== 200) {
+            return null; // Error or data not found
+        }
+        const text_response = await response.text();
+
+        let choices = text_response.trim().split(/\s*\r?\n\s*/);
+        const answer = Math.floor(Math.random() * 4);
+        choices.splice(answer, 0, translate_word[word]);
+        let ret = [answer, choices];
+        return ret;
+    }
+
     // private function
     async retrieveData(target, options) {
-        // Create a promise that rejects in 3000 milliseconds (3 seconds)
+        // Create a promise that rejects in 5000 milliseconds (5 seconds)
         const timeoutPromise = new Promise((_, reject) => {
             setTimeout(() => {
                 reject(new Error('Request timed out')); // Reject with an error when timeout is reached
-            }, 3000); // Timeout set to 3 seconds
+            }, 5000); // Timeout set to 5 seconds
         });
 
         try {
@@ -334,10 +421,15 @@ class GameClient {
 
 }
 
-// Check if the environment is Node.js (CommonJS)
+// Export for Node.js (CommonJS)
 if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
     module.exports = GameClient;
 } else {
-    // If not Node.js, assign to global window object for the browser
-    window.GameClient = GameClient;
+    // Export for Browser (attach to window object)
+    if (typeof window !== 'undefined') {
+        window.GameClient = GameClient;
+    }
 }
+
+// ES Module export (supports `import` syntax)
+// export default GameClient;

@@ -60,3 +60,8 @@ Maintaining cloud server. Responding to bug report.
 Implemented Weighted Randomizer for getting one word from user's learned word. 
 Implemented multiple choice generator using ChatGPT API. 
 Using AES-128 CBC to encrypt OpenAI API Key. 
+
+2024/05/15: 
+Migrated ChatGPT compatibility to backend. 
+Improved randomizer with difficulty parameter. 
+Working on AI generated conversations. 

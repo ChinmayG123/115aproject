@@ -87,7 +87,11 @@ const Type = function(props) {
     const location = useLocation();
     const username = location.state.username;
     const selectedlanguage = location.state.language;
+
+    const difficulty = location.state.difficulty;
   
+    console.log("DIFFICULTY", difficulty);
+    
     const goToMap = () => {
         navigate('/map', { state: { username, language: selectedlanguage } });
     };
@@ -126,7 +130,7 @@ const Type = function(props) {
 
 
 
-
+    
     const getTheUserInformation = async (username, language) => {
         try {
             const result = await gameClient.getUserDictionary(username, language);
@@ -204,6 +208,7 @@ const Type = function(props) {
 
         console.log(textInput);
         console.log("key", key);
+        const initialTimer = getInitialTimer(difficulty);
 
         const translation = await gameClient.getTranslation(username, selectedlanguage, key);
         console.log("translationnnn", translation);
@@ -256,6 +261,7 @@ const Type = function(props) {
 
 
 
+
     useEffect(() => {
     
         const interval = setInterval(() => {
@@ -281,7 +287,7 @@ const Type = function(props) {
     
         // Clean up interval on component unmount
         return () => clearInterval(interval);
-    }, [currentWordIndex, showNextWord, username, selectedlanguage, englishword]); // Re-run effect when necessary dependencies change
+    }, [currentWordIndex, showNextWord, username, selectedlanguage, englishword, correctMessage, difficulty, initialTimer]); // Re-run effect when necessary dependencies change
 
 
     console.log("CORRECT MESSAGE", correctMessage);

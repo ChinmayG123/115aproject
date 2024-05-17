@@ -2,7 +2,8 @@ import json
 import os
 import socket
 from datetime import datetime
-
+from openai import OpenAI
+from dotenv import load_dotenv
 from httplib2 import Response
 from requests import Request
 from ServerToDatabase import DatabaseAccess
@@ -13,6 +14,12 @@ database_dir_path = os.path.dirname(server_dir_path) + "/database"
 print("Server program location: ", script_path)
 print("The server module is located in: ", server_dir_path)
 print("The database module is located in: ", database_dir_path)
+
+# Load environment variables from the .env file in the same directory
+load_dotenv(dotenv_path=".env")
+
+# Access the API key
+api_key = os.getenv("OPENAI_API_KEY")
 
 
 class Server:
@@ -46,7 +53,10 @@ class Server:
 
         headers = lines[1:-2]  # Skip the request line and the last line (body)
         for header in headers:
-            key, value = header.split(": ")
+            try:
+                key, value = header.split(": ")
+            except Exception as e:
+                key, value = header.split(":")
             self.Request["Headers"][key] = value
 
         self.Request["Body"] = lines[-1]
@@ -99,7 +109,7 @@ class Server:
                 self.username = username
             else:
                 self.Response["Body"] = "User already in session"
-                
+
         elif target_db == "/progress":  # get user learned words
             self.username = self.Request["Headers"]["Username"]
 
@@ -114,8 +124,10 @@ class Server:
                 self.retrieve_all_dict(self.Request["Headers"]["Target-Asset"])
             elif "Target-Word" in self.Request["Headers"]:
                 self.retrieve_translation(self.Request["Headers"]["Target-Word"])
-
-            
+        elif target_db == "/chatgpt":
+            if "Action" in self.Request["Headers"]:
+                if self.Request["Headers"]["Action"] == "fake":
+                    self.retrieve_false_word()
 
     def retrieve_login(self, username):
         db_access = DatabaseAccess(database_dir_path)
@@ -151,7 +163,7 @@ class Server:
     def retrieve_user_percentage(self, username):
         db_access = DatabaseAccess(database_dir_path)
         language = self.Request["Headers"]["Game-Language"]
-        try: 
+        try:
             db_access.calculate_progress(self.username, language)
             result = db_access.retrieve_progress(self.username, language)
             self.Response["Body"] = json.dumps(dict({username: result}))
@@ -163,13 +175,13 @@ class Server:
             self.Response["StatusCode"] = "500"
             self.Response["StatusLine"] = "Internal Server Error"
             print(f"An error occurred: {e}")
-            
-    def retrieve_all_dict(self, category=''):
+
+    def retrieve_all_dict(self, category=""):
         db_access = DatabaseAccess(database_dir_path)
         db_access.groupWordsByCategory()
         result = db_access.getAllWordsFromCategory(category)
         if isinstance(result, list):  # Check if result is a dictionary
-            self.Response["Body"] = json.dumps(dict({category:result}))
+            self.Response["Body"] = json.dumps(dict({category: result}))
             self.Response["Headers"]["Content-Length"] = str(len(self.Response["Body"]))
             self.Response["Headers"]["Content-Type"] = "application/json"
             self.Response["StatusCode"] = "200"
@@ -181,12 +193,45 @@ class Server:
     def retrieve_translation(self, word):
         db_access = DatabaseAccess(database_dir_path)
         language = self.Request["Headers"]["Game-Language"]
-        try: 
+        try:
             result = db_access.get_translation(word, language)
 
-            self.Response["Body"] = json.dumps(dict({word:result}))
+            self.Response["Body"] = json.dumps(dict({word: result}))
             self.Response["Headers"]["Content-Length"] = str(len(self.Response["Body"]))
             self.Response["Headers"]["Content-Type"] = "application/json"
+            self.Response["StatusCode"] = "200"
+            self.Response["StatusLine"] = "OK"
+        except Exception as e:
+            self.Response["StatusCode"] = "500"
+            self.Response["StatusLine"] = "Internal Server Error"
+            print(f"An error occurred: {e}")
+
+    def retrieve_false_word(self):
+        word = self.Request["Headers"]["Target-Word"]
+        language = self.Request["Headers"]["Game-Language"]
+        role_str = f"You are an examiner. You are making multiple choice question for the word {word}."
+        prompt_str = f"""Please create 3 {language} words close to {word}. 
+The words should look similar, but mean diferrent or mean nothing.
+Your words' length should be close, so that the examinee would know a hint. 
+Follow the format of <word><newline><word><newline><word>, all lower case. """
+        try:
+            client = OpenAI(api_key=api_key)
+            completion = client.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {
+                        "role": "system",
+                        "content": role_str,
+                    },
+                    {
+                        "role": "user",
+                        "content": prompt_str,
+                    },
+                ],
+            )
+            self.Response["Body"] = completion.choices[0].message.content
+            self.Response["Headers"]["Content-Length"] = str(len(self.Response["Body"]))
+            self.Response["Headers"]["Content-Type"] = "text/plain"
             self.Response["StatusCode"] = "200"
             self.Response["StatusLine"] = "OK"
         except Exception as e:
@@ -247,11 +292,11 @@ class Server:
         self.username = self.Request["Headers"]["Username"]
         if self.Request["URI"] == "/progress":
             action = self.Request["Headers"]["Action"]
-            if action == 'learn':
+            if action == "learn":
                 self.toggle_learn(self.username)
-            elif action == 'proficiency up':
+            elif action == "proficiency up":
                 self.toggle_proficiency(self.username, 1)
-            elif action == 'proficiency down':
+            elif action == "proficiency down":
                 self.toggle_proficiency(self.username, -1)
 
     def toggle_learn(self, username):
@@ -279,7 +324,7 @@ class Server:
             self.Response["StatusCode"] = "500"
             self.Response["StatusLine"] = "Internal Server Error"
             self.Response["Body"] = "alter_proficiency() failed"
-            
+
     def process_request(self):
         if self.Request["Method"] == "GET":
             if self.debugMode:
@@ -335,7 +380,7 @@ class Server:
                 break
             else:  # invalid state
                 break
-        
+
         return self.username
 
 
