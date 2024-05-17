@@ -313,9 +313,18 @@ const Market = function() {
               
             <img id= "bg" src={bg}></img>
             
-            {/*image display div*/}
+
+
             <div className="learn-content">
                 <img id="learnBG" src={learnBG} />
+                <div className="learnCONTENT">
+                </div>
+            </div>
+            
+            {/* <div className="learn-content">
+                <img id="learnBG" src={learnBG} />
+                <div className="learnCONTENT">
+                </div>
                 <div className="learned-words">
                  <ul>
                         
@@ -333,7 +342,7 @@ const Market = function() {
                 />
             )}
 
-            </div>
+            </div> */}
           
             <div className="npc-content">   
             <img id="npcimg" src={npcimg} alt="npc image" />
@@ -362,6 +371,24 @@ const Market = function() {
                     <button type="button" id="enterbutton" onClick={handleEnterClick}>
                         Enter
                     </button>
+
+
+                    <div className="learned-words">
+                        <ul>
+                                
+                                <h1>English: {chosenWords[currentWordIndex]}</h1>
+                                <br></br>
+                                <h1>{selectedlanguage}: {translatedWord}</h1>
+                            </ul>
+                        </div>
+
+                        {chosenWords[currentWordIndex] && (
+                        <img
+                            id="colorImage"
+                            src={getFoodImageSrc(chosenWords[currentWordIndex])}
+                            alt={chosenWords[currentWordIndex]}
+                        />
+                    )}
                 </>
             ) : ( promptTrigger ? (
                 

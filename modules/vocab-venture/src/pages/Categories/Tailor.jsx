@@ -280,7 +280,15 @@ const Tailor = function() {
               
             <img id= "bg" src={bg}></img>
             
-            {/*image display div*/}
+            
+
+            <div className="learn-content">
+                <img id="learnBG" src={learnBG} />
+                <div className="learnCONTENT">
+                </div>
+            </div>
+            
+{/* 
             <div className="learn-content">
                 <img id="learnBG" src={learnBG} />
                 <div className="learned-words">
@@ -294,7 +302,7 @@ const Tailor = function() {
 
                
             </div>
-          
+           */}
             <div className="npc-content">   
             <img id="npcimg" src={npcimg} alt="npc image" />
 
@@ -322,6 +330,15 @@ const Tailor = function() {
                     <button type="button" id="enterbutton" onClick={handleEnterClick}>
                         Enter
                     </button>
+
+                    <div className="learned-words">
+                 <ul>
+                        
+                        <h1>English: {chosenWords[currentWordIndex]}</h1>
+                        <br></br>
+                        <h1>{selectedlanguage}: {translatedWord}</h1>
+                    </ul>
+                </div>
                 </>
             ) : ( promptTrigger ? (
                 
