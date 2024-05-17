@@ -14,11 +14,11 @@ const Outskirts = function() {
     const [difficulty, setDifficulty] = useState('easy'); // Default difficulty level
 
     const goToType = () => {
-        navigate('/type', { state: { username, language: selectedlanguage, questionType, difficulty } });
+        navigate('/typeOG', { state: { username, language: selectedlanguage, questionType, difficulty } });
     };
 
     const multipleChoice = () => {
-        navigate('/multiplechoice', { state: { username, language: selectedlanguage, questionType, difficulty } });
+        navigate('/multiplechoiceOG', { state: { username, language: selectedlanguage, questionType, difficulty } });
     };
 
     const match = () => {
