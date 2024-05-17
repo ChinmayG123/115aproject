@@ -1,88 +1,43 @@
-
-#enterbutton {
-  position: absolute;
-  
-  width: 10vw;
-
-  top: 89%;
-  left: 77%;
-}
-
-#wordImage1 {
-  position: absolute;
-  width:100%;
-  left:0;
-  height: auto;
-  display:flex;
-  justify-self: center;
-  
-}
-
-
-.word-info {
-  position: relative;
-  text-align:center;
-  width:100%;  
-  
-}
-
-#timer {
-  position: absolute;
-  left: 100%;
-}
-
-
-/* .message-display {
-  position: absolute;
-  top: 20px;
-  right: -400px; 
-  background-color: rgba(255, 255, 255, 0.8); 
-  padding: 10px; 
-  border-radius: 5px;
-  font-size: 50px;
-}
-*/
-
- .message-display {
-  position: absolute;
-  top: 20px; 
-  right: 20px; 
-  background-color: rgba(255, 255, 255, 0.8);
-  padding: 10px;
-  border-radius: 5px; 
-  font-size: 50px; 
-  z-index: 999; 
-}
-.learned-words1{
-  background-image: url('../../assets/artist-assets/Contentbox.png');
-  background-size: cover;
-  position: absolute;
-  display: flex;
-  width: 30%;
-  height: 70%;
-  justify-self: center;
-  align-self: center;
-  left:34%;
-}
-
-.contentBG{
-  position:fixed;
-}
-.image-container{
-  display: flex;
-  position:relative;
-  width:100%;
-  height:70%;
-  
-}
-.word-container{
-  z-index: 1;
-  position:relative;
-  justify-content: flex-start;
-
-  width:100%;
+.type-container{
+  width: 100%;
   height:100%;
   display:flex;
-  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.typeCONTENT{
+  background-image: url('../../assets/artist-assets/Contentbox.png');
+  background-size:cover;
+  position:absolute;
+  width:30%;
+  height: 75%;
+  top:5%;
+  justify-content: center;
+  padding-top: 50px;
   
+}
+
+.type-image-container {
+  position:absolute;
+  width:100%;
+  justify-content:center;
+  height: 70%;
+  text-align: center;
+  
+}
+.type-image-container img{
+  height: 80%;
+}
+.type-image{
+   width:100%;
+}
+
+.type-word-info{
+  bottom:0;
+  position:absolute;
+  width:100%;
+  height: 30%;
+  align-content: center;
+  text-align: center;
 }
