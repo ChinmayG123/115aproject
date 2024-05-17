@@ -3,6 +3,7 @@
 .container{
     top:0px;
     left: 0px;
+  
     position: absolute;
     
     width:100%;
@@ -18,22 +19,17 @@
 }
 
 .learn-content{
-    
     z-index: 1;
-    position:absolute;
-    left:0;
+    position:relative;
+   
 
     width:50vw;
     height:85vh;
 
     display:flex;
     justify-content: center;
-    align-items: center;
 }
 
-#learnBG{
-    height:100%;
-}
 
 
 #npcimg{ 
@@ -41,35 +37,30 @@
     position:absolute;
     
     width:38vw;
-    max-width: 450px;
     display:flex;
     left: 10%;
     align-self: flex-end;
     justify-self: flex-end;
     
-    
-    
 }
 #npcTextbox{
-    z-index:1;
     position: absolute;
+    
     width: 40vw;
-   
     
 }
 
 .npc-content{
-    left: 50%;
-    bottom:0;
     padding-top: 5px;
-    position:absolute;
+    position:relative;
     width:60vw;
     display:flex;
     justify-content: flex-start;
-    height: 100%;
 }
 
-
+#npcTextbox{
+    z-index:1;
+}
 /* .npc-content img {
     position: absolute;
     top: 0;
