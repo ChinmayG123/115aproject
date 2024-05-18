@@ -180,6 +180,11 @@ const MultChoiceOG = ({ questionType }) => {
     
     useEffect(() => {
         const fetchTranslations = async () => {
+            let generated = await gameClient.getMultipleChoice(username, selectedlanguage, englishword);
+            let translated = await gameClient.getTranslation(username, selectedlanguage, englishword);
+            console.log("This is the word to filter", translated[englishword]);
+            generated[1] = generated[1].filter(item => item !== translated[englishword]);
+
             let temp = [];
             for (const dictWord of wordChoice) {
                 const translation = await gameClient.getTranslation(username, selectedlanguage, dictWord);
@@ -191,8 +196,17 @@ const MultChoiceOG = ({ questionType }) => {
                 }
             }
             setTranslatedWord(temp);
-    
-            let choices = temp.slice(0, 4); // Get the first 4 translations
+            let newArray = [];
+            newArray.push(translated[englishword]);
+            for (const genWord of generated[1])
+            {
+                    newArray.push(genWord); //populate the newarray with the filtered generated words
+            }
+            //let choices = temp.slice(0, 4); // Get the first 4 translations
+            let choices = newArray.slice(0, 4);
+             //filter out the correct word from the incorrect answer choices
+            console.log("getting GPT words", generated[1]);
+           
             console.log("before", choices);
             const shuffledchoices = Object.entries(choices).sort(() => Math.random() - 0.5 + Math.random() - 0.5).map(([key, value]) => value);
             console.log("shuffled", shuffledchoices);
