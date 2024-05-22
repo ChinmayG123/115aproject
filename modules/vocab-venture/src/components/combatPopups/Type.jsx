@@ -92,90 +92,22 @@ const Type = function(props) {
         navigate('/map', { state: { username, language: selectedlanguage } });
     };
 
-    const [chosenWords, setChosenWords] = useState([]);
-    const [fetchedWords, setFetchedWords] = useState([]);
-    const [seenWords, setSeenWords] = useState([]);
-    const [unseenWords, setUnseenWords] = useState([]);
-    const [texts, setTexts] = useState([]);
-    const [promptTrigger, setPromptTrigger] = useState(false);
+  
     const [currentWordIndex, setCurrentWordIndex] = useState(0);
-    const [translatedWord, setTranslatedWord] = useState('');
 
 
-
-  const [translations, setTranslations] = useState({});
 
 
   const [correctMessage, setCorrectMessage] = useState(""); // Define the state for displaying the message
 
-
-    
-    // the user's dictionary 
-    const [userDictionary, setUserDictionary] = useState([]);
-
-
-
-    //if the user should see new words or practice old ones 
-    const [userChoice, setUserChoice] = useState("");
-
     const [textInput, setTextInput] = useState(""); 
 
 
-    const [isLastWordCorrect, setIsLastWordCorrect] = useState(true); // Track if the last entered word was correct
 
-
-
-
-
-    const getTheUserInformation = async (username, language) => {
-        try {
-            const result = await gameClient.getUserDictionary(username, language);
-            return result;
-        } catch (error) {
-            return { status: 'error', message: 'An error occurred during login. Please try again.' };
-        }
-      }
-
-      useEffect(() => {
-        const fetchData = async () => {
-            try {
-                console.log(username, selectedlanguage);
-                const result = await getTheUserInformation(username, selectedlanguage);
-                if (!result) {
-                    console.error('User dictionary is empty or undefined.');
-                    return;
-                }
-
-                console.log("result", result);
-
-
-                // Shuffle the entries (key-value pairs) in the dictionary
-                const shuffledEntries = Object.entries(result).sort(() => Math.random() - 0.5);
-                const shuffledDictionary = Object.fromEntries(shuffledEntries);
-
-                console.log("shuffledDictionary", shuffledDictionary);
-
-    
-                setUserDictionary(shuffledDictionary);
-            } catch (error) {
-                console.error('An error occurred while fetching user information:', error);
-            }
-        };
-        fetchData();
-    }, [username, selectedlanguage]);
-
-
+     
     // const [englishword, setEnglishWord] = useState('');
 
-    let englishword = Object.keys(userDictionary)[currentWordIndex];
 
-    const showNextWord = () => {
-        if (currentWordIndex < Object.keys(userDictionary).length - 1) {
-            setCurrentWordIndex(currentWordIndex + 1);
-            englishword = Object.keys(userDictionary)[currentWordIndex + 1];
-            console.log("englishword", englishword);
-        }
-    };
     
     const handleInputChange = (event) => {
         const newValue = event.target.value;
@@ -184,77 +116,47 @@ const Type = function(props) {
     };
 
 
-   const randomizeWords = (array) =>{
-        // Create a copy of the array
-        const shuffledArray = array.slice();
-        // Shuffle the copy
-        for (let i = shuffledArray.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
-        }
-        // Update state with the shuffled array
-        setChosenWords(shuffledArray);
-        console.log("shuffled words: ", shuffledArray);
-    }
 
 
 
     const handleEnterClick = async (key) => {
         
 
-        console.log(textInput);
-        console.log("key", key);
+        console.log("inputted text", textInput);
 
         const translation = await gameClient.getTranslation(username, selectedlanguage, key);
-        console.log("translationnnn", translation);
-        console.log("keyyy", translation[key]);
+       
 
-        if (translation) {
-            setTranslatedWord(translation[key]);
-        }
+      
 
         if (textInput.toLowerCase() === translation[key].toLowerCase()) {
-            // showNextWord();
-            // setIsLastWordCorrect(true); // Set the state to true if the word is correct
-            // console.log("page", currentWordIndex);
-            // upProficiency(username, selectedlanguage, key);
-            // setTimer(10); // Reset the timer to 10 seconds
-            // await gameClient.upProficiency(username, selectedlanguage, key);
-
-            // console.log("correct");
-            setCorrectMessage("Correct!");
-            setTimeout(() => {
-                // showNextWord();
-                setCorrectMessage("");
-            }, 1500);
-            setIsLastWordCorrect(true);
-
-
-            // Wait 2 seconds before moving to the next word
+           
+            //setCorrectMessage("Correct!");
+            props.setIsAttacking(true);
+            props.setIsAnswerCorrect(true);
+            props.setIsQuestionDone(true);
+            // Wait 1 second before moving to the next word
+            /*
             setTimeout(() => {
                 showNextWord();
                 gameClient.downProficiency(username, selectedlanguage, englishword); // Call downProficiency()
                 props.setTimer(10); // Reset timer to initial value
-            }, 2000);
+            }, 1000);*/
         } else {
             props.setIsHit(true);
-            console.log("Incorrect word. Try again!");
-            setCorrectMessage("Try again!");
-            setTimeout(() => {
-                setCorrectMessage("");
-            }, 1500);
-            setIsLastWordCorrect(false); // Set the state to false if the word is incorrect
+            //console.log("Incorrect word!");
+            props.setIsAnswerCorrect(false);
+            props.setIsQuestionDone(true);
+
+            
             await gameClient.downProficiency(username, selectedlanguage, key);
-            props.setTimer(10);
         }
     
         setTextInput(""); // Clear the text input after checking
     };
 
-    console.log("page", currentWordIndex);
 
-
-
+/*
 
     useEffect(() => {
     
@@ -282,14 +184,13 @@ const Type = function(props) {
         // Clean up interval on component unmount
         return () => clearInterval(interval);
     }, [currentWordIndex, showNextWord, username, selectedlanguage, englishword]); // Re-run effect when necessary dependencies change
+*/
 
-
-    console.log("CORRECT MESSAGE", correctMessage);
     
 
     return(props.trigger) ?(  
 
-        <div className = "container">
+        <div className = "type-container">
             
 
             <div className="textdiv">
@@ -307,14 +208,6 @@ const Type = function(props) {
                 Enter
             </button> */}
 
-            <div className='timer'>
-                
-                {/* <h1>Timer: {timer}</h1> */}
-
-                <h1>Timer: {props.timer === 0 ? "Time is up!" : props.timer}</h1>
-
-
-            </div>
 
                 
             {correctMessage && (
@@ -324,47 +217,36 @@ const Type = function(props) {
             )}
 
 
-            <div className = "learned-words1" >
+            <div className = "typeCONTENT" >
                 
-            {/*<img id="learnBG" src={learnBG} />*/}
-              {userDictionary &&
-                    Object.entries(userDictionary).map(([key, value], index) => {
-                        // englishword = key;
-                        if (index === currentWordIndex)
-                        return (
+           
                           
-                          <div key={key} className="word-container">
+                          <div className="type-word-container">
                            
                             
-                              <div className="image-container">
-                                {getWordImageSrc(key) && (
+                              <div className="type-image-container">
+                                {getWordImageSrc(props.wordToShow) && (
                                   <img
-                                    id="wordImage1"
-                                    src={getWordImageSrc(key)}
-                                    alt={key}
+                                    id="type-image"
+                                    src={getWordImageSrc(props.wordToShow)}
+                                    alt={props.wordToShow}
                                   />
                                 )}
                               </div>
 
-                              <div className="word-info">
-                                <h1 >English: {key}</h1>
+                              <div className="type-word-info">
+                                <h1 >English: {props.wordToShow}</h1>
                                 </div>
 
-                            {/* <button type="button" style={{ position: 'fixed'}} id="enterbutton" onClick={() => handleEnterClick(key)}>
-                                Enter
-                            </button> */}
                             
                         </div>
-                        );
-                      
-                      return null;
-                    })}
+                        
               </div>
 
                 
 
             
-            <button type="button"  id="enterbutton" onClick={() => handleEnterClick(englishword)}>
+            <button type="button"  id="enterbutton" onClick={() => handleEnterClick(props.wordToShow)}>
                 Enter
             </button>
 

@@ -80,7 +80,7 @@ const getWordImageSrc = (wordImage) => {
 
 
 
-const MultChoice = ({ questionType }) => {
+const MultChoice = (props) => {
 
 
     const navigate = useNavigate(); 
@@ -89,27 +89,18 @@ const MultChoice = ({ questionType }) => {
     const username = location.state.username;
     const selectedlanguage = location.state.language;
 
-    const difficulty = location.state.difficulty;
   
-    console.log("DIFFICULTY", difficulty);
 
   
     const goToMap = () => {
         navigate('/map', { state: { username, language: selectedlanguage } });
     };
 
-    const [chosenWords, setChosenWords] = useState([]);
-    const [fetchedWords, setFetchedWords] = useState([]);
-
     const [currentWordIndex, setCurrentWordIndex] = useState(0);
     const [translatedWord, setTranslatedWord] = useState([]);
 
     const [correctMessage, setCorrectMessage] = useState(""); // Define the state for displaying the message
-
-
-
-    const [translations, setTranslations] = useState({});
-
+    const [multChoiceOptions, setMultChoiceOptions] = useState([]);
     
     // the user's dictionary 
     const [userDictionary, setUserDictionary] = useState([]);
@@ -122,66 +113,50 @@ const MultChoice = ({ questionType }) => {
     const [textInput, setTextInput] = useState(""); 
     const [wordChoices, setWordChoices] = useState([]);
 
+ 
 
-    const [isLastWordCorrect, setIsLastWordCorrect] = useState(true); // Track if the last entered word was correct
-
-
-
-    const getInitialTimer = (difficulty) => {
-        switch (difficulty) {
-            case 'easy':
-                return 15; // Set timer to 15 seconds for easy difficulty
-            case 'medium':
-                return 10; // Set timer to 10 seconds for medium difficulty
-            case 'hard':
-                return 5; // Set timer to 5 seconds for hard difficulty
-            default:
-                return 10; // Default to 10 seconds
-        }
-    };
-
-
-    const initialTimer = getInitialTimer(difficulty); // Calculate initial timer value outside the useEffect hook
-
-    const [timer, setTimer] = useState(initialTimer); // Initial timer value in seconds
-
-
+    
+    //let englishword = props.wordToShow;
+    //console.log("word from quiz ",englishword)
+    //let wordChoice = Object.keys(userDictionary).slice(currentWordIndex, currentWordIndex + 3); // assuming you have a translation available
     const getTheUserInformation = async (username, language) => {
         try {
             const result = await gameClient.getUserDictionary(username, language);
+            // return { status: 'success' };
             return result;
+            // return { status: 'success', result: result };
         } catch (error) {
             return { status: 'error', message: 'An error occurred during login. Please try again.' };
         }
       }
-
-      useEffect(() => {
-        const fetchData = async () => {
-            try {
-                console.log(username, selectedlanguage);
-                const result = await getTheUserInformation(username, selectedlanguage);
-                if (!result) {
-                    console.error('User dictionary is empty or undefined.');
-                    return;
-                }
-                const shuffledEntries = Object.entries(result).sort(() => Math.random() - 0.5);
-                const shuffledDictionary = Object.fromEntries(shuffledEntries);
-    
-                setUserDictionary(shuffledDictionary);
-            } catch (error) {
-                console.error('An error occurred while fetching user information:', error);
-            }
-        };
-        fetchData();
-    }, [username, selectedlanguage]);
-
-    let englishword = Object.keys(userDictionary)[currentWordIndex];
-    let wordChoice = Object.keys(userDictionary).slice(currentWordIndex, currentWordIndex + 4); // assuming you have a translation available
-    
     useEffect(() => {
+      const fetchData = async () => {
+        const result = await getTheUserInformation(props.username, selectedlanguage);
+        setUserDictionary(Object.keys(result));
+      }
+      fetchData();
+    }, [props.username, selectedlanguage]);
+
+
+    useEffect(() => {
+
         const fetchTranslations = async () => {
-            let temp = [];
-            for (const dictWord of wordChoice) {
+          let temp = [];
+           /*
+           //choosing 3 random false words 
+            for(let i = 0; i < 3; i++){
+                let word = userDictionary[Math.floor(Math.random() * userDictionary.length)];
+                const translation = await gameClient.getTranslation(username, selectedlanguage, word);
+                if (translation) {
+                    temp.push(translation[word]);
+                } else {
+                    temp.push(""); // Push an empty string if the translation is missing
+                }
+            }
+            
+            console.log(temp);*/
+            
+            for (const dictWord of props.wordGroup) {
                 const translation = await gameClient.getTranslation(username, selectedlanguage, dictWord);
                 // console.log("TRANSLATION", translation);
                 if (translation) {
@@ -190,84 +165,32 @@ const MultChoice = ({ questionType }) => {
                     temp.push(""); // Push an empty string if the translation is missing
                 }
             }
-            setTranslatedWord(temp);
     
-            let choices = temp.slice(0, 4); // Get the first 4 translations
-            console.log("before", choices);
-            const shuffledchoices = Object.entries(choices).sort(() => Math.random() - 0.5 + Math.random() - 0.5).map(([key, value]) => value);
-            console.log("shuffled", shuffledchoices);
+            const shuffledchoices = Object.entries(temp).sort(() => Math.random() - 0.5 + Math.random() - 0.5).map(([key, value]) => value);
             setWordChoices(shuffledchoices);
-
         };
     
         fetchTranslations();
-    }, [currentWordIndex, selectedlanguage, userDictionary, username]);
+    },[props.wordGroup]);
+
     
-
-
-    const showNextWord = () => {
-        if (currentWordIndex < Object.keys(userDictionary).length - 1) {
-            setCurrentWordIndex(currentWordIndex + 1);
-            englishword = Object.keys(userDictionary)[currentWordIndex + 1];
-            // console.log("englishword", englishword);
-            // setEnglishWord(Object.keys(userDictionary)[currentWordIndex + 1]);
-        }
-    };
-    
-    const handleInputChange = (event) => {
-        const newValue = event.target.value;
-        setTextInput(newValue); // Update the text input value as the user types
-        // console.log(newValue);
-    };
-
-
-   const randomizeWords = (array) =>{
-        // Create a copy of the array
-        const shuffledArray = array.slice();
-        // Shuffle the copy
-        for (let i = shuffledArray.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
-        }
-        // Update state with the shuffled array
-        setChosenWords(shuffledArray);
-        // console.log("shuffled words: ", shuffledArray);
-    }
-
     const handleEnterClick = async (clickedWord) => {
-        const initialTimer = getInitialTimer(difficulty);
-        const translation = await gameClient.getTranslation(username, selectedlanguage, englishword);
-        console.log("ENGLISH", englishword);
-        console.log("This is the desired output:", translation[englishword]);
+        //console.log(wordChoices);
+        let correctWord = props.wordToShow;
+        const translation = await gameClient.getTranslation(username, selectedlanguage,correctWord);
+        console.log("ENGLISH", correctWord);
+        console.log("correct answer:", translation[correctWord]);
         console.log("CLICKED", clickedWord);
-        if (clickedWord === translation[englishword]) {
-            // console.log("correct");
-            setCorrectMessage("Correct!");
-            setTimeout(() => {
-                showNextWord();
-                setCorrectMessage("");
-            }, 1500);
-            setIsLastWordCorrect(true);
-            // setTimer(10); // Reset the timer to 10 seconds
-            // await gameClient.upProficiency(username, selectedlanguage, englishword);
-
-
-
-            // Wait 2 seconds before moving to the next word
-            setTimeout(() => {
-                showNextWord();
-                gameClient.downProficiency(username, selectedlanguage, englishword); // Call downProficiency()
-                setTimer(initialTimer); // Reset timer to initial value
-            }, 2000);
+        if (clickedWord === translation[correctWord]) {
+            props.setIsAttacking(true);
+            gameClient.upProficiency(username, selectedlanguage, correctWord); // Call downProficiency()
+            props.setIsAnswerCorrect(true);
+            props.setIsQuestionDone(true);   
         } else {
-            console.log("wrong");
-            setIsLastWordCorrect(false);
-            setCorrectMessage("Try again!");
-            setTimeout(() => {
-                setCorrectMessage("");
-            }, 1500);
-            await gameClient.downProficiency(username, selectedlanguage, englishword);
-            setTimer(initialTimer);
+            props.setIsHit(true);
+            await gameClient.downProficiency(username, selectedlanguage, correctWord);
+            props.setIsAnswerCorrect(false);
+            props.setIsQuestionDone(true);   
         }
         setTextInput("");
 
@@ -276,8 +199,7 @@ const MultChoice = ({ questionType }) => {
     };
 
 
-
-
+/*
     useEffect(() => {
         const initialTimer = getInitialTimer(difficulty);
         console.log("NEW TIMERRR", initialTimer);
@@ -305,65 +227,37 @@ const MultChoice = ({ questionType }) => {
         return () => clearInterval(interval);
     }, [currentWordIndex, showNextWord, username, selectedlanguage, englishword, correctMessage, difficulty, initialTimer]); // Re-run effect when necessary dependencies change
 
-
+*/
     
 
 
-    return(  
+    return(props.trigger) ?  (
 
-        <div className = "container">
-            
-
-            <div className='timer'>
-                
-                {/* <h1>Timer: {timer}</h1> */}
-
-                <h1>Timer: {timer === 0 ? "Time is up!" : timer}</h1>
-
-
-            </div>
-
-
-
-            <div className = "learned-words1" >
-              {userDictionary &&
-                    Object.entries(userDictionary).map(([key, value], index) => {
-                        // englishword = key;
-                        if (index === currentWordIndex)
-                        return (
-                    
-                          <div key={key} className="word-container">
-
-                            <div className="image-container">
-                                {getWordImageSrc(key) && (
+        <div className = "mc-container">
+            <div className = "mcCONTENT" >            
+                          <div className="mc-word-container">
+                            <div className="mc-image-container">
+                                {getWordImageSrc(props.wordToShow) && (
                                   <img
-                                    id="wordImage1"
-                                    src={getWordImageSrc(key)}
-                                    alt={key}
+                                    id="mc-image"
+                                    src={getWordImageSrc(props.wordToShow)}
+                                    alt={props.wordToShow}
                                   />
                                 )}
                               </div>
-                              <div className="word-info">
-                                <h1 style={{ marginTop: '300px', marginLeft: '550px' }} >English: {key}</h1>
+                              <div className="mc-word-info">
+                                <h1 >English: {props.wordToShow}</h1>
                                 </div>
-                        </div>
-                        );
-                      return null;
-                    })}
-
-
-            
-
-                <div className="word-buttons">
-                    {wordChoices.map((spanishWord, index) => (
-                        <button key={`${spanishWord}-${index}`} className="word-button" onClick={() => handleEnterClick(spanishWord)}>
-                            {spanishWord}
-                        </button>
-                    ))}
-                </div>
-
-                      
-
+                                               
+                                <div className="mc-buttons">
+                                    {wordChoices.map((spanishWord, index) => (
+                                        <button key= {index} className="mc-button" onClick={() => handleEnterClick(spanishWord)}>
+                                            {spanishWord}
+                                        </button>
+                                    ))}
+                                </div>
+                        </div>  
+                        
               </div>
 
                     
@@ -379,7 +273,7 @@ const MultChoice = ({ questionType }) => {
                 
         </div>
     
-     );
+     ):"";
 };
 
 export default MultChoice;

@@ -1,64 +1,64 @@
-/* 
-  .word-buttons {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); 
-    grid-gap: 10px; 
-    margin-top: 100px; 
-    justify-content: flex-end;
-  }
-  
-  .word-button {
-    height: 50px; 
-    margin-left: 250px;
-  }
-   */
-
-
-   .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Center the content horizontally */
-  }
-  
-  .word-buttons {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Two columns */
-    grid-gap: 10px; /* Gap between buttons */
-    margin-top: 75px; /* Add margin to the top */
-    justify-content: flex-end; /* Align buttons to the right */
-  }
-  
-  .word-button {
-    height: 50px; /* Set the height of each button */
-    margin-left: 250px; /* Add margin to the left */
-    margin-right: 50px; /* Add margin to the right */
-    text-align: center; /* Center the text horizontally */
-    padding: 10px; /* Add padding around the text */
-  }
-  
-
-
-#wordImage1 {
-    position: absolute;
-    height: 60%;
-    top: -20%;
-    left: 35%;
-    /* transform: translateX(100px);  */
-    display: flex;
+.mc-container{
+    width: 100%;
+    height: 100%;
+    display:flex;
     justify-content: center;
-    /* max-width: 30%; 
-    max-height: 30%; */
-    transform: scale(0.3); /* Scale the image down to 50% of its original size */
-
+    align-items: center;
   }
   
-  .message-display {
-    position: absolute;
-    top: 20px; /* Adjust the top position as needed */
-    right: -400px; /* Adjust the right position as needed */
-    background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
-    padding: 10px; /* Add padding around the text */
-    border-radius: 5px; /* Add rounded corners */
-    font-size: 50px; /* Adjust the font size as needed */
+  .mcCONTENT{
+    background-image: url('../../assets/artist-assets/Contentbox.png');
+    background-size:cover;
+    position:absolute;
+    width:30%;
+    height: 75%;
+    top:5%;
+    display:flex;
+    justify-content: center;
+    
+  }
+  .mc-word-container{
+    width:100%;
+    padding: 5px;
+  }
+  .mc-word-info{
+    position:absolute;
+    width:100%;
+    bottom:40%;
+    height: 10%;
+    align-content: center;
+    text-align: center;
+  
+  }
+  .mc-buttons{
+    
+    display:flex;
+    flex-wrap:wrap;
+    gap:5px;
+    position:absolute;
+    width:100%;
+    height: 40%;
+    padding: 10px;
+    padding-left:30px;
+    padding-right:30px;
+    left:0;
+    bottom:0;
+  }
+  
+  .mc-image-container {
+    margin-top: 10px;
+    top:0;
+    position:absolute;
+    width:100%;
+    justify-content:center;
+    height: 60%;
+    text-align: center;
+  }
+
+  .mc-image-container img{
+    height: 80%;
+  }
+  .mc-image{
+     width:100%;
   }
   

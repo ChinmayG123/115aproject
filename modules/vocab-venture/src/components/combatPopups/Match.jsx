@@ -26,46 +26,7 @@ import meat from '../../assets/dict-images/food/Meat.png';
 import milk from '../../assets/dict-images/food/Milk.png';
 import water from '../../assets/dict-images/food/Water.png';
 
-const getWordImageSrc = (wordImage) => {
-    switch (wordImage) {
-        case 'black':
-            return black;
-        case 'blue':
-            return blue;
-        case 'brown':
-            return brown;
-        case 'red':
-            return red;
-        case 'yellow':
-            return yellow;
-        case 'green':
-            return green;
-        case 'white':
-            return white;
-        case 'orange':
-            return orange;
-        case 'apple':
-            return apple;
-        case 'bread':
-            return bread;
-        case 'egg':
-            return egg;
-        case 'fish':
-            return fish;
-        case 'juice':
-            return juice;
-        case 'meat':
-            return meat;
-        case 'milk':
-            return milk;
-        case 'water':
-            return water;
-        default:
-            return null;
-    }
-};
-
-const Match = () => {
+const Match = (props) => {
     const navigate = useNavigate();
     const location = useLocation();
     const username = location.state.username;
@@ -78,47 +39,20 @@ const Match = () => {
     const [selectedEnglishWord, setSelectedEnglishWord] = useState(null);
     const usedWords = useRef(new Set());
 
-    const getTheUserInformation = async (username, language) => {
-        try {
-            const result = await gameClient.getUserDictionary(username, language);
-            return result;
-        } catch (error) {
-            console.error('An error occurred while fetching user information:', error);
-            return {};
-        }
-    };
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const result = await getTheUserInformation(username, selectedlanguage);
-                if (!result) {
-                    console.error('User dictionary is empty or undefined.');
-                    return;
-                }
-                const shuffledEntries = Object.entries(result).sort(() => Math.random() - 0.5);
-                const shuffledDictionary = Object.fromEntries(shuffledEntries);
-                setUserDictionary(shuffledDictionary);
-            } catch (error) {
-                console.error('An error occurred while fetching user information:', error);
-            }
-        };
-        fetchData();
-    }, [username, selectedlanguage]);
-
-    useEffect(() => {
-        if (Object.keys(userDictionary).length > 0) {
+        if (props.wordGroup.length > 0) {
             loadNewSet();
         }
-    }, [userDictionary]);
+    }, [props.wordGroup]);
 
     const loadNewSet = () => {
-        let newWords = Object.keys(userDictionary).filter(word => !usedWords.current.has(word)).slice(0, 4);
-
+        let newWords = props.wordGroup;
+        /*
         if (newWords.length < 4) {
             usedWords.current.clear();
             newWords = Object.keys(userDictionary).slice(0, 4);
-        }
+        }*/
 
         let newTranslations = [];
         newWords.forEach(async (word) => {
@@ -129,7 +63,6 @@ const Match = () => {
                 setCurrentTranslations(newTranslations.sort(() => Math.random() - 0.5));
             }
         });
-
         newWords.forEach(word => usedWords.current.add(word));
     };
 
@@ -140,22 +73,26 @@ const Match = () => {
             if (selectedEnglishWord) {
                 const translation = await gameClient.getTranslation(username, selectedlanguage, selectedEnglishWord);
                 if (clickedWord === translation[selectedEnglishWord]) {
-                    setCorrectMessage(currentWords.length === 1 ? "All Words Matched!" : "Correct!");
-                    setTimeout(() => {
-                        setCorrectMessage("");
+                    console.log("correct match");
+                    if(currentWords.length === 1){ //if all words matched
+                        props.setIsAttacking(true);
+                        console.log("All words matched");
+                        props.setIsQuestionDone(true);
+                    }
+                    //setCorrectMessage(currentWords.length === 1 ? "All Words Matched!" : "Correct!");
+                   
+                        //setCorrectMessage("");
                         setCurrentWords(currentWords.filter(word => word !== selectedEnglishWord));
                         setCurrentTranslations(currentTranslations.filter(word => word !== clickedWord));
                         setSelectedEnglishWord(null);
-                        if (currentWords.length === 1) {
-                            setTimeout(loadNewSet, 1500);
-                        }
-                    }, 1500);
+    
+                   
                 } else {
-                    setCorrectMessage("Try again!");
-                    setTimeout(() => {
-                        setCorrectMessage("");
-                        setSelectedEnglishWord(null);
-                    }, 1500);
+                    console.log("Incorrect, timer decreases");
+                    props.setIsHit(true);
+                    //setCorrectMessage("Try again!");
+                    //decrease timer
+                   
                 }
             }
         }
@@ -165,7 +102,7 @@ const Match = () => {
         navigate('/map', { state: { username, language: selectedlanguage } });
     };
 
-    return (
+    return (props.trigger) ?(
         <div className="match-container">
             <div className="matchCONTENT">
                 <div className="word-column">
@@ -203,7 +140,7 @@ const Match = () => {
                 <p>Click the English word, then the corresponding translated word.</p>
             </div>
         </div>
-    );
+    ):"";
 };
 
 export default Match;
