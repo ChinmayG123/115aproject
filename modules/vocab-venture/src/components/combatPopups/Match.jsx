@@ -57,7 +57,7 @@ const Match = (props) => {
         let newTranslations = [];
         newWords.forEach(async (word) => {
             const translation = await gameClient.getTranslation(username, selectedlanguage, word);
-            newTranslations.push(translation[word]);
+            newTranslations.push(translation);
             if (newTranslations.length === newWords.length) {
                 setCurrentWords(newWords);
                 setCurrentTranslations(newTranslations.sort(() => Math.random() - 0.5));
@@ -72,7 +72,9 @@ const Match = (props) => {
         } else {
             if (selectedEnglishWord) {
                 const translation = await gameClient.getTranslation(username, selectedlanguage, selectedEnglishWord);
-                if (clickedWord === translation[selectedEnglishWord]) {
+                console.log("HERE", translation);
+
+                if (clickedWord === translation) {
                     console.log("correct match");
                     if(currentWords.length === 1){ //if all words matched
                         props.setIsAttacking(true);
@@ -102,6 +104,8 @@ const Match = (props) => {
         navigate('/map', { state: { username, language: selectedlanguage } });
     };
 
+
+    console.log("MATCH");
     return (props.trigger) ?(
         <div className="match-container">
             <div className="matchCONTENT">

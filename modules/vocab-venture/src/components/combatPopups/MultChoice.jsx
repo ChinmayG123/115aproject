@@ -138,6 +138,7 @@ const MultChoice = (props) => {
     }, [props.username, selectedlanguage]);
 
 
+    console.log("MC");
     useEffect(() => {
 
         const fetchTranslations = async () => {
@@ -160,7 +161,7 @@ const MultChoice = (props) => {
                 const translation = await gameClient.getTranslation(username, selectedlanguage, dictWord);
                 // console.log("TRANSLATION", translation);
                 if (translation) {
-                    temp.push(translation[dictWord]);
+                    temp.push(translation);
                 } else {
                     temp.push(""); // Push an empty string if the translation is missing
                 }
@@ -179,9 +180,9 @@ const MultChoice = (props) => {
         let correctWord = props.wordToShow;
         const translation = await gameClient.getTranslation(username, selectedlanguage,correctWord);
         console.log("ENGLISH", correctWord);
-        console.log("correct answer:", translation[correctWord]);
+        console.log("correct answer:", translation);
         console.log("CLICKED", clickedWord);
-        if (clickedWord === translation[correctWord]) {
+        if (clickedWord === translation) {
             props.setIsAttacking(true);
             gameClient.upProficiency(username, selectedlanguage, correctWord); // Call downProficiency()
             props.setIsAnswerCorrect(true);

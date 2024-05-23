@@ -74,6 +74,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 // import React, { useState } from 'react';
 
+console.log("TYPE");
 
 
 const Type = function(props) {
@@ -129,7 +130,7 @@ const Type = function(props) {
 
       
 
-        if (textInput.toLowerCase() === translation[key].toLowerCase()) {
+        if (textInput.toLowerCase() === translation.toLowerCase()) {
            
             //setCorrectMessage("Correct!");
             props.setIsAttacking(true);
