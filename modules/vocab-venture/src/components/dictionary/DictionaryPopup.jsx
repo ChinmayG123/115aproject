@@ -147,19 +147,45 @@ const handleNextPage = () => {
 
 
 
-  const showTranslation1 = async (key) => {
-    const translation = await gameClient.getTranslation(props.username, selectedLanguage, key);
+// const [translatedWord, setTranslatedWord] = useState('');
+// const [translatedWord2, setTranslatedWord2] = useState('');
 
-    setTranslatedWord(translation[key]);
+useEffect(() => {
+  const fetchTranslations = async () => {
+    if (userDictionary) {
+      const keys = Object.keys(userDictionary);
+      const key1 = keys[currentPage * 2];
+      const key2 = keys[currentPage * 2 + 1];
+      
+      if (key1) {
+        const translation1 = await gameClient.getTranslation(props.username, selectedLanguage, key1);
+        setTranslatedWord(translation1[key1]);
+      }
+      if (key2) {
+        const translation2 = await gameClient.getTranslation(props.username, selectedLanguage, key2);
+        setTranslatedWord2(translation2[key2]);
+      }
+    }
+  };
+  fetchTranslations();
+}, [currentPage, userDictionary, props.username, selectedLanguage]);
+
+
+
+
+//   const showTranslation1 = async (key) => {
+//     const translation = await gameClient.getTranslation(props.username, selectedLanguage, key);
+
+//     setTranslatedWord(translation[key]);
     
-};
+// };
 
-const showTranslation2 = async (key) => {
-  const translation = await gameClient.getTranslation(props.username, selectedLanguage, key);
+// const showTranslation2 = async (key) => {
+//   const translation = await gameClient.getTranslation(props.username, selectedLanguage, key);
 
-  setTranslatedWord2(translation[key]);
+//   setTranslatedWord2(translation[key]);
   
-};
+// };
 
 
   return (props.trigger) ? (
@@ -186,14 +212,12 @@ const showTranslation2 = async (key) => {
             </div>
 
             <br></br>
-            
-            
           
             <div className = "learned-words1" >
               {userDictionary &&
                     Object.entries(userDictionary).map(([key, value], index) => {
                         if (index % 2 === 0 && index === currentPage * 2) {
-                          showTranslation1(key);
+                          // showTranslation1(key);
                         return (
 
                           <div key={key} className="word-container">
@@ -211,6 +235,9 @@ const showTranslation2 = async (key) => {
                               <div className="word-info">
                                 <h1 style={{ marginTop: '270px', marginLeft: '50px' }} >English: {key}</h1>
                                 <h1 style={{ marginTop: '0px', marginLeft: '50px' }} > {selectedLanguage}: {translatedWord}</h1>
+                                {/* const translation = await gameClient.getTranslation(props.username, selectedLanguage, key);
+
+                                setTranslatedWord(translation[key]); */}
                                 {/* <h1 style={{marginLeft: '50px'}}>{selectedLanguage}: {translations[key] ? translations[key][key] : value}</h1> */}
               </div>
                             </div>
@@ -235,7 +262,7 @@ const showTranslation2 = async (key) => {
               {userDictionary &&
                   Object.entries(userDictionary).map(([key, value], index) => {
                     if (index === currentPage * 2 + 1) {
-                      showTranslation2(key);
+                      // showTranslation2(key);
                       return (
                         <div key={key} className="word-container2">
                             <div className="image-container">
