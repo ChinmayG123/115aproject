@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 from httplib2 import Response
 from requests import Request
 from ServerToDatabase import DatabaseAccess
+from ServerToOpenAI import VocabAI
 
 script_path = os.path.abspath(__file__)
 server_dir_path = os.path.dirname(script_path)
@@ -119,15 +120,26 @@ class Server:
                 self.retrieve_user_percentage(self.username)
 
         elif target_db == "/total":
-            mode = 0
+            self.username = self.Request["Headers"]["Username"]
             if "Target-Asset" in self.Request["Headers"]:
                 self.retrieve_all_dict(self.Request["Headers"]["Target-Asset"])
-            elif "Target-Word" in self.Request["Headers"]:
+            elif (
+                "Target-Word" in self.Request["Headers"]
+                and "Action" not in self.Request["Headers"]
+            ):
                 self.retrieve_translation(self.Request["Headers"]["Target-Word"])
+            elif (
+                "Target-Word" in self.Request["Headers"]
+                and "Action" in self.Request["Headers"]
+            ):
+                self.retrieve_definition(self.Request["Headers"]["Target-Word"])
         elif target_db == "/chatgpt":
+            self.username = self.Request["Headers"]["Username"]
             if "Action" in self.Request["Headers"]:
                 if self.Request["Headers"]["Action"] == "fake":
                     self.retrieve_false_word()
+                if self.Request["Headers"]["Action"] == "conversation":
+                    self.retrieve_conversation()
 
     def retrieve_login(self, username):
         db_access = DatabaseAccess(database_dir_path)
@@ -206,32 +218,50 @@ class Server:
             self.Response["StatusLine"] = "Internal Server Error"
             print(f"An error occurred: {e}")
 
+    def retrieve_definition(self, word):
+        db_access = DatabaseAccess(database_dir_path)
+        language = self.Request["Headers"]["Game-Language"]
+        try:
+            result = db_access.get_definition(word)
+
+            self.Response["Body"] = result
+            self.Response["Headers"]["Content-Length"] = str(len(self.Response["Body"]))
+            self.Response["Headers"]["Content-Type"] = "application/json"
+            self.Response["StatusCode"] = "200"
+            self.Response["StatusLine"] = "OK"
+        except Exception as e:
+            self.Response["StatusCode"] = "500"
+            self.Response["StatusLine"] = "Internal Server Error"
+            print(f"An error occurred: {e}")
+
     def retrieve_false_word(self):
         word = self.Request["Headers"]["Target-Word"]
         language = self.Request["Headers"]["Game-Language"]
-        role_str = f"You are an examiner. You are making multiple choice question for the word {word}."
-        prompt_str = f"""Please create 3 {language} words close to {word}. 
-The words should look similar, but mean diferrent or mean nothing.
-Your words' length should be close, so that the examinee would know a hint. 
-Follow the format of <word><newline><word><newline><word>, all lower case. """
         try:
-            client = OpenAI(api_key=api_key)
-            completion = client.chat.completions.create(
-                model="gpt-3.5-turbo",
-                messages=[
-                    {
-                        "role": "system",
-                        "content": role_str,
-                    },
-                    {
-                        "role": "user",
-                        "content": prompt_str,
-                    },
-                ],
-            )
-            self.Response["Body"] = completion.choices[0].message.content
+            ai = VocabAI()
+            self.Response["Body"] = ai.getFalseWord(language=language, word=word)
             self.Response["Headers"]["Content-Length"] = str(len(self.Response["Body"]))
             self.Response["Headers"]["Content-Type"] = "text/plain"
+            self.Response["StatusCode"] = "200"
+            self.Response["StatusLine"] = "OK"
+        except Exception as e:
+            self.Response["StatusCode"] = "500"
+            self.Response["StatusLine"] = "Internal Server Error"
+            print(f"An error occurred: {e}")
+
+    def retrieve_conversation(self):
+        word = self.Request["Headers"]["Target-Word"]
+        category = self.Request["Headers"]["Target-Asset"]
+        language = self.Request["Headers"]["Game-Language"]
+        try:
+            ai = VocabAI()
+            result = ai.getConversation(
+                username=self.username, language=language, category=category, word=word
+            )
+            
+            self.Response["Body"] = json.dumps(dict({word: result}))
+            self.Response["Headers"]["Content-Length"] = str(len(self.Response["Body"]))
+            self.Response["Headers"]["Content-Type"] = "application/json"
             self.Response["StatusCode"] = "200"
             self.Response["StatusLine"] = "OK"
         except Exception as e:

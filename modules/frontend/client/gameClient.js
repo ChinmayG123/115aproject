@@ -8,6 +8,11 @@
  * learnNewWord(username, language, word);
  * upProficiency(username, language, word);
  * downProficiency(username, language, word);
+ * getAllWordsByCategory(username, category);
+ * getTranslation(username, language, word);
+ * getDefinition(username, language, word);
+ * getQuestionWord(username, language, difficulty); generate one word based on user's proficiency/mastery
+ * getMultipleChoice(username, language, word); generates four words for MC question in the format [correct index, four words in a list]
  */
 class GameClient {
     // Private fields
@@ -295,12 +300,32 @@ class GameClient {
         if (this.#DEBUG)
             this.printDebug(response);
         if (response.status === 200) {
-            return await response.json();
+            let result = await response.json();
+            return String(result[word]).trim();
         } else {
             return null; // Error or data not found
         }
     }
 
+    async getDefinition(username, language, word) {
+        const options = {
+            method: 'GET',
+            headers: {
+                'Username': username,
+                'Game-Language': language,
+                'Target-Word': word,
+                'Action': 'definition'
+            },
+        };
+        const response = await this.retrieveData(this.allDict, options);
+        if (this.#DEBUG)
+            this.printDebug(response);
+        if (response.status === 200) {
+            return response.text();
+        } else {
+            return null; // Error or data not found
+        }
+    }
     /**
      * Generates a quiz question word based on the user's learned words and the specified difficulty.
      * 
@@ -379,10 +404,38 @@ class GameClient {
         const text_response = await response.text();
 
         let choices = text_response.trim().split(/\s*\r?\n\s*/);
-        const answer = Math.floor(Math.random() * 4);
-        choices.splice(answer, 0, translate_word[word]);
+        let answer;
+        const index = choices.indexOf(word);
+        if (index === -1) {
+            choices.pop();
+            answer = Math.floor(Math.random() * 4);
+            choices.splice(answer, 0, translate_word[word]);
+        } else {
+            answer = index;
+        }
+
         let ret = [answer, choices];
         return ret;
+    }
+
+    async getConversation(username, language, category, word) {
+        const options = {
+            method: 'GET',
+            headers: {
+                'Username': username,
+                'Game-Language': language,
+                'Target-Word': word,
+                'Target-Asset': category,
+                'Action': "conversation"
+            },
+        };
+        const response = await this.retrieveData(this.ai, options);
+        if (response.status === 200) {
+            let result = await response.json();
+            return String(result[word]).trim();
+        } else {
+            return null; // Error or data not found
+        }
     }
 
     // private function
@@ -391,7 +444,7 @@ class GameClient {
         const timeoutPromise = new Promise((_, reject) => {
             setTimeout(() => {
                 reject(new Error('Request timed out')); // Reject with an error when timeout is reached
-            }, 5000); // Timeout set to 5 seconds
+            }, 6000); // Timeout set to 6 seconds
         });
 
         try {

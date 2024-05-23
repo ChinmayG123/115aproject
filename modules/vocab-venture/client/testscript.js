@@ -90,7 +90,7 @@ async function test_getQuestionWord(difficulty) {
     }
 }
 
-async function test_getFalseChoice() {
+async function test_getMultipleChoice() {
     const username = "TestApril232ndUser";
     const language = "spanish";
     const client = new GameClient();
@@ -98,7 +98,7 @@ async function test_getFalseChoice() {
         const word = await client.getQuestionWord(username, language, difficulty = 3);
         const result = await client.getMultipleChoice(username, language, word);
         console.log(`test_getFourChoices()\'s result: ${result[1]}`);
-        console.log("The correct answer is ", result[1][result[0]]);
+        console.log(`The correct answer is ${result[1][result[0]]}`);
     } catch (error) {
         console.error('Error during test:', error);
     }
@@ -136,6 +136,7 @@ function sleep(ms) {
 // for (let i = 0; i < 20; i++){
 //     test_getQuestionWord(3);
 // }
-for (let i = 0; i < 10; i++) {
-    test_getFalseChoice();
-}
+test_getMultipleChoice();
+// for (let i = 0; i < 10; i++) {
+//     test_getMultipleChoice();
+// }

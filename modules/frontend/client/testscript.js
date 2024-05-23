@@ -67,17 +67,31 @@ async function test_getAllWordsByCategory() {
 }
 
 async function test_getTranslation() {
-    const username = "TestApril23";
-    const language = "french";
+    const username = "TestApril232ndUser";
+    const language = "spanish";
     const word = "airport"
     const client = new GameClient();
     try {
         const result = await client.getTranslation(username, language, word);
-        console.log('test_getTranslation()\'s result:\n', result);
+        console.log('test_getTranslation()\'s result:', result);
     } catch (error) {
         console.error('Error during test:', error);
     }
 }
+
+async function test_getDefinition() {
+    const username = "TestApril232ndUser";
+    const language = "spanish";
+    const word = "airport"
+    const client = new GameClient();
+    try {
+        const result = await client.getDefinition(username, language, word);
+        console.log('test_getDefinition()\'s result:', result);
+    } catch (error) {
+        console.error('Error during test:', error);
+    }
+}
+
 async function test_getQuestionWord(difficulty) {
     const username = "TestApril232ndUser";
     const language = "spanish";
@@ -90,7 +104,7 @@ async function test_getQuestionWord(difficulty) {
     }
 }
 
-async function test_getFalseChoice() {
+async function test_getMultipleChoice() {
     const username = "TestApril232ndUser";
     const language = "spanish";
     const client = new GameClient();
@@ -98,7 +112,22 @@ async function test_getFalseChoice() {
         const word = await client.getQuestionWord(username, language, difficulty = 3);
         const result = await client.getMultipleChoice(username, language, word);
         console.log(`test_getFourChoices()\'s result: ${result[1]}`);
-        console.log("The correct answer is ", result[1][result[0]]);
+        console.log(`The correct answer is ${result[1][result[0]]}`);
+    } catch (error) {
+        console.error('Error during test:', error);
+    }
+}
+
+async function test_getConversation() {
+    const category = "animals"
+    const username = "TestApril232ndUser"
+    const language = 'spanish'
+    const word = 'cat'
+    const client = new GameClient();
+    try {
+        const result = await client.getConversation(username, language, category, word);
+        console.log('test_getConversation()\'s result:\n', result);
+        // console.log(typeof result);
     } catch (error) {
         console.error('Error during test:', error);
     }
@@ -115,7 +144,9 @@ function sleep(ms) {
 // testupProficiency();
 // test_getAllWordsByCategory();
 // sleep(10000);
-// test_getTranslation();
+test_getTranslation();
+
+test_getDefinition();
 // sleep(10000);
 // test_getProgressPercentage();
 
@@ -136,6 +167,9 @@ function sleep(ms) {
 // for (let i = 0; i < 20; i++){
 //     test_getQuestionWord(3);
 // }
-for (let i = 0; i < 10; i++) {
-    test_getFalseChoice();
-}
+// test_getMultipleChoice();
+// for (let i = 0; i < 10; i++) {
+//     test_getMultipleChoice();
+// }
+
+// test_getConversation();
