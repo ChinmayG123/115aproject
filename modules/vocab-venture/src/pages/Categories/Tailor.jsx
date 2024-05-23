@@ -82,7 +82,8 @@ const Tailor = function() {
                 const translation = await gameClient.getTranslation(username, selectedlanguage, chosenWords[currentWordIndex]);
 
                 if (translation) {
-                    setTranslatedWord(translation[chosenWords[currentWordIndex]]);
+                    setTranslatedWord(translation);
+                    // setTranslatedWord(translation[chosenWords[currentWordIndex]]);
                 }
                 
             }

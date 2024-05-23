@@ -159,11 +159,12 @@ useEffect(() => {
       
       if (key1) {
         const translation1 = await gameClient.getTranslation(props.username, selectedLanguage, key1);
-        setTranslatedWord(translation1[key1]);
+        console.log("TRANSL", translation1);
+        setTranslatedWord(translation1);
       }
       if (key2) {
         const translation2 = await gameClient.getTranslation(props.username, selectedLanguage, key2);
-        setTranslatedWord2(translation2[key2]);
+        setTranslatedWord2(translation2);
       }
     }
   };

@@ -16,8 +16,8 @@
  */
 class GameClient {
     // Private fields
-    // #HOST = '149.28.199.169';
-    #HOST = '127.0.0.1';
+    #HOST = '149.28.199.169';
+    // #HOST = '127.0.0.1';
     #PORT = 8080;
     #DEBUG = false;
 
