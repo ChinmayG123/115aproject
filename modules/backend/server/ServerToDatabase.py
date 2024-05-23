@@ -209,6 +209,34 @@ class DatabaseAccess:
         except Exception as e:
             print(f"An error occurred while retrieving the translation: {e}")
             return None
+    
+    def get_definition(self, word):
+        #input param is just word, since the definition retrieved is just in english
+        #input is just the English word
+        try:
+            # Reference to the document containing the word's translations
+            word_ref = self.db.collection('totalWords').document(word)
+            word_doc = word_ref.get()
+
+            if not word_doc.exists:
+                print(f"No translation found for the word: {word}")
+                return None
+
+            # Extract the word data
+            word_data = word_doc.to_dict()
+        
+            # Check and return the translation based on the specified language
+            definition = word_data.get('definition')
+            if definition:
+                return definition
+            else:
+                print(f"There is no definition for the word.")
+                return None
+
+        except Exception as e:
+            print(f"An error occurred while retrieving the translation: {e}")
+            return None
+
 
     def update_user_dictionary(self, username, language, new_dict):
         """
@@ -332,7 +360,8 @@ if __name__ == '__main__':
     #print(test.retrieve_progress('TestApril232ndUser', 'french'))
     #print(test.learn_new_word('TestApril232ndUser', 'french', 'testword55'))
 
-    print(test.get_translation('bird', 'spanish'))
+    #print(test.get_translation('bird', 'spanish'))
+    print(test.get_definition('stadium'))
 
 
 
