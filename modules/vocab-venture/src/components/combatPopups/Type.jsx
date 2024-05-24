@@ -74,13 +74,13 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 // import React, { useState } from 'react';
 
-console.log("TYPE");
+
 
 
 const Type = function(props) {
 
 //   const { selectedLanguage } = props;
-
+console.log("TYPE");
 
 
     const navigate = useNavigate(); 

@@ -150,6 +150,11 @@ const handleNextPage = () => {
 // const [translatedWord, setTranslatedWord] = useState('');
 // const [translatedWord2, setTranslatedWord2] = useState('');
 
+
+const [definition, setDefinition] = useState(null);
+const [definition2, setDefinition2] = useState(null);
+
+
 useEffect(() => {
   const fetchTranslations = async () => {
     if (userDictionary) {
@@ -161,16 +166,24 @@ useEffect(() => {
         const translation1 = await gameClient.getTranslation(props.username, selectedLanguage, key1);
         console.log("TRANSL", translation1);
         setTranslatedWord(translation1);
+
+        const def = await gameClient.getDefinition(props.username, selectedLanguage, key1);
+        console.log("def1 ", def);
+        setDefinition(def);
       }
       if (key2) {
         const translation2 = await gameClient.getTranslation(props.username, selectedLanguage, key2);
         setTranslatedWord2(translation2);
+
+        const def = await gameClient.getDefinition(props.username, selectedLanguage, key2);
+        console.log("def2", def);
+        setDefinition2(def);
       }
     }
+    
   };
   fetchTranslations();
 }, [currentPage, userDictionary, props.username, selectedLanguage]);
-
 
 
 
