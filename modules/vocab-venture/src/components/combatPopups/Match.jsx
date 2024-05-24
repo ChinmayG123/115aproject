@@ -83,17 +83,32 @@ const Match = (props) => {
                     }
                     //setCorrectMessage(currentWords.length === 1 ? "All Words Matched!" : "Correct!");
                    
-                        //setCorrectMessage("");
-                        setCurrentWords(currentWords.filter(word => word !== selectedEnglishWord));
-                        setCurrentTranslations(currentTranslations.filter(word => word !== clickedWord));
-                        setSelectedEnglishWord(null);
-    
+                    //setCorrectMessage("");
+                    setCurrentWords(currentWords.filter(word => word !== selectedEnglishWord));
+                    setCurrentTranslations(currentTranslations.filter(word => word !== clickedWord));
+                    setSelectedEnglishWord(null);
+
+                    setCorrectMessage("Correct!");
+                    setTimeout(() => {
+                        // showNextWord();
+                        setCorrectMessage("");
+                        gameClient.upProficiency(username, selectedlanguage, key); // Call downProficiency()
+                        // props.setIsAnswerCorrect(true);
+                    }, 2000);
+
                    
                 } else {
                     console.log("Incorrect, timer decreases");
                     props.setIsHit(true);
-                    //setCorrectMessage("Try again!");
-                    //decrease timer
+                    props.setIsAnswerCorrect(false);
+
+                    setCorrectMessage("Incorrect word!");
+
+                    setTimeout(() => {
+                        gameClient.downProficiency(username, selectedlanguage, key); // Call downProficiency()
+                        setCorrectMessage("");
+
+                    }, 3000);
                    
                 }
             }
@@ -108,6 +123,14 @@ const Match = (props) => {
     console.log("MATCH");
     return (props.trigger) ?(
         <div className="match-container">
+
+
+                
+            {correctMessage && (
+                <div className="message-display-match">
+                    <p>{correctMessage}</p>
+                </div>
+            )}
             <div className="matchCONTENT">
                 <div className="word-column">
                     {currentWords.map((englishWord) => (
@@ -131,11 +154,7 @@ const Match = (props) => {
                         </button>
                     ))}
                 </div>
-                {correctMessage && (
-                    <div className="match-message-display">
-                        <p>{correctMessage}</p>
-                    </div>
-                )}
+                
             </div>
             <button type="button" id="goToMapButton" onClick={goToMap}>
                 Go to Map
