@@ -182,22 +182,23 @@ const MultChoiceOG = ({ questionType }) => {
         const fetchTranslations = async () => {
             let generated = await gameClient.getMultipleChoice(username, selectedlanguage, englishword);
             let translated = await gameClient.getTranslation(username, selectedlanguage, englishword);
-            console.log("This is the word to filter", translated[englishword]);
-            generated[1] = generated[1].filter(item => item !== translated[englishword]);
+            console.log("This is the word to filter", translated);
+            console.log("This is the new translation", translated);
+            generated[1] = generated[1].filter(item => item !== translated);
 
             let temp = [];
             for (const dictWord of wordChoice) {
                 const translation = await gameClient.getTranslation(username, selectedlanguage, dictWord);
                 // console.log("TRANSLATION", translation);
                 if (translation) {
-                    temp.push(translation[dictWord]);
+                    temp.push(translation);
                 } else {
                     temp.push(""); // Push an empty string if the translation is missing
                 }
             }
             setTranslatedWord(temp);
             let newArray = [];
-            newArray.push(translated[englishword]);
+            newArray.push(translated);
             for (const genWord of generated[1])
             {
                     newArray.push(genWord); //populate the newarray with the filtered generated words
@@ -252,9 +253,9 @@ const MultChoiceOG = ({ questionType }) => {
         const initialTimer = getInitialTimer(difficulty);
         const translation = await gameClient.getTranslation(username, selectedlanguage, englishword);
         console.log("ENGLISH", englishword);
-        console.log("This is the desired output:", translation[englishword]);
+        console.log("This is the desired output:", translation);
         console.log("CLICKED", clickedWord);
-        if (clickedWord === translation[englishword]) {
+        if (clickedWord === translation) {
             // console.log("correct");
             setCorrectMessage("Correct!");
             setTimeout(() => {
