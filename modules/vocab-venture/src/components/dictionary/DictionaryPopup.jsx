@@ -265,6 +265,10 @@ useEffect(() => {
                 <img src={prvsimg} />
             </button>
             <br />
+            <div className="definition-container">
+              <h2>Definition:</h2>
+              <p>{definition}</p>
+            </div>
           {/*end left page div*/}
           </div>
 
@@ -298,6 +302,10 @@ useEffect(() => {
                     }
                     return null;
                   })}
+            </div>
+            <div className="definition-container2">
+              <h2>Definition:</h2>
+              <p>{definition2}</p>
             </div>
 
             <button className="button" id="next-page-btn" onClick={handleNextPage} 

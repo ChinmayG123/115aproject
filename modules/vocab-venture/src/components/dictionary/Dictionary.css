@@ -3,7 +3,13 @@
     border: none;
     cursor: pointer;
   }
-  
+  .definition-container, .definition-container2{
+    position: absolute;
+    bottom: 10px; /* Places the definition near the bottom of the popup */
+    left: 0;
+    right: 0;
+    text-align: center;
+  }
   .popup {
     position: relative;
     top: 0;
