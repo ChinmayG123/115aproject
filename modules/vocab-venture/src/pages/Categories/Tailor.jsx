@@ -9,6 +9,17 @@ import bg from '../../assets/tailor-assets/tailorBG.png';
 import './Artist.css';
 import './Tailor.css';
 
+import shirt from '../../assets/dict-images/clothing/shirt.png';
+import hat from '../../assets/dict-images/clothing/hat.png';
+import skirt from '../../assets/dict-images/clothing/skirt.png';
+import jacket from '../../assets/dict-images/clothing/jacket.png';
+import socks from '../../assets/dict-images/clothing/socks.png';
+import shoes from '../../assets/dict-images/clothing/shoes.png';
+import gloves from '../../assets/dict-images/clothing/gloves.png';
+import pants from '../../assets/dict-images/clothing/pants.png';
+
+
+
 
 
 
@@ -53,6 +64,28 @@ const Tailor = function() {
 
     const [congrats, setCongrats] = useState(false); // Track if the NPC content should be shown
 
+    const getTailorImageSrc = (tailorWord) => {
+        switch (tailorWord) {
+            case 'shirt':
+                return shirt;
+            case 'pants':
+                return pants;
+            case 'socks':
+                return socks;
+            case 'jacket':
+                return jacket;
+            case 'shoes':
+                return shoes;
+            case 'hat':
+                return hat;
+            case 'gloves':
+                return gloves;
+            case 'skirt':
+                return skirt;
+            default:
+                return null;
+        }
+    };
 
     useEffect(() => {
         const fetchWords = async () => {
@@ -74,6 +107,11 @@ const Tailor = function() {
         fetchWords();
     }, []);
 
+    const handleKeyPress = (e) =>{
+        if(e.key === 'Enter'){
+            handleEnterClick();
+        }
+    }
     
     useEffect(() => {
         const fetchTranslation = async () => {
@@ -326,6 +364,9 @@ const Tailor = function() {
                             placeholder="text"
                             value={textInput}
                             onChange={handleInputChange}
+                            onKeyPress={handleKeyPress}
+                            autoFocus
+
                         />
                     </div>
                     <button type="button" id="enterbutton" onClick={handleEnterClick}>
@@ -340,6 +381,13 @@ const Tailor = function() {
                         <h1>{selectedlanguage}: {translatedWord}</h1>
                     </ul>
                 </div>
+                {chosenWords[currentWordIndex] && (
+                        <img
+                            id="colorImage"
+                            src={getTailorImageSrc(chosenWords[currentWordIndex])}
+                            alt={chosenWords[currentWordIndex]}
+                        />
+                    )}
                 </>
             ) : ( promptTrigger ? (
                 

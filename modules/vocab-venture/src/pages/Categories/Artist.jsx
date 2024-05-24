@@ -221,7 +221,11 @@ const Artist = function() {
         } 
         
     };
-    
+    const handleKeyPress = (e) =>{
+        if(e.key === 'Enter'){
+            handleEnterClick();
+        }
+    }
 
     const handleInputChange = (event) => {
         const newValue = event.target.value;
@@ -357,6 +361,9 @@ const Artist = function() {
                             placeholder="text"
                             value={textInput}
                             onChange={handleInputChange}
+                            onKeyPress={handleKeyPress}
+                            autoFocus
+                            
                         />
                     </div>
                     <button type="button" id="enterbutton" onClick={handleEnterClick}>

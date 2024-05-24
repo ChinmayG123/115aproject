@@ -1,30 +1,10 @@
-import npcimg from '../../assets/artist-assets/Artist.png';
-import learnBG from '../../assets/artist-assets/Contentbox.png';
-import npcTextbox from '../../assets/artist-assets/ArtistTextbox.png';
-import easel from '../../assets/artist-assets/Easel.png';
-import artistbg from '../../assets/artist-assets/ArtistBG.png';
+
 import './Match.css';
 
 import { useNavigate, useLocation } from 'react-router-dom';
 import React, { useState, useEffect, useRef } from 'react';
 
-import blue from '../../assets/dict-images/colors/blue.png';
-import black from '../../assets/dict-images/colors/black.png';
-import brown from '../../assets/dict-images/colors/brown.png';
-import green from '../../assets/dict-images/colors/green.png';
-import orange from '../../assets/dict-images/colors/orange.png';
-import red from '../../assets/dict-images/colors/red.png';
-import white from '../../assets/dict-images/colors/white.png';
-import yellow from '../../assets/dict-images/colors/yellow.png';
 
-import apple from '../../assets/dict-images/food/Apple.png';
-import bread from '../../assets/dict-images/food/Bread.png';
-import egg from '../../assets/dict-images/food/Eggs.png';
-import fish from '../../assets/dict-images/food/Fish.png';
-import juice from '../../assets/dict-images/food/Juice.png';
-import meat from '../../assets/dict-images/food/Meat.png';
-import milk from '../../assets/dict-images/food/Milk.png';
-import water from '../../assets/dict-images/food/Water.png';
 
 const Match = (props) => {
     const navigate = useNavigate();

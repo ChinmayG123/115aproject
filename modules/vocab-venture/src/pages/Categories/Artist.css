@@ -224,6 +224,7 @@ input.learnInputBox{
     display: flex;
     justify-content: center;
     align-items: center;
+    text-align: center;
     flex-direction: column;
     color: rgb(45, 37, 39); /* Set the text color */
 /* 
@@ -241,16 +242,12 @@ input.learnInputBox{
 }
 
 
-
-
 #colorImage{
     position:absolute;
-    height: 40%;
+    height: 45%;
     /* height:30vh; */
-    top: 7%;
-    left: 10%;
-
     display:flex;
-    justify-content: center;
+    left: 11.5%;
+    top:10%;
     z-index: 1;
 }

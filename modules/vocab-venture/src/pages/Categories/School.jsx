@@ -9,6 +9,16 @@ import bg from '../../assets/school-assets/schoolBG.png';
 import './Artist.css';
 import './School.css';
 
+import desk from '../../assets/dict-images/school/desk.png'
+import paper from '../../assets/dict-images/school/paper.png'
+import pencil from '../../assets/dict-images/school/pencil.png'
+import pen from '../../assets/dict-images/school/pen.png'
+import student from '../../assets/dict-images/school/student.png'
+import teacher from '../../assets/dict-images/school/teacher.png'
+import classroom from '../../assets/dict-images/school/classroom.png'
+import book from '../../assets/dict-images/school/book.png'
+
+
 
 // import { useLocation } from 'react-router-dom';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -51,7 +61,35 @@ const School = function() {
     const [isLastWordCorrect, setIsLastWordCorrect] = useState(true); // Track if the last entered word was correct
 
     const [congrats, setCongrats] = useState(false); // Track if the NPC content should be shown
+    
+    const getSchoolImageSrc = (schoolWord) => {
+        switch (schoolWord) {
+            case 'desk':
+                return desk;
+            case 'pencil':
+                return pencil;
+            case 'pen':
+                return pen;
+            case 'classroom':
+                return classroom;
+            case 'teacher':
+                return teacher;
+            case 'student':
+                return student;
+            case 'paper':
+                return paper;
+            case 'book':
+                return book;
+            default:
+                return null;
+        }
+    };
 
+    const handleKeyPress = (e) =>{
+        if(e.key === 'Enter'){
+            handleEnterClick();
+        }
+    }
 
     useEffect(() => {
         const fetchWords = async () => {
@@ -325,6 +363,8 @@ const School = function() {
                             placeholder="text"
                             value={textInput}
                             onChange={handleInputChange}
+                            onKeyPress={handleKeyPress}
+                            autoFocus
                         />
                     </div>
                     <button type="button" id="enterbutton" onClick={handleEnterClick}>
@@ -339,6 +379,13 @@ const School = function() {
                         <h1>{selectedlanguage}: {translatedWord}</h1>
                     </ul>
                 </div>
+                {chosenWords[currentWordIndex] && (
+                        <img
+                            id="colorImage"
+                            src={getSchoolImageSrc(chosenWords[currentWordIndex])}
+                            alt={chosenWords[currentWordIndex]}
+                        />
+                    )}
                 </>
             ) : ( promptTrigger ? (
                 

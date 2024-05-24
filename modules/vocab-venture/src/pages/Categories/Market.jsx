@@ -127,7 +127,12 @@ const Market = function() {
 
     //condition to decide whether to show the prompt 
 
-    
+    const handleKeyPress = (e) =>{
+        if(e.key === 'Enter'){
+            handleEnterClick();
+        }
+    }
+
     const greetings = {
         'spanish': 'Hola',
         'french': 'Bonjour',
@@ -367,6 +372,9 @@ const Market = function() {
                             placeholder="text"
                             value={textInput}
                             onChange={handleInputChange}
+                            onKeyPress={handleKeyPress}
+                            autoFocus
+
                         />
                     </div>
                     <button type="button" id="enterbutton" onClick={handleEnterClick}>
