@@ -409,7 +409,7 @@ class GameClient {
         if (index === -1) {
             choices.pop();
             answer = Math.floor(Math.random() * 4);
-            choices.splice(answer, 0, translate_word[word]);
+            choices.splice(answer, 0, translate_word);
         } else {
             answer = index;
         }
@@ -444,7 +444,7 @@ class GameClient {
         const timeoutPromise = new Promise((_, reject) => {
             setTimeout(() => {
                 reject(new Error('Request timed out')); // Reject with an error when timeout is reached
-            }, 5000); // Timeout set to 6 seconds
+            }, 6000); // Timeout set to 6 seconds
         });
 
         try {

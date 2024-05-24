@@ -109,7 +109,7 @@ async function test_getMultipleChoice() {
     const language = "spanish";
     const client = new GameClient();
     try {
-        const word = await client.getQuestionWord(username, language, difficulty = 3);
+        const word = await client.getQuestionWord(username, language, difficulty = 0);
         const result = await client.getMultipleChoice(username, language, word);
         console.log(`test_getFourChoices()\'s result: ${result[1]}`);
         console.log(`The correct answer is ${result[1][result[0]]}`);
@@ -144,9 +144,9 @@ function sleep(ms) {
 // testupProficiency();
 // test_getAllWordsByCategory();
 // sleep(10000);
-test_getTranslation();
+// test_getTranslation();
 
-test_getDefinition();
+// test_getDefinition();
 // sleep(10000);
 // test_getProgressPercentage();
 
@@ -159,17 +159,17 @@ test_getDefinition();
 // for (let i = 0; i < 20; i++){
 //     test_getQuestionWord(1);
 // }
-console.log("More weighted");
-for (let i = 0; i < 20; i++){
-    test_getQuestionWord(2);
-}
+// console.log("More weighted");
+// for (let i = 0; i < 20; i++){
+//     test_getQuestionWord(2);
+// }
 // console.log("Focused");
 // for (let i = 0; i < 20; i++){
 //     test_getQuestionWord(3);
 // }
 // test_getMultipleChoice();
-// for (let i = 0; i < 10; i++) {
-//     test_getMultipleChoice();
-// }
+for (let i = 0; i < 10; i++) {
+    test_getMultipleChoice();
+}
 
 // test_getConversation();
