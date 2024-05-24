@@ -46,24 +46,30 @@ class Server:
         self.debugMode = debug_mode
 
     def parse_request(self, data):
-        lines = data.split("\r\n")
-        request_line = lines[0].split(" ")
-        self.Request["Method"], self.Request["URI"], self.Request["Version"] = (
-            request_line
-        )
+        try:
+            lines = data.split("\r\n")
+            request_line = lines[0].split(" ")
+            self.Request["Method"], self.Request["URI"], self.Request["Version"] = (
+                request_line
+            )
 
-        headers = lines[1:-2]  # Skip the request line and the last line (body)
-        for header in headers:
-            try:
+            headers = lines[1:-2]  # Skip the request line and the last line (body)
+            for header in headers:
                 key, value = header.split(": ")
-            except Exception as e:
-                key, value = header.split(":")
-            self.Request["Headers"][key] = value
+                self.Request["Headers"][key] = value
 
-        self.Request["Body"] = lines[-1]
+            self.Request["Body"] = lines[-1]
 
-        if self.debugMode:
-            print(datetime.now(), " - Parsed Request:\n\n", self.Request)
+            if self.debugMode:
+                print(datetime.now(), " - Parsed Request:\n\n", self.Request)
+        except Exception:
+            self.Request = {
+                "Method": None,
+                "URI": None,
+                "Version": None,
+                "Headers": {},
+                "Body": None,
+            }
 
     def compose_response(self):
         response = (
@@ -258,7 +264,7 @@ class Server:
             result = ai.getConversation(
                 username=self.username, language=language, category=category, word=word
             )
-            
+
             self.Response["Body"] = json.dumps(dict({word: result}))
             self.Response["Headers"]["Content-Length"] = str(len(self.Response["Body"]))
             self.Response["Headers"]["Content-Type"] = "application/json"

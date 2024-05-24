@@ -159,10 +159,10 @@ test_getDefinition();
 // for (let i = 0; i < 20; i++){
 //     test_getQuestionWord(1);
 // }
-// console.log("More weighted");
-// for (let i = 0; i < 20; i++){
-//     test_getQuestionWord(2);
-// }
+console.log("More weighted");
+for (let i = 0; i < 20; i++){
+    test_getQuestionWord(2);
+}
 // console.log("Focused");
 // for (let i = 0; i < 20; i++){
 //     test_getQuestionWord(3);

@@ -16,8 +16,8 @@
  */
 class GameClient {
     // Private fields
-    // #HOST = '149.28.199.169';
-    #HOST = '127.0.0.1';
+    #HOST = '149.28.199.169';
+    // #HOST = '127.0.0.1';
     #PORT = 8080;
     #DEBUG = false;
 
@@ -444,7 +444,7 @@ class GameClient {
         const timeoutPromise = new Promise((_, reject) => {
             setTimeout(() => {
                 reject(new Error('Request timed out')); // Reject with an error when timeout is reached
-            }, 6000); // Timeout set to 6 seconds
+            }, 5000); // Timeout set to 6 seconds
         });
 
         try {

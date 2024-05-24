@@ -1,6 +1,8 @@
 import firebase_admin
 import os
 import threading
+from datetime import datetime
+import random
 from firebase_admin import credentials
 from firebase_admin import firestore
 from collections import defaultdict
@@ -21,21 +23,29 @@ class DatabaseAccess:
 
 
     def __init__(self, script_path):
-        unique_name = f"firebaseApp-{threading.get_ident()}"
+        # Current timestamp in a compact format
+        timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+        # Generate a random integer
+        random_number = random.randint(1000, 9999)
+
+        # Format the unique name with thread ID, timestamp, and random number
+        self.unique_name = f"firebaseApp-{threading.current_thread().ident}-{timestamp}-{random_number}"
         # print(f"Firebase instance {unique_name} created")
         self.cred = credentials.Certificate(script_path + '/cfg/dbaccess.json')
-        self.firebase_app  = firebase_admin.initialize_app(self.cred, name=unique_name)
+        self.firebase_app  = firebase_admin.initialize_app(self.cred, name=self.unique_name)
         self.db = firestore.client(self.firebase_app)
 
         #the collection we are under is the users collection on Firestore
         self.collection_name = 'users'
 
         self.categoryData = defaultdict(list)
+        print(datetime.now(), f" - Firebase App: {self.unique_name} created")
         
 
     def __del__(self):
         # Clean up Firebase app on object destruction
         firebase_admin.delete_app(self.firebase_app)
+        print(datetime.now(), f" - Firebase App: {self.unique_name} deleted")
 
         
     def request_login(self, username, password):
