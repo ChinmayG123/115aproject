@@ -45,6 +45,13 @@ const Quiz = () => {
     const selectedlanguage = location.state.language;
 
 
+    const goToAfterPage = () => {
+        // navigate('/map', { state: { username } });
+        navigate('/afterquizpage', { state: { username, language: selectedlanguage } }); // Navigate to the next page when timer reaches 0
+    };
+
+
+
     const goToMap = () => {
         navigate('/map', { state: { username, language: selectedlanguage } });
     };
@@ -204,6 +211,7 @@ const Quiz = () => {
                     if (prevTimer <= 1) {
                         clearInterval(interval);
                         setIsQuestionDone(true);
+                        goToAfterPage();
                         return 0;
                     }
                     return prevTimer - 1;
