@@ -1,5 +1,3 @@
-// import { useNavigate } from 'react-router-dom/dist';
-// import { useNavigate } from 'react-router-dom';
 
 import npcimg from '../../assets/artist-assets/Artist.png';
 import learnBG from '../../assets/artist-assets/Contentbox.png';
@@ -194,10 +192,40 @@ const Quiz = () => {
         
         
     }
+
+
+    const [timer, setTimer] = useState(60); // Initial timer value in seconds
+
+
+    useEffect(() => {
+        if (isStartClicked) {
+            const interval = setInterval(() => {
+                setTimer(prevTimer => {
+                    if (prevTimer <= 1) {
+                        clearInterval(interval);
+                        setIsQuestionDone(true);
+                        return 0;
+                    }
+                    return prevTimer - 1;
+                });
+            }, 1000);
+            return () => clearInterval(interval);
+        }
+    }, [isStartClicked]);
+
+
     
     
     return(  
         <div className = "combatBackground">
+
+            <div className='timer'>
+                
+                <h1>Timer: {timer === 0 ? "Time is up!" : timer}</h1>
+
+
+            </div>
+
             
             <div className = "Sprite"> {isHit ? playHitAnim():
             (isAttacking ? playAttackAnim(): playIdleAnim())
@@ -230,6 +258,5 @@ const Quiz = () => {
 };
 
 export default Quiz;
-
 
 

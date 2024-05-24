@@ -80,7 +80,7 @@ import React, { useState, useEffect } from 'react';
 const Type = function(props) {
 
 //   const { selectedLanguage } = props;
-console.log("TYPE");
+// console.log("TYPE");
 
 
     const navigate = useNavigate(); 
@@ -132,25 +132,35 @@ console.log("TYPE");
 
         if (textInput.toLowerCase() === translation.toLowerCase()) {
            
-            //setCorrectMessage("Correct!");
-            props.setIsAttacking(true);
-            props.setIsAnswerCorrect(true);
-            props.setIsQuestionDone(true);
-            // Wait 1 second before moving to the next word
-            /*
+            setCorrectMessage("Correct!");
             setTimeout(() => {
-                showNextWord();
-                gameClient.downProficiency(username, selectedlanguage, englishword); // Call downProficiency()
-                props.setTimer(10); // Reset timer to initial value
-            }, 1000);*/
+                // showNextWord();
+                setCorrectMessage("");
+                gameClient.upProficiency(username, selectedlanguage, key); // Call downProficiency()
+                props.setIsAttacking(true);
+                props.setIsAnswerCorrect(true);
+                props.setIsQuestionDone(true);
+            }, 2000);
+            
         } else {
             props.setIsHit(true);
             //console.log("Incorrect word!");
             props.setIsAnswerCorrect(false);
-            props.setIsQuestionDone(true);
+
+            setCorrectMessage("Incorrect word!");
+            console.log("WRONG INPUT");
+
+            setTimeout(() => {
+
+                gameClient.downProficiency(username, selectedlanguage, key); // Call downProficiency()
+                props.setIsQuestionDone(true);
+                setCorrectMessage("");
+
+            }, 3000);
+
 
             
-            await gameClient.downProficiency(username, selectedlanguage, key);
+            // await gameClient.downProficiency(username, selectedlanguage, key);
         }
     
         setTextInput(""); // Clear the text input after checking
