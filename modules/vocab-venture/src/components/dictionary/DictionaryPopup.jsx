@@ -248,7 +248,7 @@ useEffect(() => {
 
                               <div className="word-info">
                                 <h1 style={{ marginTop: '270px', marginLeft: '50px' }} >English: {key}</h1>
-                                <h1 style={{ marginTop: '0px', marginLeft: '50px' }} > {selectedLanguage}: {translatedWord}</h1>
+                                <h2 style={{ marginTop: '0px', marginLeft: '50px' }} > {selectedLanguage}: {translatedWord}</h2>
                                 {/* const translation = await gameClient.getTranslation(props.username, selectedLanguage, key);
 
                                 setTranslatedWord(translation[key]); */}
@@ -294,7 +294,7 @@ useEffect(() => {
                                 </div>
                             <div className="word-info2">
                               <h1 style={{ marginTop: '270px', marginLeft: '40px' }} >English: {key}</h1>
-                              <h1 style={{ marginTop: '0px', marginLeft: '40px' }} > {selectedLanguage}: {translatedWord2}</h1>
+                              <h2 style={{ marginTop: '0px', marginLeft: '40px' }} > {selectedLanguage}: {translatedWord2}</h2>
                               {/* <h1 style={{marginLeft: '40px'}}>{selectedLanguage}: {translations[key] ? translations[key][key] : value}</h1> */}
                           </div>
                         </div>

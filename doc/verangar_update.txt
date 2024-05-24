@@ -51,3 +51,7 @@ Reworked incorrect answer choices to be done through GPT API
 2024/05/23:
 
 Added get_definition() function to query the defintion for a chosen word from Firestore DB
+
+2024/05/23:
+
+Added definitions to dictionary front end, updated DictionaryPopup and Dictionary.css

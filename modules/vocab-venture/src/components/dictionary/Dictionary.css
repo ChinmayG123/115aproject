@@ -5,7 +5,7 @@
   }
   .definition-container, .definition-container2{
     position: absolute;
-    bottom: 10px; /* Places the definition near the bottom of the popup */
+    bottom: 90px; /* Places the definition near the bottom of the popup */
     left: 0;
     right: 0;
     text-align: center;
@@ -167,14 +167,14 @@
 
 .learned-words1 {
   position: absolute;
-  top: 70px; /* Adjust the top position as needed */
+  top: -10px; /* Adjust the top position as needed */
   left: 20px; /* Adjust the left position as needed */
   transform: scale(1);
 }
 
 .learned-words2 {
   position: absolute;
-  top: 70px; /* Adjust the top position as needed */
+  top: -10px; /* Adjust the top position as needed */
   left: 20px; /* Adjust the left position as needed */
   transform: scale(1);
 }
