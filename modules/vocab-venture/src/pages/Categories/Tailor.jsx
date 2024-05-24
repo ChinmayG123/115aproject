@@ -57,7 +57,7 @@ const Tailor = function() {
     useEffect(() => {
         const fetchWords = async () => {
             try {
-                const response = await gameClient.getAllWordsByCategory(username, "school");
+                const response = await gameClient.getAllWordsByCategory(username, "clothing");
                 const fetchedWords = Object.values(response).flat();
 
                 const fetchedUserDict = await gameClient.getUserDictionary(username, selectedlanguage);
