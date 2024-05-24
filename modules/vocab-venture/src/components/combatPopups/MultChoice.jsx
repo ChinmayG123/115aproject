@@ -183,15 +183,32 @@ const MultChoice = (props) => {
         console.log("correct answer:", translation);
         console.log("CLICKED", clickedWord);
         if (clickedWord === translation) {
-            props.setIsAttacking(true);
-            gameClient.upProficiency(username, selectedlanguage, correctWord); // Call downProficiency()
-            props.setIsAnswerCorrect(true);
-            props.setIsQuestionDone(true);   
+            
+
+
+            setCorrectMessage("Correct!");
+            setTimeout(() => {
+                // showNextWord();
+                setCorrectMessage("");
+                props.setIsAttacking(true);
+                gameClient.upProficiency(username, selectedlanguage, correctWord); // Call downProficiency()
+                props.setIsAnswerCorrect(true);
+                props.setIsQuestionDone(true);   
+            }, 2000);
         } else {
             props.setIsHit(true);
-            await gameClient.downProficiency(username, selectedlanguage, correctWord);
             props.setIsAnswerCorrect(false);
-            props.setIsQuestionDone(true);   
+            setCorrectMessage("Incorrect word!");
+
+            setTimeout(() => {
+
+                gameClient.downProficiency(username, selectedlanguage, correctWord); // Call downProficiency()
+                props.setIsQuestionDone(true);
+                setCorrectMessage("");
+
+            }, 3000);
+
+
         }
         setTextInput("");
 
@@ -263,7 +280,7 @@ const MultChoice = (props) => {
 
                     
               {correctMessage && (
-                            <div className="message-display">
+                            <div className="message-display-mc">
                                 <p>{correctMessage}</p>
                             </div>
                         )}
