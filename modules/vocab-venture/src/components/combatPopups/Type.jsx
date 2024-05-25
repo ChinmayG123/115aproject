@@ -135,17 +135,11 @@ const Type = function(props) {
     const username = location.state.username;
     const selectedlanguage = location.state.language;
   
-    const goToMap = () => {
-        navigate('/map', { state: { username, language: selectedlanguage } });
-    };
-
   
-    const [currentWordIndex, setCurrentWordIndex] = useState(0);
+  
 
 
 
-
-  const [correctMessage, setCorrectMessage] = useState(""); // Define the state for displaying the message
 
     const [textInput, setTextInput] = useState(""); 
 
@@ -153,8 +147,9 @@ const Type = function(props) {
 
      
     // const [englishword, setEnglishWord] = useState('');
-
-
+    
+    //on page load, stall
+    
     
     const handleInputChange = (event) => {
         const newValue = event.target.value;
@@ -182,31 +177,37 @@ const Type = function(props) {
 
         if (textInput.toLowerCase() === translation.toLowerCase()) {
            
-            setCorrectMessage("Correct!");
-            setTimeout(() => {
                 // showNextWord();
-                setCorrectMessage("");
                 gameClient.upProficiency(username, selectedlanguage, key); // Call downProficiency()
-                props.setIsAttacking(true);
+                
+                setTimeout(() => {
+                    props.setIsAttacking(true);
+                    setTimeout(() => {
+                        props.setIsSlimeHit(true);
+                    }, 600)
+                },1000)
                 props.setIsAnswerCorrect(true);
                 props.setIsQuestionDone(true);
-            }, 2000);
+
             
         } else {
-            props.setIsHit(true);
+            setTimeout(() => {
+                props.setIsSlimeAttacking(true);
+                setTimeout(() => {
+                    props.setIsHit(true);
+                }, 600) 
+            },1000)
+
             //console.log("Incorrect word!");
             props.setIsAnswerCorrect(false);
+            props.setIsQuestionDone(true);
 
-            setCorrectMessage("Incorrect word!");
+                  
             console.log("WRONG INPUT");
 
-            setTimeout(() => {
 
                 gameClient.downProficiency(username, selectedlanguage, key); // Call downProficiency()
-                props.setIsQuestionDone(true);
-                setCorrectMessage("");
 
-            }, 3000);
 
 
             
@@ -273,11 +274,7 @@ const Type = function(props) {
 
 
                 
-            {correctMessage && (
-                <div className="message-display">
-                    <p>{correctMessage}</p>
-                </div>
-            )}
+          
 
 
             <div className = "typeCONTENT" >
@@ -314,7 +311,6 @@ const Type = function(props) {
             </button>
 
 
-            <button type="button" id="goToMapButton" onClick={goToMap}> Go to Map</button>
             
                 
         </div>

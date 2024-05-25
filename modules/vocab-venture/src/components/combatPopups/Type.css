@@ -48,6 +48,7 @@
 }
 
 .message-display {
+  z-index: 4;
   position: absolute;
   top: 10px; /* Adjust the distance from the top as needed */
   right: 10px; /* Adjust the distance from the right as needed */

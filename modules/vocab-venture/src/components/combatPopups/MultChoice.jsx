@@ -1,11 +1,7 @@
 // import { useNavigate } from 'react-router-dom/dist';
 // import { useNavigate } from 'react-router-dom';
 
-import npcimg from '../../assets/artist-assets/Artist.png';
-import learnBG from '../../assets/artist-assets/Contentbox.png';
-import npcTextbox from '../../assets/artist-assets/ArtistTextbox.png';
-import easel from '../../assets/artist-assets/Easel.png';
-import artistbg from '../../assets/artist-assets/ArtistBG.png';
+
 import './MultChoice.css';
 
 
@@ -149,7 +145,6 @@ const MultChoice = (props) => {
     const [currentWordIndex, setCurrentWordIndex] = useState(0);
     const [translatedWord, setTranslatedWord] = useState([]);
 
-    const [correctMessage, setCorrectMessage] = useState(""); // Define the state for displaying the message
     const [multChoiceOptions, setMultChoiceOptions] = useState([]);
     
     // the user's dictionary 
@@ -188,7 +183,6 @@ const MultChoice = (props) => {
     }, [props.username, selectedlanguage]);
 
 
-    console.log("MC");
     useEffect(() => {
 
         const fetchTranslations = async () => {
@@ -234,29 +228,34 @@ const MultChoice = (props) => {
         console.log("CLICKED", clickedWord);
         if (clickedWord === translation) {
             
-
-
-            setCorrectMessage("Correct!");
-            setTimeout(() => {
-                // showNextWord();
-                setCorrectMessage("");
-                props.setIsAttacking(true);
-                gameClient.upProficiency(username, selectedlanguage, correctWord); // Call downProficiency()
                 props.setIsAnswerCorrect(true);
-                props.setIsQuestionDone(true);   
-            }, 2000);
-        } else {
-            props.setIsHit(true);
-            props.setIsAnswerCorrect(false);
-            setCorrectMessage("Incorrect word!");
+                props.setIsQuestionDone(true);
 
+                // showNextWord();
+                setTimeout(() => {
+                    props.setIsAttacking(true);
+                    setTimeout(() => {
+                        props.setIsSlimeHit(true);
+                    }, 600)
+                },1000)
+                gameClient.upProficiency(username, selectedlanguage, correctWord); // Call downProficiency()
+                
+                
+            
+        } else {
+            props.setIsAnswerCorrect(false);
+            props.setIsQuestionDone(true);
             setTimeout(() => {
+                props.setIsSlimeAttacking(true);
+                setTimeout(() => {
+                    props.setIsHit(true);
+                }, 600) 
+            },1000)
+            
+
 
                 gameClient.downProficiency(username, selectedlanguage, correctWord); // Call downProficiency()
-                props.setIsQuestionDone(true);
-                setCorrectMessage("");
 
-            }, 3000);
 
 
         }
@@ -329,12 +328,7 @@ const MultChoice = (props) => {
               </div>
 
                     
-              {correctMessage && (
-                            <div className="message-display-mc">
-                                <p>{correctMessage}</p>
-                            </div>
-                        )}
-
+            
 
             <button type="button" id="goToMapButton" onClick={goToMap}> Go to Map</button>
             

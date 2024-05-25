@@ -1,13 +1,22 @@
 
-import npcimg from '../../assets/artist-assets/Artist.png';
-import learnBG from '../../assets/artist-assets/Contentbox.png';
-import npcTextbox from '../../assets/artist-assets/ArtistTextbox.png';
-import easel from '../../assets/artist-assets/Easel.png';
-import artistbg from '../../assets/artist-assets/ArtistBG.png';
+
 import './MultChoice.css';
+
 import cat from '../../assets/outskirts-assets/testSS.png';
 import catHIT from '../../assets/outskirts-assets/catHitSS.png';
 import catATTACK from '../../assets/outskirts-assets/catAttackSS.png';
+import slime from '../../assets/outskirts-assets/slimeIDLE.png'
+import slimeHIT from '../../assets/outskirts-assets/slimeHIT.png'
+import slimeATTACK from '../../assets/outskirts-assets/slimeATTACK.png'
+
+import correctEffect1 from '../../assets/outskirts-assets/correctEffect1.png'
+import correctEffect2 from '../../assets/outskirts-assets/correctEffect2.png'
+import incorrectEffect1 from '../../assets/outskirts-assets/incorrectEffect1.png'
+import correctEffect3 from '../../assets/outskirts-assets/correctEffect3.png'
+
+
+
+
 import './Quiz.css';
 import TypePopup from '../combatPopups/Type';
 import MCPopup from '../combatPopups/MultChoice';
@@ -18,17 +27,17 @@ import MatchPopup from '../combatPopups/Match';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 import React, { useState, useEffect } from 'react';
-import Match from '../combatPopups/Match';
 
 
 const Quiz = () => {
     //const [timer, setTimer] = useState(10000000); // Initial timer value in seconds
-    const [running, setRunning] = useState(false);
     const [typePopup, setTypePopup] = useState(false);
     const [mcPopup, setMcPopup] = useState(false);
     const [matchPopup, setMatchPopup] = useState(false);
     const [isHit, setIsHit] = useState(false);
     const [isAttacking, setIsAttacking] = useState(false);
+    const [isSlimeHit, setIsSlimeHit] = useState(false);
+    const [isSlimeAttacking, setIsSlimeAttacking] = useState(false);
     const [userDictionary, setUserDictionary] = useState([]);
     const [wordToShow, setWordToShow] = useState('');
     const [isAnswerCorrect, setIsAnswerCorrect] = useState(false); 
@@ -38,6 +47,10 @@ const Quiz = () => {
     const [shuffledDictKeys, setShuffledDictKeys] = useState([]);
     const [qType, setQType] = useState(0); //0 is mult choice, 1 type, 2 match
     const [wordGroup, setWordGroup] = useState([]); //store 4 words to pass to mult choice and matching
+    const [correctMessage, setCorrectMessage] = useState("");
+
+    const [backgroundStall, setBackgroundStall] = useState(false);
+
 
     const navigate = useNavigate(); 
     const location = useLocation();
@@ -50,7 +63,7 @@ const Quiz = () => {
         navigate('/afterquizpage', { state: { username, language: selectedlanguage } }); // Navigate to the next page when timer reaches 0
     };
 
-
+    
 
     const goToMap = () => {
         navigate('/map', { state: { username, language: selectedlanguage } });
@@ -70,11 +83,20 @@ const Quiz = () => {
         if(isAnswerCorrect == false && isQuestionDone ==true){
             console.log("wrong answer");
             getNextQuestion();
+            setCorrectMessage("Incorrect!");
+            setTimeout(()=>{
+                setCorrectMessage("");
+            },1000);
 
         }
         else if(isAnswerCorrect == true && isQuestionDone == true){
             console.log("correct answer");
             getNextQuestion();
+            setCorrectMessage("Correct!");
+            setTimeout(()=>{
+                setCorrectMessage("");
+            },1000);
+
 
         }
     
@@ -162,47 +184,125 @@ const Quiz = () => {
 
 
     }
-
-
-    const playAttackAnim = () =>{
-        return(
-            <img onAnimationEnd= {handleEndAnimation} className = "catAttackSS" src={catATTACK}></img>
     
-     )
+    const playCorrectEffect= ()=>{
+
+            if(qType == 0){
+                return( 
+                    <div className= "coverUpBG">
+                        <div className="Effects" >
+                            <img className= "correctEffect1SS" src= {correctEffect1} ></img>
+                        </div>
+                    </div>
+                )
+            }
+            else if (qType == 1){
+                return( 
+                    <div className= "coverUpBG">
+                        <div className="Effects" >
+                            <img className= "correctEffect2SS" src= {correctEffect2} ></img>
+                        </div>
+                    </div>
+                )
+
+            }
+            else{
+                return( 
+                    <div className= "coverUpBG">
+                        <div className="Effects" >
+                            <img className= "correctEffect3SS" src= {correctEffect3} ></img>
+                        </div>
+                    </div>
+                )
+
+            }
+        
     }
-    const playHitAnim = () =>{
+    const playIncorrectEffect= ()=>{
+        return( 
+        <div className= "coverUpBG">
+            <div className="Effects" >
+                <img className="incorrectEffect1SS" src= {incorrectEffect1} ></img>
+            </div>
+        </div>)
+    }
+
+    const playSlimeIdleAnim = () =>{
+        return( <img className= "slimeSS" src= {slime} ></img>)
+    }
+    const playSlimeAttackAnim = () =>{
+
+        
+        
         return(
-            <img onAnimationEnd= {handleEndAnimation} className = "catHitSS" src={catHIT}></img>
-    
-     )
+            <img onAnimationEnd= {handleSlimeEndAttackAnimation} className = "slimeAttackSS" src={slimeATTACK}></img>
+        )
+
+    }
+    const playSlimeHitAnim = () =>{
+            return(
+                <img onAnimationEnd= {handleSlimeEndHitAnimation} className = "slimeHitSS" src={slimeHIT}></img>
+         )
+
         
     }
 
-    const handleEndAnimation = () =>{
-        setIsHit(false);
-        setIsAttacking(false);
-     
+
+   
+    const playAttackAnim = () =>{
+        console.log("ONCEEEEE");
+        handleStall();
+        return(
+            <img onAnimationEnd= {handleEndAttackAnimation} className = "catAttackSS" src={catATTACK}></img>
+        )
     }
+    const playHitAnim = () =>{
+            return(
+                <img onAnimationEnd= {handleEndHitAnimation} className = "catHitSS" src={catHIT}></img>
+            )
+        
+    }
+    const handleSlimeEndHitAnimation = () =>{
+        setIsSlimeHit(false);
+    }
+    const handleSlimeEndAttackAnimation = () =>{
+        setIsSlimeAttacking(false);
+    }
+    const handleEndAttackAnimation = () =>{
+        setIsAttacking(false);
+       
+    }
+    const handleEndHitAnimation = () =>{
+        setIsHit(false);
+    }
+
+    const handleStall = () => {
+            setTimeout(() => {
+                setBackgroundStall(false);
+            },2800)
+
+    }
+
     const playIdleAnim = () => {
         return( <img className= "catSS" src= {cat} ></img>)
     }
 
     
     const getNextQuestion = () => {
-
-        setIsQuestionDone(false);
-        
         let q = Math.floor(Math.random() * 3)
         setQType(q);
+        setBackgroundStall(true);
+        handleStall();
+        setIsQuestionDone(false);
+        
+        
         console.log("Question: ", q);
         sendWords(1); //num words to send, */
-        
-        
     }
 
-
     const [timer, setTimer] = useState(60); // Initial timer value in seconds
-
+   
+  
 
     useEffect(() => {
         if (isStartClicked) {
@@ -226,7 +326,16 @@ const Quiz = () => {
     
     return(  
         <div className = "combatBackground">
-
+            {correctMessage && (
+                <div className="isCorrect-display">
+                    <p>{correctMessage}</p>
+                </div>
+            )}
+            
+            {backgroundStall ? 
+            <div className= "coverUpBG"></div>:
+            ""
+            }
             <div className='timer'>
                 
                 <h1>Timer: {timer === 0 ? "Time is up!" : timer}</h1>
@@ -235,10 +344,22 @@ const Quiz = () => {
             </div>
 
             
-            <div className = "Sprite"> {isHit ? playHitAnim():
-            (isAttacking ? playAttackAnim(): playIdleAnim())
-            } 
+            <div className = "Sprite"> {isAttacking ? playAttackAnim():
+                (isHit ? playHitAnim() : playIdleAnim()
+            )
+                
+                } 
             </div>
+
+            <div className = "SpriteOpp"> {isSlimeAttacking ? playSlimeAttackAnim():
+            (isSlimeHit ? playSlimeHitAnim():  playSlimeIdleAnim())
+                } 
+            </div>
+            {isAttacking ? playCorrectEffect():
+            (isSlimeAttacking ? playIncorrectEffect() : "")
+            } 
+
+
             {isStartClicked ? 
             <div></div>
             :
@@ -249,17 +370,23 @@ const Quiz = () => {
             </div>}
             
             <TypePopup trigger = {typePopup} setTrigger={setTypePopup} username={username} selectedLanguage={selectedlanguage}
-            setIsHit = {setIsHit} setIsAttacking = {setIsAttacking} wordToShow = {wordToShow} setIsAnswerCorrect = {setIsAnswerCorrect} setIsQuestionDone = {setIsQuestionDone}>
+            setIsHit = {setIsHit} setIsAttacking = {setIsAttacking} setIsSlimeAttacking = {setIsSlimeAttacking} wordToShow = {wordToShow} setIsAnswerCorrect = {setIsAnswerCorrect} setIsQuestionDone = {setIsQuestionDone}
+            setIsSlimeHit = {setIsSlimeHit}>
             </TypePopup>
             <MCPopup trigger = {mcPopup} setTrigger= {setMcPopup}username={username} selectedLanguage={selectedlanguage}
-            setIsHit = {setIsHit} setIsAttacking = {setIsAttacking} wordToShow = {wordToShow} setIsAnswerCorrect = {setIsAnswerCorrect} setIsQuestionDone = {setIsQuestionDone} wordGroup = {wordGroup}>
+            setIsHit = {setIsHit} setIsAttacking = {setIsAttacking} setIsSlimeAttacking = {setIsSlimeAttacking} wordToShow = {wordToShow} setIsAnswerCorrect = {setIsAnswerCorrect} setIsQuestionDone = {setIsQuestionDone} wordGroup = {wordGroup}
+            setIsSlimeHit = {setIsSlimeHit}>
             </MCPopup>
             <MatchPopup trigger = {matchPopup} setTrigger= {setMatchPopup}username={username} selectedLanguage={selectedlanguage}
-            setIsHit = {setIsHit} setIsAttacking = {setIsAttacking} setIsAnswerCorrect = {setIsAnswerCorrect} setIsQuestionDone = {setIsQuestionDone} wordGroup = {wordGroup}>
+            setIsHit = {setIsHit} setIsAttacking = {setIsAttacking} setIsSlimeAttacking = {setIsSlimeAttacking} setIsAnswerCorrect = {setIsAnswerCorrect} setIsQuestionDone = {setIsQuestionDone} wordGroup = {wordGroup}
+            setIsSlimeHit = {setIsSlimeHit}>
             </MatchPopup>
+            <button type="button" id="goToMapButton" onClick={goToMap}> Go to Map</button>
+
 
         </div>
- 
+    
+                
      
     
      );

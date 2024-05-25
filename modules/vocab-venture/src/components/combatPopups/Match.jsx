@@ -17,8 +17,10 @@ const Match = (props) => {
     const [currentTranslations, setCurrentTranslations] = useState([]);
     const [correctMessage, setCorrectMessage] = useState("");
     const [selectedEnglishWord, setSelectedEnglishWord] = useState(null);
+
     const usedWords = useRef(new Set());
 
+    
 
     useEffect(() => {
         if (props.wordGroup.length > 0) {
@@ -57,9 +59,17 @@ const Match = (props) => {
                 if (clickedWord === translation) {
                     console.log("correct match");
                     if(currentWords.length === 1){ //if all words matched
-                        props.setIsAttacking(true);
+                       
+                        props.setIsAnswerCorrect(true);
+                        setTimeout(() => {
+                            props.setIsAttacking(true);
+                            setTimeout(() => {
+                                props.setIsSlimeHit(true);
+                            }, 600)
+                        },1000)
                         console.log("All words matched");
                         props.setIsQuestionDone(true);
+                        
                     }
                     //setCorrectMessage(currentWords.length === 1 ? "All Words Matched!" : "Correct!");
                    
@@ -67,30 +77,35 @@ const Match = (props) => {
                     setCurrentWords(currentWords.filter(word => word !== selectedEnglishWord));
                     setCurrentTranslations(currentTranslations.filter(word => word !== clickedWord));
                     setSelectedEnglishWord(null);
-
                     setCorrectMessage("Correct!");
                     setTimeout(() => {
-                        // showNextWord();
                         setCorrectMessage("");
+                    },1000)
                         gameClient.upProficiency(username, selectedlanguage, key); // Call downProficiency()
                         // props.setIsAnswerCorrect(true);
-                    }, 2000);
+                    
 
                    
                 } else {
-                    console.log("Incorrect, timer decreases");
-                    props.setIsHit(true);
-                    props.setIsAnswerCorrect(false);
-
-                    setCorrectMessage("Incorrect word!");
-
+                    console.log("Incorrect");
+                    /*
                     setTimeout(() => {
-                        gameClient.downProficiency(username, selectedlanguage, key); // Call downProficiency()
-                        setCorrectMessage("");
+                        props.setIsSlimeAttacking(true);
+                        setTimeout(() => {
+                            props.setIsHit(true);
+                        }, 600) 
+                    },1000)
+                    */
+                    
 
-                    }, 3000);
+                    setCorrectMessage("Incorrect!");
+                        setTimeout(() => {
+                            setCorrectMessage("");
+                    },1000)
+                        gameClient.downProficiency(username, selectedlanguage, key); // Call downProficiency()
                    
                 }
+                
             }
         }
     };
@@ -100,10 +115,9 @@ const Match = (props) => {
     };
 
 
-    console.log("MATCH");
     return (props.trigger) ?(
         <div className="match-container">
-
+           
 
                 
             {correctMessage && (
