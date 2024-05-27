@@ -137,6 +137,7 @@ const MultChoice = (props) => {
 
   
 
+
   
     const goToMap = () => {
         navigate('/map', { state: { username, language: selectedlanguage } });
@@ -239,7 +240,8 @@ const MultChoice = (props) => {
                     }, 600)
                 },1000)
                 gameClient.upProficiency(username, selectedlanguage, correctWord); // Call downProficiency()
-                
+                props.setCorrectCounter((prevCount) => prevCount + 1); // Increment correct counter
+
                 
             
         } else {
@@ -256,46 +258,16 @@ const MultChoice = (props) => {
 
                 gameClient.downProficiency(username, selectedlanguage, correctWord); // Call downProficiency()
 
+                props.setWrongCounter((prevCount) => prevCount + 1); // Increment correct counter
 
 
         }
         setTextInput("");
 
-        // navigate('/outskirts', { state: { username, language: selectedlanguage, questionType: "type" } });
 
     };
 
 
-/*
-    useEffect(() => {
-        const initialTimer = getInitialTimer(difficulty);
-        console.log("NEW TIMERRR", initialTimer);
-        const interval = setInterval(() => {
-            setTimer((prevTimer) => {
-                if (prevTimer > 0 && !correctMessage) {
-                    return prevTimer - 1;
-                } 
-                else if (prevTimer > 0 && correctMessage) {
-                    return prevTimer;
-                } else {
-                    // Timer expired
-                    clearInterval(interval); // Stop the interval
-                    setTimeout(() => {
-                        showNextWord(); // Move to the next word after 2 seconds
-                        gameClient.downProficiency(username, selectedlanguage, englishword); // Call downProficiency()
-                        setTimer(initialTimer); // Reset timer to initial value
-                    }, 2000);
-                    return 0; // Set timer to 0 to display "Time is up!"
-                }
-            });
-        }, 1000); // Update timer every second
-    
-        // Clean up interval on component unmount
-        return () => clearInterval(interval);
-    }, [currentWordIndex, showNextWord, username, selectedlanguage, englishword, correctMessage, difficulty, initialTimer]); // Re-run effect when necessary dependencies change
-
-*/
-    
 
 
     return(props.trigger) ?  (

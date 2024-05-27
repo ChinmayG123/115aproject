@@ -12,6 +12,8 @@ const Match = (props) => {
     const username = location.state.username;
     const selectedlanguage = location.state.language;
 
+
+  
     const [userDictionary, setUserDictionary] = useState({});
     const [currentWords, setCurrentWords] = useState([]);
     const [currentTranslations, setCurrentTranslations] = useState([]);
@@ -81,29 +83,24 @@ const Match = (props) => {
                     setTimeout(() => {
                         setCorrectMessage("");
                     },1000)
-                        gameClient.upProficiency(username, selectedlanguage, key); // Call downProficiency()
+                    gameClient.upProficiency(username, selectedlanguage, selectedEnglishWord); // Call downProficiency()
                         // props.setIsAnswerCorrect(true);
-                    
+                    props.setCorrectCounter((prevCount) => prevCount + 1); // Increment correct counter
+
 
                    
                 } else {
                     console.log("Incorrect");
-                    /*
-                    setTimeout(() => {
-                        props.setIsSlimeAttacking(true);
-                        setTimeout(() => {
-                            props.setIsHit(true);
-                        }, 600) 
-                    },1000)
-                    */
-                    
 
                     setCorrectMessage("Incorrect!");
                         setTimeout(() => {
                             setCorrectMessage("");
                     },1000)
-                        gameClient.downProficiency(username, selectedlanguage, key); // Call downProficiency()
-                   
+                    // props.setIsAnswerCorrect(false);
+
+                    gameClient.downProficiency(username, selectedlanguage, selectedEnglishWord); // Call downProficiency()
+                    props.setWrongCounter((prevCount) => prevCount + 1); // Increment correct counter
+
                 }
                 
             }

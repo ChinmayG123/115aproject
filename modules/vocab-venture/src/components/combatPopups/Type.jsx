@@ -134,9 +134,6 @@ const Type = function(props) {
     const location = useLocation();
     const username = location.state.username;
     const selectedlanguage = location.state.language;
-  
-  
-  
 
 
 
@@ -188,6 +185,8 @@ const Type = function(props) {
                 },1000)
                 props.setIsAnswerCorrect(true);
                 props.setIsQuestionDone(true);
+                props.setCorrectCounter((prevCount) => prevCount + 1); // Increment correct counter
+
 
             
         } else {
@@ -198,55 +197,20 @@ const Type = function(props) {
                 }, 600) 
             },1000)
 
-            //console.log("Incorrect word!");
             props.setIsAnswerCorrect(false);
             props.setIsQuestionDone(true);
 
-                  
-            console.log("WRONG INPUT");
-
-
-                gameClient.downProficiency(username, selectedlanguage, key); // Call downProficiency()
+            gameClient.downProficiency(username, selectedlanguage, key); // Call downProficiency()
+            props.setWrongCounter((prevCount) => prevCount + 1); // Increment correct counter
 
 
 
             
-            // await gameClient.downProficiency(username, selectedlanguage, key);
         }
     
         setTextInput(""); // Clear the text input after checking
     };
 
-
-/*
-
-    useEffect(() => {
-    
-        const interval = setInterval(() => {
-            props.setTimer((prevTimer) => {
-                if (prevTimer > 0 && !correctMessage) {
-                    return prevTimer - 1;
-                } 
-                else if (prevTimer > 0 && correctMessage) {
-                    return prevTimer;
-                } else {
-                    // Timer expired
-                    clearInterval(interval); // Stop the interval
-                    setTimeout(() => {
-                        showNextWord(); // Move to the next word after 2 seconds
-                        gameClient.downProficiency(username, selectedlanguage, englishword); // Call downProficiency()
-                        props.setTimer(10); // Reset timer to initial value
-                    }, 2000);
-                    return 0; // Set timer to 0 to display "Time is up!"
-                }
-            });
-            
-        }, 1000); // Update timer every second
-    
-        // Clean up interval on component unmount
-        return () => clearInterval(interval);
-    }, [currentWordIndex, showNextWord, username, selectedlanguage, englishword]); // Re-run effect when necessary dependencies change
-*/
 
     
 
@@ -266,16 +230,6 @@ const Type = function(props) {
                     autoFocus
                 />
             </div>
-
-{/* 
-            <button type="button"  id="enterbutton" onClick={() => handleEnterClick(englishword)}>
-                Enter
-            </button> */}
-
-
-                
-          
-
 
             <div className = "typeCONTENT" >
                 

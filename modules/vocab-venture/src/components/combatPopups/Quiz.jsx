@@ -51,16 +51,36 @@ const Quiz = () => {
 
     const [backgroundStall, setBackgroundStall] = useState(false);
 
+    const [correctCounter, setCorrectCounter] = useState(0);
+    const [wrongCounter, setWrongCounter] = useState(0);
+
+
+    const [beforeCorrectCounter, setBeforeCorrectCounter] = useState(0);
+    const [beforeWrongCounter, setBeforeWrongCounter] = useState(0);
+
+
 
     const navigate = useNavigate(); 
     const location = useLocation();
     const username = location.state.username;
     const selectedlanguage = location.state.language;
 
+    console.log("COUNTING", correctCounter, wrongCounter);
+    
+    useEffect(() => {
+
+
+        setBeforeCorrectCounter(correctCounter);
+        setBeforeWrongCounter(wrongCounter);
+        console.log("BEFORE COUNTING", beforeCorrectCounter, beforeWrongCounter);
+
+
+    })
 
     const goToAfterPage = () => {
-        // navigate('/map', { state: { username } });
-        navigate('/afterquizpage', { state: { username, language: selectedlanguage } }); // Navigate to the next page when timer reaches 0
+        console.log("quizzzzzzzzzz", beforeCorrectCounter, beforeWrongCounter);
+        navigate('/afterquizpage', { state: { username, selectedlanguage, beforeCorrectCounter, beforeWrongCounter } });
+
     };
 
     
@@ -300,7 +320,7 @@ const Quiz = () => {
         sendWords(1); //num words to send, */
     }
 
-    const [timer, setTimer] = useState(60); // Initial timer value in seconds
+    const [timer, setTimer] = useState(10); // Initial timer value in seconds
    
   
 
@@ -311,7 +331,8 @@ const Quiz = () => {
                     if (prevTimer <= 1) {
                         clearInterval(interval);
                         setIsQuestionDone(true);
-                        goToAfterPage();
+
+                
                         return 0;
                     }
                     return prevTimer - 1;
@@ -321,7 +342,27 @@ const Quiz = () => {
         }
     }, [isStartClicked]);
 
+    console.log("TIMERRRRRR", timer);
 
+
+    useEffect(() => {
+        if (timer == 0) {
+            setBeforeCorrectCounter(correctCounter);
+            setBeforeWrongCounter(wrongCounter);
+            console.log("TIMR COUNTING", beforeCorrectCounter, beforeWrongCounter);
+            goToAfterPage();
+
+        }
+    });
+
+
+    // const handleAnswer = (isCorrect) => {
+    //     if (isCorrect) {
+    //         setCorrectCounter(prev => prev + 1);
+    //     } else {
+    //         setWrongCounter(prev => prev + 1);
+    //     }
+    // };
     
     
     return(  
@@ -371,18 +412,17 @@ const Quiz = () => {
             
             <TypePopup trigger = {typePopup} setTrigger={setTypePopup} username={username} selectedLanguage={selectedlanguage}
             setIsHit = {setIsHit} setIsAttacking = {setIsAttacking} setIsSlimeAttacking = {setIsSlimeAttacking} wordToShow = {wordToShow} setIsAnswerCorrect = {setIsAnswerCorrect} setIsQuestionDone = {setIsQuestionDone}
-            setIsSlimeHit = {setIsSlimeHit}>
+            setIsSlimeHit = {setIsSlimeHit} correctCounter = {correctCounter} setCorrectCounter = {setCorrectCounter} wrongCounter = {wrongCounter} setWrongCounter = {setWrongCounter} >
             </TypePopup>
             <MCPopup trigger = {mcPopup} setTrigger= {setMcPopup}username={username} selectedLanguage={selectedlanguage}
             setIsHit = {setIsHit} setIsAttacking = {setIsAttacking} setIsSlimeAttacking = {setIsSlimeAttacking} wordToShow = {wordToShow} setIsAnswerCorrect = {setIsAnswerCorrect} setIsQuestionDone = {setIsQuestionDone} wordGroup = {wordGroup}
-            setIsSlimeHit = {setIsSlimeHit}>
+            setIsSlimeHit = {setIsSlimeHit} correctCounter = {correctCounter} setCorrectCounter = {setCorrectCounter} wrongCounter = {wrongCounter} setWrongCounter = {setWrongCounter} >
             </MCPopup>
             <MatchPopup trigger = {matchPopup} setTrigger= {setMatchPopup}username={username} selectedLanguage={selectedlanguage}
             setIsHit = {setIsHit} setIsAttacking = {setIsAttacking} setIsSlimeAttacking = {setIsSlimeAttacking} setIsAnswerCorrect = {setIsAnswerCorrect} setIsQuestionDone = {setIsQuestionDone} wordGroup = {wordGroup}
-            setIsSlimeHit = {setIsSlimeHit}>
+            setIsSlimeHit = {setIsSlimeHit} correctCounter = {correctCounter} setCorrectCounter = {setCorrectCounter} wrongCounter = {wrongCounter} setWrongCounter = {setWrongCounter} >
             </MatchPopup>
             <button type="button" id="goToMapButton" onClick={goToMap}> Go to Map</button>
-
 
         </div>
     
