@@ -16,12 +16,18 @@ const afterQuizPage = () => {
 
 
 
+    const goToMap = () => {
+        navigate('/map', { state: { username, language: selectedlanguage } });
+    };
+
 
     
     return(  
         <div className = "hi">
             <h1>Number of Questions Correct: {correctCounter}</h1>
             <h1>Number of Questions Wrong: {wrongCounter}</h1>
+            <button type="button" id="goToMapButton" onClick={goToMap}> Go to Map</button>
+
         </div>
  
      
