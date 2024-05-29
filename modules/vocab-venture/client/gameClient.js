@@ -16,19 +16,50 @@
  */
 class GameClient {
     // Private fields
-    #HOST = '149.28.199.169';
-    // #HOST = '127.0.0.1';
+    // #HOST = '149.28.199.169'; // dev server
+    #HOST = '45.63.84.166'; // high-performance
+    // #HOST = '127.0.0.1'; // localhost
     #PORT = 8080;
     #DEBUG = false;
 
+    userTable = '/userlist';
+    userProgress = '/progress';
+    allDict = '/total';
+    ai = "/chatgpt";
+
     constructor() {
         this.baseURL = `http://${this.#HOST}:${this.#PORT}`;
-        this.userTable = '/userlist';
-        this.userProgress = '/progress'
-        this.allDict = '/total'
-        this.ai = "/chatgpt"
+        this.spanish = {};
+        this.french = {};
+        this.definition = {};
+        // Call the async initialization method
+        this.init();
     }
 
+    async init() {
+        const colors = await this.getAllWordsByCategory("client", "colors");
+        const school = await this.getAllWordsByCategory("client", "school");
+        const food = await this.getAllWordsByCategory("client", "food");
+        const clothing = await this.getAllWordsByCategory("client", "clothing");
+        this.colors = colors["colors"];
+        this.school = school['school'];
+        this.food = food['food'];
+        this.clothing = clothing['clothing'];
+        // console.log("colors: ", this.colors);
+        const allWords = [...this.colors, ...this.school, ...this.food, ...this.clothing];
+        for (const word of allWords) {
+            let sp_translate = await this.getTranslation("client", "spanish", word);
+            let fr_translate = await this.getTranslation("client", "french", word);
+            let definition = await this.getDefinition("client", "french", word);
+            this.spanish[word] = sp_translate;
+            this.french[word] = fr_translate;
+            this.definition[word] = definition;
+        }
+        // console.log("All words: ", allWords);
+        // console.log("Spanish Dictionary: ", this.spanish);
+        // console.log("French Dictionary: ", this.french);
+        // console.log("Definitions: ", this.definition);
+    }
 
     /**
      * Validates a user by sending a GET request with custom headers for username and password.
@@ -54,7 +85,8 @@ class GameClient {
             }
         };
         const response = await this.retrieveData(this.userTable, options);
-        this.printDebug(response);
+        if (this.#DEBUG)
+            this.printDebug(response);
         switch (response.status) {
             case 200:
                 return 0;
@@ -90,7 +122,8 @@ class GameClient {
             }
         };
         const response = await this.retrieveData(this.userTable, options);
-        this.printDebug(response);
+        if (this.#DEBUG)
+            this.printDebug(response);
         switch (response.status) {
             case 200: return 0; // 200 OK
             case 409: return 1; // 409 Conflict
@@ -161,7 +194,8 @@ class GameClient {
             body: JSON.stringify({ [word]: proficiency })
         };
         const response = await this.retrieveData(this.userProgress, options);
-        this.printDebug(response);
+        if (this.#DEBUG)
+            this.printDebug(response);
         switch (response.status) {
             case 200: case 201: return 0; // 200 OK, 201 Created
             case 404: return 1; // 404 Not Found
@@ -191,7 +225,8 @@ class GameClient {
             body: word
         };
         const response = await this.retrieveData(this.userProgress, options);
-        this.printDebug(response);
+        if (this.#DEBUG)
+            this.printDebug(response);
         switch (response.status) {
             case 200: case 201: return 0; // 200 OK, 201 Created
             case 404: return 1; // 404 Not Found
@@ -207,12 +242,13 @@ class GameClient {
                 'Content-Type': 'application/json',
                 'Username': username,
                 'Game-Language': language,
-                'Action': 'proficiency up'
+                'Action': 'proficiency down'
             },
             body: word
         };
         const response = await this.retrieveData(this.userProgress, options);
-        this.printDebug(response);
+        if (this.#DEBUG)
+            this.printDebug(response);
         switch (response.status) {
             case 200: case 201: return 0; // 200 OK, 201 Created
             case 404: return 1; // 404 Not Found
@@ -227,18 +263,20 @@ class GameClient {
                 'Content-Type': 'application/json',
                 'Username': username,
                 'Game-Language': language,
-                'Action': 'proficiency down'
+                'Action': 'proficiency up'
             },
             body: word
         };
         const response = await this.retrieveData(this.userProgress, options);
-        this.printDebug(response);
+        if (this.#DEBUG)
+            this.printDebug(response);
         switch (response.status) {
             case 200: case 201: return 0; // 200 OK, 201 Created
             case 404: return 1; // 404 Not Found
             default: return -1;
         }
     }
+
     /**
      * Get all available words in database within a certain category
      * @param {*} username 
@@ -259,7 +297,8 @@ class GameClient {
             }
         };
         const response = await this.retrieveData(this.allDict, options);
-        this.printDebug(response);
+        if (this.#DEBUG)
+            this.printDebug(response);
         if (response.status === 200) {
             return await response.json();
         } else {
@@ -278,7 +317,8 @@ class GameClient {
             }
         };
         const response = await this.retrieveData(this.userProgress, options);
-        this.printDebug(response);
+        if (this.#DEBUG)
+            this.printDebug(response);
         if (response.status === 200) {
             return await response.json();
         } else {
@@ -287,6 +327,18 @@ class GameClient {
     }
 
     async getTranslation(username, language, word) {
+        if (language == "spanish") {
+            if (word in this.spanish && this.spanish[word] !== null && this.spanish[word] !== undefined && this.spanish[word] !== '') {
+                // console.log("Spanish translation found locally");
+                return this.spanish[word];
+            }
+        }
+        else if (language == "french") {
+            if (word in this.french && this.french[word] !== null && this.french[word] !== undefined && this.french[word] !== '') {
+                // console.log("French translation found locally");
+                return this.french[word];
+            }
+        }
 
         const options = {
             method: 'GET',
@@ -405,11 +457,11 @@ class GameClient {
 
         let choices = text_response.trim().split(/\s*\r?\n\s*/);
         let answer;
-        const index = choices.indexOf(word);
+        const index = choices.indexOf(translate_word);
         if (index === -1) {
             choices.pop();
             answer = Math.floor(Math.random() * 4);
-            choices.splice(answer, 0, translate_word[word]);
+            choices.splice(answer, 0, translate_word);
         } else {
             answer = index;
         }
@@ -444,7 +496,7 @@ class GameClient {
         const timeoutPromise = new Promise((_, reject) => {
             setTimeout(() => {
                 reject(new Error('Request timed out')); // Reject with an error when timeout is reached
-            }, 5000); // Timeout set to 6 seconds
+            }, 6000); // Timeout set to 6 seconds
         });
 
         try {

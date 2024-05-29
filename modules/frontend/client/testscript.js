@@ -66,10 +66,9 @@ async function test_getAllWordsByCategory() {
     }
 }
 
-async function test_getTranslation() {
+async function test_getTranslation(word) {
     const username = "TestApril232ndUser";
     const language = "spanish";
-    const word = "airport"
     const client = new GameClient();
     try {
         const result = await client.getTranslation(username, language, word);
@@ -137,6 +136,28 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+async function test_main() {
+    const username = "TestApril232ndUser";
+    const language = "spanish";
+    const client = new GameClient();
+    try {
+        let word = "airport"
+        let result = await client.getTranslation(username, language, "airport");
+        console.log('test_getTranslation()\'s result:', result);
+        sleep(10000);
+        for (let i = 0; i < 100; i++) {
+            word = await client.getQuestionWord(username, language, 0);
+            result = await client.getTranslation(username, language, word);
+            console.log('test_getTranslation()\'s result:', result);
+            // sleep(1000);
+        }
+
+    } catch (error) {
+        console.error('Error during test:', error);
+    }
+}
+
+test_main();
 //testGetUserDictionary();
 
 // testlearnNewWord();
@@ -144,7 +165,7 @@ function sleep(ms) {
 // testupProficiency();
 // test_getAllWordsByCategory();
 // sleep(10000);
-// test_getTranslation();
+// test_getTranslation("airport");
 
 // test_getDefinition();
 // sleep(10000);
@@ -168,8 +189,8 @@ function sleep(ms) {
 //     test_getQuestionWord(3);
 // }
 // test_getMultipleChoice();
-for (let i = 0; i < 10; i++) {
-    test_getMultipleChoice();
-}
+// for (let i = 0; i < 10; i++) {
+//     test_getMultipleChoice();
+// }
 
 // test_getConversation();
