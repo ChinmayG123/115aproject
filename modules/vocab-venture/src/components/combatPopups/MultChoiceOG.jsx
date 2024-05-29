@@ -105,8 +105,7 @@ const MultChoiceOG = ({ questionType }) => {
     const [translatedWord, setTranslatedWord] = useState([]);
 
     const [correctMessage, setCorrectMessage] = useState(""); // Define the state for displaying the message
-
-
+    const [profWord, setProfWord] = useState(null);
 
     const [translations, setTranslations] = useState({});
 
@@ -173,13 +172,34 @@ const MultChoiceOG = ({ questionType }) => {
             }
         };
         fetchData();
+        
     }, [username, selectedlanguage]);
 
-    let englishword = Object.keys(userDictionary)[currentWordIndex];
+    useEffect(() => {
+        const fetchQuestionWord = async () => {
+          try {
+            const questionWord = await gameClient.getQuestionWord(username, selectedlanguage, 2);
+            setProfWord(questionWord);
+          } catch (error) {
+            console.error('Error fetching question word:', error);
+          }
+        };
+    
+        fetchQuestionWord();
+      }, [username, selectedlanguage, 2]);
+    
+    console.log("This is the proficiency word: ", profWord);
+
+    let englishword = Object.keys(userDictionary)[currentWordIndex]; //this is for randomized
+    //adapt to use the getQuestionWord function
+    //let englishword = profWord;
     let wordChoice = Object.keys(userDictionary).slice(currentWordIndex, currentWordIndex + 4); // assuming you have a translation available
     
     useEffect(() => {
         const fetchTranslations = async () => {
+            //englishword = profWord;
+           // let profWord = await gameClient.getQuestionWord(username, selectedlanguage, 3); // max weight impacting selection for testing purposes
+            //console.log("This is the proficiency word: ", profWord);
             let generated = await gameClient.getMultipleChoice(username, selectedlanguage, englishword);
             let translated = await gameClient.getTranslation(username, selectedlanguage, englishword);
             console.log("This is the word to filter", translated);
