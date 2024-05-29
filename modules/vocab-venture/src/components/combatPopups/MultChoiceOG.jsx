@@ -186,7 +186,7 @@ const MultChoiceOG = ({ questionType }) => {
         };
     
         fetchQuestionWord();
-      }, [username, selectedlanguage, 2]);
+      }, [correctMessage]);
     
     console.log("This is the proficiency word: ", profWord);
 
@@ -243,18 +243,12 @@ const MultChoiceOG = ({ questionType }) => {
     const showNextWord = () => {
         if (currentWordIndex < Object.keys(userDictionary).length - 1) {
             setCurrentWordIndex(currentWordIndex + 1);
-            englishword = Object.keys(userDictionary)[currentWordIndex + 1];
+            //englishword = Object.keys(userDictionary)[currentWordIndex + 1];
+            englishword = profWord;
             // console.log("englishword", englishword);
             // setEnglishWord(Object.keys(userDictionary)[currentWordIndex + 1]);
         }
     };
-    
-    const handleInputChange = (event) => {
-        const newValue = event.target.value;
-        setTextInput(newValue); // Update the text input value as the user types
-        // console.log(newValue);
-    };
-
 
    const randomizeWords = (array) =>{
         // Create a copy of the array
@@ -301,7 +295,7 @@ const MultChoiceOG = ({ questionType }) => {
             setTimeout(() => {
                 setCorrectMessage("");
             }, 1500);
-            await gameClient.downProficiency(username, selectedlanguage, englishword);
+            await gameClient.upProficiency(username, selectedlanguage, englishword);
             setTimer(initialTimer);
         }
         setTextInput("");
@@ -418,5 +412,4 @@ const MultChoiceOG = ({ questionType }) => {
 };
 
 export default MultChoiceOG;
-
 
