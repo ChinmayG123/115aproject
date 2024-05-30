@@ -5,10 +5,16 @@
   }
   .definition-container, .definition-container2{
     position: absolute;
-    bottom: 90px; /* Places the definition near the bottom of the popup */
+    bottom: 100px; /* Places the definition near the bottom of the popup */
     left: 0;
     right: 0;
     text-align: center;
+
+    height: 80px; /* Set a fixed height for the definition container */
+
+    max-width: 90%; /* Limit the width to 90% of the popup width */
+    margin: 0 auto; /* Center the container horizontally */
+    
   }
   .popup {
     position: relative;
@@ -184,9 +190,9 @@
 #wordImage1 {
   position: absolute;
   height: 66%;
-  top: 5%;
-  left: -30%;
-  transform: translateX(0px) translateY(30px) scale(0.6);
+  top: 10%;
+  left: 20%;
+  transform: translateX(0px) translateY(30px) scale(0.7);
   display: flex;
   justify-content: center;
 }
@@ -196,9 +202,11 @@
 #wordImage2 {
   position: absolute;
   height: 66%;
-  top: 5%;
+  top: 20%;
   left: 80px; 
+  transform: scale(0.8);
   display: flex;
   justify-content: center;
+  
 }
 

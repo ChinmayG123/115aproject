@@ -1,9 +1,14 @@
 
+import './afterQuizPage.css';
 // import { useLocation } from 'react-router-dom';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 import React, { useState, useEffect } from 'react';
 
+
+
+import pageleft from '../../assets/dictionary-assets/DictPageLeft.png'
+import pageright from '../../assets/dictionary-assets/DictPageRight.png'
 
 const afterQuizPage = () => {
 
@@ -23,14 +28,21 @@ const afterQuizPage = () => {
 
     
     return(  
-        <div className = "hi">
-            <h1>Number of Questions Correct: {correctCounter}</h1>
-            <h1>Number of Questions Wrong: {wrongCounter}</h1>
-            <button type="button" id="goToMapButton" onClick={goToMap}> Go to Map</button>
+        <div className="after-quiz-page">
+            <button type="button" id="goToMapButton" onClick={goToMap}>Go to Map</button>
+            <div className="page-content">
+                <div className="score-header">
+                    <h1>Your Report:</h1>
+                </div>
+                
+                <img src={pageleft} alt="Page Left" className="page-image" />
 
+                <div className="score-container">
+                    <h2>Number of Questions Correct: {correctCounter}</h2><br></br>
+                    <h2>Number of Questions Wrong: {wrongCounter}</h2>
+                </div>
+            </div>
         </div>
- 
-     
     
      );
 };

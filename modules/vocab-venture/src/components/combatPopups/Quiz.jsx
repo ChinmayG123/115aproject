@@ -320,7 +320,7 @@ const Quiz = () => {
         sendWords(1); //num words to send, */
     }
 
-    const [timer, setTimer] = useState(10); // Initial timer value in seconds
+    const [timer, setTimer] = useState(60); // Initial timer value in seconds
    
   
 

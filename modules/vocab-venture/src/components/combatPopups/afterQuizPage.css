@@ -1,0 +1,49 @@
+.after-quiz-page {
+    text-align: center;
+    padding: 20px;
+    position: relative;
+}
+
+#goToMapButton {
+    left: -20px;
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+.page-content {
+    position: relative;
+    display: inline-block;
+}
+
+.page-image {
+    width: 65%;
+    height: auto;
+}
+
+
+.score-header {
+
+    position: absolute;
+    top: 10%;
+    width: 100%;
+    border-radius: 10px;
+    text-decoration: underline;
+
+}
+
+
+.score-container {
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.score-container h2 {
+    font-size: 25px; /* Adjust this value to make the text smaller */
+}
