@@ -5,6 +5,8 @@
 
 #goToMapButton{
   z-index:3;
+
+  position: absolute;
 }
 
 .isCorrect-display{

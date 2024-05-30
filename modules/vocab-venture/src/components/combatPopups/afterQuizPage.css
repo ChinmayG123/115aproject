@@ -47,3 +47,8 @@
 .score-container h2 {
     font-size: 25px; /* Adjust this value to make the text smaller */
 }
+
+
+.Sprite {
+    left: -60%;
+}

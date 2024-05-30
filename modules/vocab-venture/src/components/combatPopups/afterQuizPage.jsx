@@ -5,10 +5,10 @@ import { useNavigate, useLocation } from 'react-router-dom';
 
 import React, { useState, useEffect } from 'react';
 
+import cat from '../../assets/outskirts-assets/testSS.png';
 
 
 import pageleft from '../../assets/dictionary-assets/DictPageLeft.png'
-import pageright from '../../assets/dictionary-assets/DictPageRight.png'
 
 const afterQuizPage = () => {
 
@@ -26,9 +26,12 @@ const afterQuizPage = () => {
     };
 
 
-    
     return(  
         <div className="after-quiz-page">
+
+            <div className = "Sprite"> {<img className= "catSS" src= {cat} ></img>} 
+            </div>
+
             <button type="button" id="goToMapButton" onClick={goToMap}>Go to Map</button>
             <div className="page-content">
                 <div className="score-header">
