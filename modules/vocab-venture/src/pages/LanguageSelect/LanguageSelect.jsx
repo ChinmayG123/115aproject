@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react'; // Import useEffect and useS
 import { useNavigate } from 'react-router-dom';
 
 import { useLocation } from 'react-router-dom';
+import './LanguageSelect.css'; // Import your CSS file for styling
 
 
 const LanguageSelect = function() {
@@ -55,7 +56,10 @@ const LanguageSelect = function() {
     
     return( 
         <div className='wrapper'>          
-        <h1>Welcome, {username}!</h1>
+            <h1>Welcome,</h1>
+            <div className="username-container">
+                <h3>{username}</h3> 
+            </div>
           <form action ="">
           {/* <button type= "button" id= "submit-spanish" onClick = {goToMap}>Spanish</button>
           <button type= "button" id= "submit-french" onClick = {goToMap}>French</button> */}
