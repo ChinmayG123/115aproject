@@ -157,7 +157,47 @@ async function test_main() {
     }
 }
 
-test_main();
+async function test_userser_data_cache() {
+    const username = "TestApril232ndUser";
+    const language = "spanish";
+    const client = new GameClient();
+    try {
+        let word;
+        let result;
+        result = await client.getUserDictionary(username, language);
+        console.log('getUserDictionary()\'s result:', result);
+        result = await client.getUserDictionary(username, language);
+        console.log('getUserDictionary()\'s result:', result);
+        sleep(10000);
+        for (let i = 0; i < 10; i++) {
+            // result = await client.getUserDictionary(username, language);
+            word = await client.getQuestionWord(username, language, 0);
+            result = await client.getTranslation(username, language, word);
+            console.log(`getTranslation()\'s result: (${word} : ${result})`);
+            // console.log('getUserDictionary()\'s result:', result);
+            // sleep(1000);
+        }
+        for (let i = 0; i < 10; i++) {
+            word = await client.getQuestionWord(username, language, 0);
+            console.log('getQuestionWord()\'s result:', word);
+            result = await client.downProficiency(username, language, word);
+            result = await client.getUserDictionary(username, language);
+            console.log('getUserDictionary()\'s result:', result);
+        }
+        for (let i = 0; i < 10; i++) {
+            word = await client.getQuestionWord(username, language, difficulty = 0);
+            result = await client.getMultipleChoice(username, language, word);
+            console.log(`getMultipleChoice()\'s result: ${result[1]}`);
+            console.log(`The correct answer is ${result[1][result[0]]}`);
+        }
+
+    } catch (error) {
+        console.error('Error during test:', error);
+    }
+}
+
+// test_main();
+test_userser_data_cache();
 //testGetUserDictionary();
 
 // testlearnNewWord();

@@ -16,9 +16,9 @@
  */
 class GameClient {
     // Private fields
-    // #HOST = '149.28.199.169'; // dev server
+    // #HOST = '149.28.199.169';
     #HOST = '45.63.84.166'; // high-performance
-    // #HOST = '127.0.0.1'; // localhost
+    // #HOST = '127.0.0.1';
     #PORT = 8080;
     #DEBUG = false;
 
@@ -32,6 +32,7 @@ class GameClient {
         this.spanish = {};
         this.french = {};
         this.definition = {};
+        this.userData = {};
         // Call the async initialization method
         this.init();
     }
@@ -56,9 +57,9 @@ class GameClient {
             this.definition[word] = definition;
         }
         // console.log("All words: ", allWords);
-        // console.log("Spanish Dictionary: ", this.spanish);
-        // console.log("French Dictionary: ", this.french);
-        // console.log("Definitions: ", this.definition);
+        console.log("Spanish Dictionary: ", this.spanish);
+        console.log("French Dictionary: ", this.french);
+        console.log("Definitions: ", this.definition);
     }
 
     /**
@@ -150,6 +151,10 @@ class GameClient {
      * - null // If there is an error or data cannot be found.
      */
     async getUserDictionary(username, language) {
+        if (username in this.userData && this.userData[username] != null) {
+            console.log("User Dictionary found locally")
+            return this.userData[username];
+        }
 
         const options = {
             method: 'GET',
@@ -163,7 +168,9 @@ class GameClient {
         if (this.#DEBUG)
             this.printDebug(response);
         if (response.status === 200) {
-            return await response.json(); // Assuming JSON response
+            let result = await response.json();
+            this.userData[username] = result;
+            return result; // Assuming JSON response
         } else {
             return null; // Error or data not found
         }
@@ -235,7 +242,7 @@ class GameClient {
     }
 
     async downProficiency(username, language, word) {
-
+        this.userData[username] = null;
         const options = {
             method: 'PUT',
             headers: {
