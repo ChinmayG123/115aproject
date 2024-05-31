@@ -176,27 +176,10 @@ const handleNextPage = () => {
         const result = await getTheUserInformation(props.username, selectedLanguage);
         setUserDictionary(result);
         setCurrentPage(0); 
-
-
-
-      // // Fetch translations
-      // const translationsObject = {};
-      // for (const [key, _] of Object.entries(result)) {
-      //   // console.log("key", key);
-      //   const translation = await gameClient.getTranslation(props.username, selectedLanguage, key);
-      //   // console.log("translate", translation);
-      //   translationsObject[key] = translation;
-      // }
-      // setTranslations(translationsObject);
-
     }
     fetchData();
 }, [props.username, selectedLanguage]);
 
-
-
-// const [translatedWord, setTranslatedWord] = useState('');
-// const [translatedWord2, setTranslatedWord2] = useState('');
 
 
 const [definition, setDefinition] = useState(null);
@@ -235,21 +218,6 @@ useEffect(() => {
 
 
 
-//   const showTranslation1 = async (key) => {
-//     const translation = await gameClient.getTranslation(props.username, selectedLanguage, key);
-
-//     setTranslatedWord(translation[key]);
-    
-// };
-
-// const showTranslation2 = async (key) => {
-//   const translation = await gameClient.getTranslation(props.username, selectedLanguage, key);
-
-//   setTranslatedWord2(translation[key]);
-  
-// };
-
-
   return (props.trigger) ? (
     <div className= "popup">      
         <div className= "popup-inner"> 
@@ -257,9 +225,6 @@ useEffect(() => {
             <button className= "button" id= "dictionary-menu-btn" onClick={goToMenu}>
               <img src={menuimg} />
             </button>
-              {/* <button className= "button" id= "dictionary-close-btn" onClick={() => props.setTrigger(false)}>
-              <img src={closeimg} /></button> */}
-
             <button className="button" id="dictionary-close-btn" onClick={handleClose}>
               <img src={closeimg} />
             </button>
@@ -297,10 +262,6 @@ useEffect(() => {
                               <div className="word-info">
                                 <h1 style={{ marginTop: '270px', marginLeft: '50px' }} >English: {key}</h1>
                                 <h2 style={{ marginTop: '0px', marginLeft: '50px' }} > {selectedLanguage}: {translatedWord}</h2>
-                                {/* const translation = await gameClient.getTranslation(props.username, selectedLanguage, key);
-
-                                setTranslatedWord(translation[key]); */}
-                                {/* <h1 style={{marginLeft: '50px'}}>{selectedLanguage}: {translations[key] ? translations[key][key] : value}</h1> */}
               </div>
                             </div>
                         );
@@ -343,7 +304,6 @@ useEffect(() => {
                             <div className="word-info2">
                               <h1 style={{ marginTop: '270px', marginLeft: '40px' }} >English: {key}</h1>
                               <h2 style={{ marginTop: '0px', marginLeft: '40px' }} > {selectedLanguage}: {translatedWord2}</h2>
-                              {/* <h1 style={{marginLeft: '40px'}}>{selectedLanguage}: {translations[key] ? translations[key][key] : value}</h1> */}
                           </div>
                         </div>
                       );
