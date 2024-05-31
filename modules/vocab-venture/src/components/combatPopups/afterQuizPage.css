@@ -49,6 +49,15 @@
 }
 
 
-.Sprite {
-    left: -60%;
+.SpriteAFTER {
+    
+    z-index:3;
+    display:flex;
+    position:absolute;
+    width: 600px; /* Width of each frame */
+    height: 600px; /* Height of each frame */
+    transform:scale(.5);
+    bottom: -50px;
+    left: -400px;
+    overflow: hidden;
 }

@@ -29,7 +29,7 @@ const afterQuizPage = () => {
     return(  
         <div className="after-quiz-page">
 
-            <div className = "Sprite"> {<img className= "catSS" src= {cat} ></img>} 
+            <div className = "SpriteAFTER"> {<img className= "catSS" src= {cat} ></img>} 
             </div>
 
             <button type="button" id="goToMapButton" onClick={goToMap}>Go to Map</button>
