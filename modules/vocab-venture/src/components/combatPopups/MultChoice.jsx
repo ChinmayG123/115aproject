@@ -126,124 +126,107 @@ const getWordImageSrc = (wordImage) => {
 
 
 
+/**
+ * Multiple Choice Popup Component.
+ * 
+ * @param {object} props - The props for the component.
+ * @param {boolean} props.trigger - Boolean to trigger the popup.
+ * @param {string} props.wordToShow - The word to show in the popup.
+ * @param {array} props.wordGroup - Array of words to choose from.
+ * @param {function} props.setIsAnswerCorrect - Function to set if the answer is correct.
+ * @param {function} props.setIsQuestionDone - Function to set if the question is done.
+ * @param {function} props.setIsAttacking - Function to set if the user is attacking.
+ * @param {function} props.setIsSlimeHit - Function to set if the slime is hit.
+ * @param {function} props.setCorrectCounter - Function to increment the correct counter.
+ * @param {function} props.setIsSlimeAttacking - Function to set if the slime is attacking.
+ * @param {function} props.setIsHit - Function to set if the user is hit.
+ * @param {function} props.setWrongCounter - Function to increment the wrong counter.
+ */
 const MultChoice = (props) => {
-
-
-    const navigate = useNavigate(); 
-
+    const navigate = useNavigate();
     const location = useLocation();
     const username = location.state.username;
     const selectedlanguage = location.state.language;
 
-  
+    const [currentWordIndex, setCurrentWordIndex] = useState(0);
+    const [translatedWord, setTranslatedWord] = useState([]);
+    const [multChoiceOptions, setMultChoiceOptions] = useState([]);
+    const [userDictionary, setUserDictionary] = useState([]);
+    const [userChoice, setUserChoice] = useState("");
+    const [textInput, setTextInput] = useState(""); 
+    const [wordChoices, setWordChoices] = useState([]);
 
-
-  
+    /**
+     * Navigate to the map page.
+     */
     const goToMap = () => {
         navigate('/map', { state: { username, language: selectedlanguage } });
     };
 
-    const [currentWordIndex, setCurrentWordIndex] = useState(0);
-    const [translatedWord, setTranslatedWord] = useState([]);
-
-    const [multChoiceOptions, setMultChoiceOptions] = useState([]);
-    
-    // the user's dictionary 
-    const [userDictionary, setUserDictionary] = useState([]);
-
-
-
-    //if the user should see new words or practice old ones 
-    const [userChoice, setUserChoice] = useState("");
-
-    const [textInput, setTextInput] = useState(""); 
-    const [wordChoices, setWordChoices] = useState([]);
-
- 
-
-    
-    //let englishword = props.wordToShow;
-    //console.log("word from quiz ",englishword)
-    //let wordChoice = Object.keys(userDictionary).slice(currentWordIndex, currentWordIndex + 3); // assuming you have a translation available
+    /**
+     * Get the user's dictionary data.
+     * 
+     * @param {string} username - The username to get the dictionary for.
+     * @param {string} language - The language to get the dictionary for.
+     * @returns {Promise<Object>} The user's dictionary data.
+     */
     const getTheUserInformation = async (username, language) => {
         try {
             const result = await gameClient.getUserDictionary(username, language);
-            // return { status: 'success' };
             return result;
-            // return { status: 'success', result: result };
         } catch (error) {
             return { status: 'error', message: 'An error occurred during login. Please try again.' };
         }
-      }
+    };
+
+    // Fetch the user dictionary data when the component mounts
     useEffect(() => {
-      const fetchData = async () => {
-        const result = await getTheUserInformation(props.username, selectedlanguage);
-        setUserDictionary(Object.keys(result));
-      }
-      fetchData();
+        const fetchData = async () => {
+            const result = await getTheUserInformation(props.username, selectedlanguage);
+            setUserDictionary(Object.keys(result));
+        };
+        fetchData();
     }, [props.username, selectedlanguage]);
 
-
+    // Fetch the translations for the multiple-choice options
     useEffect(() => {
-
         const fetchTranslations = async () => {
-          let temp = [];
-           /*
-           //choosing 3 random false words 
-            for(let i = 0; i < 3; i++){
-                let word = userDictionary[Math.floor(Math.random() * userDictionary.length)];
-                const translation = await gameClient.getTranslation(username, selectedlanguage, word);
-                if (translation) {
-                    temp.push(translation[word]);
-                } else {
-                    temp.push(""); // Push an empty string if the translation is missing
-                }
-            }
-            
-            console.log(temp);*/
-            
+            let temp = [];
             for (const dictWord of props.wordGroup) {
                 const translation = await gameClient.getTranslation(username, selectedlanguage, dictWord);
-                // console.log("TRANSLATION", translation);
                 if (translation) {
                     temp.push(translation);
                 } else {
                     temp.push(""); // Push an empty string if the translation is missing
                 }
             }
-    
-            const shuffledchoices = Object.entries(temp).sort(() => Math.random() - 0.5 + Math.random() - 0.5).map(([key, value]) => value);
-            setWordChoices(shuffledchoices);
+            setWordChoices(temp);
         };
-    
         fetchTranslations();
-    },[props.wordGroup]);
+    }, [props.wordGroup, username, selectedlanguage]);
 
-    
+    /**
+     * Handle the click event for a word choice.
+     * 
+     * @param {string} clickedWord - The word that was clicked.
+     */
     const handleEnterClick = async (clickedWord) => {
-        //console.log(wordChoices);
         let correctWord = props.wordToShow;
-        const translation = await gameClient.getTranslation(username, selectedlanguage,correctWord);
+        const translation = await gameClient.getTranslation(username, selectedlanguage, correctWord);
         console.log("ENGLISH", correctWord);
         console.log("correct answer:", translation);
         console.log("CLICKED", clickedWord);
         if (clickedWord === translation) {
-            
-                props.setIsAnswerCorrect(true);
-                props.setIsQuestionDone(true);
-
-                // showNextWord();
+            props.setIsAnswerCorrect(true);
+            props.setIsQuestionDone(true);
+            setTimeout(() => {
+                props.setIsAttacking(true);
                 setTimeout(() => {
-                    props.setIsAttacking(true);
-                    setTimeout(() => {
-                        props.setIsSlimeHit(true);
-                    }, 600)
-                },1000)
-                gameClient.upProficiency(username, selectedlanguage, correctWord); // Call downProficiency()
-                props.setCorrectCounter((prevCount) => prevCount + 1); // Increment correct counter
-
-                
-            
+                    props.setIsSlimeHit(true);
+                }, 600);
+            }, 1000);
+            gameClient.upProficiency(username, selectedlanguage, correctWord);
+            props.setCorrectCounter((prevCount) => prevCount + 1);
         } else {
             props.setIsAnswerCorrect(false);
             props.setIsQuestionDone(true);
@@ -251,66 +234,44 @@ const MultChoice = (props) => {
                 props.setIsSlimeAttacking(true);
                 setTimeout(() => {
                     props.setIsHit(true);
-                }, 600) 
-            },1000)
-            
-
-
-                gameClient.downProficiency(username, selectedlanguage, correctWord); // Call downProficiency()
-
-                props.setWrongCounter((prevCount) => prevCount + 1); // Increment correct counter
-
-
+                }, 600);
+            }, 1000);
+            gameClient.downProficiency(username, selectedlanguage, correctWord);
+            props.setWrongCounter((prevCount) => prevCount + 1);
         }
         setTextInput("");
-
-
     };
 
-
-
-
-    return(props.trigger) ?  (
-
-        <div className = "mc-container">
-            <div className = "mcCONTENT" >            
-                          <div className="mc-word-container">
-                            <div className="mc-image-container">
-                                {getWordImageSrc(props.wordToShow) && (
-                                  <img
-                                    id="mc-image"
-                                    src={getWordImageSrc(props.wordToShow)}
-                                    alt={props.wordToShow}
-                                  />
-                                )}
-                              </div>
-                              <div className="mc-word-info">
-                                <h1 >English: {props.wordToShow}</h1>
-                                </div>
-                                               
-                                <div className="mc-buttons">
-                                    {wordChoices.map((spanishWord, index) => (
-                                        <button key= {index} className="mc-button" onClick={() => handleEnterClick(spanishWord)}>
-                                            {spanishWord}
-                                        </button>
-                                    ))}
-                                </div>
-                        </div>  
-                        
-              </div>
-
-                    
-            
-
+    return (props.trigger) ? (
+        <div className="mc-container">
+            <div className="mcCONTENT">
+                <div className="mc-word-container">
+                    <div className="mc-image-container">
+                        {getWordImageSrc(props.wordToShow) && (
+                            <img
+                                id="mc-image"
+                                src={getWordImageSrc(props.wordToShow)}
+                                alt={props.wordToShow}
+                            />
+                        )}
+                    </div>
+                    <div className="mc-word-info">
+                        <h1>English: {props.wordToShow}</h1>
+                    </div>
+                    <div className="mc-buttons">
+                        {wordChoices.map((choice, index) => (
+                            <button key={index} className="mc-button" onClick={() => handleEnterClick(choice)}>
+                                {choice}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            </div>
             <button type="button" id="goToMapButton" onClick={goToMap}> Go to Map</button>
-            
-                
         </div>
-    
-     ):"";
+    ) : "";
 };
 
 export default MultChoice;
-
 
 

@@ -56,7 +56,7 @@ const getWordImageSrc = (wordImage) => {
         case 'orange':
             return orange;
         case 'apple':
-          return apple;
+            return apple;
         case 'bread':
             return bread;
         case 'egg':
@@ -74,58 +74,31 @@ const getWordImageSrc = (wordImage) => {
         default:
             return null;
     }
-  };
-  
+};
 
 
 
 
+
+/**
+ * Multiple Choice Question Component.
+ * 
+ * @param {object} props - The props for the component.
+ * @param {string} props.questionType - The type of question.
+ */
 const MultChoiceOG = ({ questionType }) => {
-
-
-    const navigate = useNavigate(); 
-
+    const navigate = useNavigate();
     const location = useLocation();
     const username = location.state.username;
     const selectedlanguage = location.state.language;
-
     const difficulty = location.state.difficulty;
-  
-    console.log("DIFFICULTY", difficulty);
 
-  
-    const goToMap = () => {
-        navigate('/map', { state: { username, language: selectedlanguage } });
-    };
-
-    const [chosenWords, setChosenWords] = useState([]);
-    const [fetchedWords, setFetchedWords] = useState([]);
-
-    const [currentWordIndex, setCurrentWordIndex] = useState(0);
-    const [translatedWord, setTranslatedWord] = useState([]);
-
-    const [correctMessage, setCorrectMessage] = useState(""); // Define the state for displaying the message
-    const [profWord, setProfWord] = useState(null);
-
-    const [translations, setTranslations] = useState({});
-
-    
-    // the user's dictionary 
-    const [userDictionary, setUserDictionary] = useState([]);
-
-
-
-    //if the user should see new words or practice old ones 
-    const [userChoice, setUserChoice] = useState("");
-
-    const [textInput, setTextInput] = useState(""); 
-    const [wordChoices, setWordChoices] = useState([]);
-
-
-    const [isLastWordCorrect, setIsLastWordCorrect] = useState(true); // Track if the last entered word was correct
-
-
-
+    /**
+     * Get the initial timer based on the difficulty level.
+     * 
+     * @param {string} difficulty - The difficulty level.
+     * @returns {number} The initial timer value.
+     */
     const getInitialTimer = (difficulty) => {
         switch (difficulty) {
             case 'easy':
@@ -139,277 +112,128 @@ const MultChoiceOG = ({ questionType }) => {
         }
     };
 
+    /**
+     * Navigate to the map page.
+     */
+    const goToMap = () => {
+        navigate('/map', { state: { username, language: selectedlanguage } });
+    };
 
-    const initialTimer = getInitialTimer(difficulty); // Calculate initial timer value outside the useEffect hook
+    // State variables
+    const [currentWord, setCurrentWord] = useState(null);
+    const [correctMessage, setCorrectMessage] = useState("");
+    const [timer, setTimer] = useState(getInitialTimer(difficulty));
+    const [nextWord, getNextWord] = useState(false);
 
-    const [timer, setTimer] = useState(initialTimer); // Initial timer value in seconds
-
-
-    const getTheUserInformation = async (username, language) => {
+    /**
+     * Fetch a new question word and its multiple-choice options.
+     */
+    const fetchQuestion = async () => {
         try {
-            const result = await gameClient.getUserDictionary(username, language);
-            return result;
+            const questionWord = await gameClient.getQuestionWord(username, selectedlanguage, 1);
+            if (questionWord) {
+                const [correctIndex, choices] = await gameClient.getMultipleChoice(username, selectedlanguage, questionWord);
+                setCurrentWord({ english: questionWord, correctIndex, choices });
+            }
         } catch (error) {
-            return { status: 'error', message: 'An error occurred during login. Please try again.' };
-        }
-      }
-
-      useEffect(() => {
-        const fetchData = async () => {
-            try {
-                console.log(username, selectedlanguage);
-                const result = await getTheUserInformation(username, selectedlanguage);
-                if (!result) {
-                    console.error('User dictionary is empty or undefined.');
-                    return;
-                }
-                const shuffledEntries = Object.entries(result).sort(() => Math.random() - 0.5);
-                const shuffledDictionary = Object.fromEntries(shuffledEntries);
-    
-                setUserDictionary(shuffledDictionary);
-            } catch (error) {
-                console.error('An error occurred while fetching user information:', error);
-            }
-        };
-        fetchData();
-        
-    }, [username, selectedlanguage]);
-
-    useEffect(() => {
-        const fetchQuestionWord = async () => {
-          try {
-            const questionWord = await gameClient.getQuestionWord(username, selectedlanguage, 2);
-            setProfWord(questionWord);
-          } catch (error) {
             console.error('Error fetching question word:', error);
-          }
-        };
-    
-        fetchQuestionWord();
-      }, [correctMessage]);
-    
-    console.log("This is the proficiency word: ", profWord);
-
-    let englishword = Object.keys(userDictionary)[currentWordIndex]; //this is for randomized
-    //adapt to use the getQuestionWord function
-    //let englishword = profWord;
-    let wordChoice = Object.keys(userDictionary).slice(currentWordIndex, currentWordIndex + 4); // assuming you have a translation available
-    
-    useEffect(() => {
-        const fetchTranslations = async () => {
-            //englishword = profWord;
-           // let profWord = await gameClient.getQuestionWord(username, selectedlanguage, 3); // max weight impacting selection for testing purposes
-            //console.log("This is the proficiency word: ", profWord);
-            let generated = await gameClient.getMultipleChoice(username, selectedlanguage, englishword);
-            let translated = await gameClient.getTranslation(username, selectedlanguage, englishword);
-            console.log("This is the word to filter", translated);
-            console.log("This is the new translation", translated);
-            generated[1] = generated[1].filter(item => item !== translated);
-
-            let temp = [];
-            for (const dictWord of wordChoice) {
-                const translation = await gameClient.getTranslation(username, selectedlanguage, dictWord);
-                // console.log("TRANSLATION", translation);
-                if (translation) {
-                    temp.push(translation);
-                } else {
-                    temp.push(""); // Push an empty string if the translation is missing
-                }
-            }
-            setTranslatedWord(temp);
-            let newArray = [];
-            newArray.push(translated);
-            for (const genWord of generated[1])
-            {
-                    newArray.push(genWord); //populate the newarray with the filtered generated words
-            }
-            //let choices = temp.slice(0, 4); // Get the first 4 translations
-            let choices = newArray.slice(0, 4);
-             //filter out the correct word from the incorrect answer choices
-            console.log("getting GPT words", generated[1]);
-           
-            console.log("before", choices);
-            const shuffledchoices = Object.entries(choices).sort(() => Math.random() - 0.5 + Math.random() - 0.5).map(([key, value]) => value);
-            console.log("shuffled", shuffledchoices);
-            setWordChoices(shuffledchoices);
-
-        };
-    
-        fetchTranslations();
-    }, [currentWordIndex, selectedlanguage, userDictionary, username]);
-    
-
-
-    const showNextWord = () => {
-        if (currentWordIndex < Object.keys(userDictionary).length - 1) {
-            setCurrentWordIndex(currentWordIndex + 1);
-            //englishword = Object.keys(userDictionary)[currentWordIndex + 1];
-            englishword = profWord;
-            // console.log("englishword", englishword);
-            // setEnglishWord(Object.keys(userDictionary)[currentWordIndex + 1]);
         }
     };
 
-   const randomizeWords = (array) =>{
-        // Create a copy of the array
-        const shuffledArray = array.slice();
-        // Shuffle the copy
-        for (let i = shuffledArray.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
-        }
-        // Update state with the shuffled array
-        setChosenWords(shuffledArray);
-        // console.log("shuffled words: ", shuffledArray);
-    }
+    // Fetch question when component mounts or when nextWord changes
+    useEffect(() => {
+        fetchQuestion();
+    }, [nextWord, username, selectedlanguage]);
 
+    /**
+     * Handle the click event for a word choice.
+     * 
+     * @param {string} clickedWord - The word that was clicked.
+     */
     const handleEnterClick = async (clickedWord) => {
         const initialTimer = getInitialTimer(difficulty);
-        const translation = await gameClient.getTranslation(username, selectedlanguage, englishword);
-        console.log("ENGLISH", englishword);
-        console.log("This is the desired output:", translation);
-        console.log("CLICKED", clickedWord);
-        if (clickedWord === translation) {
-            // console.log("correct");
+        const { english, correctIndex, choices } = currentWord;
+        const correctWord = choices[correctIndex];
+
+        if (clickedWord === correctWord) {
             setCorrectMessage("Correct!");
+            getNextWord(!nextWord);
             setTimeout(() => {
-                showNextWord();
-                setCorrectMessage("");
-            }, 1500);
-            setIsLastWordCorrect(true);
-            // setTimer(10); // Reset the timer to 10 seconds
-            // await gameClient.upProficiency(username, selectedlanguage, englishword);
-
-
-
-            // Wait 2 seconds before moving to the next word
-            setTimeout(() => {
-                showNextWord();
-                gameClient.downProficiency(username, selectedlanguage, englishword); // Call downProficiency()
+                setCorrectMessage(""); // Reset message
                 setTimer(initialTimer); // Reset timer to initial value
-            }, 2000);
+            }, 1000);
         } else {
-            console.log("wrong");
-            setIsLastWordCorrect(false);
             setCorrectMessage("Try again!");
             setTimeout(() => {
-                setCorrectMessage("");
-            }, 1500);
-            await gameClient.upProficiency(username, selectedlanguage, englishword);
+                setCorrectMessage(""); // Reset message
+            }, 500);
+            await gameClient.upProficiency(username, selectedlanguage, english);
             setTimer(initialTimer);
         }
-        setTextInput("");
-
-        // navigate('/outskirts', { state: { username, language: selectedlanguage, questionType: "type" } });
-
     };
 
-
-
-
+    // Timer countdown logic
     useEffect(() => {
-        const initialTimer = getInitialTimer(difficulty);
-        console.log("NEW TIMERRR", initialTimer);
         const interval = setInterval(() => {
             setTimer((prevTimer) => {
                 if (prevTimer > 0 && !correctMessage) {
                     return prevTimer - 1;
-                } 
-                else if (prevTimer > 0 && correctMessage) {
+                } else if (prevTimer > 0 && correctMessage) {
                     return prevTimer;
                 } else {
-                    // Timer expired
                     clearInterval(interval); // Stop the interval
                     setTimeout(() => {
-                        showNextWord(); // Move to the next word after 2 seconds
-                        gameClient.downProficiency(username, selectedlanguage, englishword); // Call downProficiency()
-                        setTimer(initialTimer); // Reset timer to initial value
+                        gameClient.downProficiency(username, selectedlanguage, currentWord.english); // Call downProficiency()
+                        setTimer(getInitialTimer(difficulty)); // Reset timer to initial value
+                        setCorrectMessage("Time Out!");
                     }, 2000);
                     return 0; // Set timer to 0 to display "Time is up!"
                 }
             });
         }, 1000); // Update timer every second
-    
+
         // Clean up interval on component unmount
         return () => clearInterval(interval);
-    }, [currentWordIndex, showNextWord, username, selectedlanguage, englishword, correctMessage, difficulty, initialTimer]); // Re-run effect when necessary dependencies change
+    }, [currentWord, correctMessage, difficulty, username, selectedlanguage]);
 
-
-    
-
-
-    return(  
-
-        <div className = "container">
-            
-
-            <div className='timer'>
-                
-                {/* <h1>Timer: {timer}</h1> */}
-
+    return (
+        <div className="container">
+            <div className="timer">
                 <h1>Timer: {timer === 0 ? "Time is up!" : timer}</h1>
-
-
             </div>
-
-
-
-            <div className = "learned-words1" >
-              {userDictionary &&
-                    Object.entries(userDictionary).map(([key, value], index) => {
-                        // englishword = key;
-                        if (index === currentWordIndex)
-                        return (
-                    
-                          <div key={key} className="word-container">
-
-                            <div className="image-container">
-                                {getWordImageSrc(key) && (
-                                  <img
+            {currentWord && (
+                <div className="learned-words1">
+                    <div key={currentWord.english} className="word-container">
+                        <div className="image-container">
+                            {getWordImageSrc(currentWord.english) && (
+                                <img
                                     id="wordImage1"
-                                    src={getWordImageSrc(key)}
-                                    alt={key}
-                                  />
-                                )}
-                              </div>
-                              <div className="word-info">
-                                <h1 style={{ marginTop: '300px', marginLeft: '550px' }} >English: {key}</h1>
-                                </div>
+                                    src={getWordImageSrc(currentWord.english)}
+                                    alt={currentWord.english}
+                                />
+                            )}
                         </div>
-                        );
-                      return null;
-                    })}
-
-
-            
-
-                <div className="word-buttons">
-                    {wordChoices.map((spanishWord, index) => (
-                        <button key={`${spanishWord}-${index}`} className="word-button" onClick={() => handleEnterClick(spanishWord)}>
-                            {spanishWord}
-                        </button>
-                    ))}
+                        <div className="word-info">
+                            <h1 style={{ marginTop: '300px', marginLeft: '550px' }} >English: {currentWord.english}</h1>
+                        </div>
+                    </div>
+                    <div className="word-buttons">
+                        {currentWord.choices.map((choice, index) => (
+                            <button key={`${choice}-${index}`} className="word-button" onClick={() => handleEnterClick(choice)}>
+                                {choice}
+                            </button>
+                        ))}
+                    </div>
                 </div>
-
-                      
-
-              </div>
-
-                    
-              {correctMessage && (
-                            <div className="message-display">
-                                <p>{correctMessage}</p>
-                            </div>
-                        )}
-
-
+            )}
+            {correctMessage && (
+                <div className="message-display">
+                    <p>{correctMessage}</p>
+                </div>
+            )}
             <button type="button" id="goToMapButton" onClick={goToMap}> Go to Map</button>
-            
-                
         </div>
-    
-     );
+    );
 };
 
 export default MultChoiceOG;
-
