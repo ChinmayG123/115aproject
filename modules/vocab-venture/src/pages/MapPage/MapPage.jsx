@@ -66,8 +66,6 @@ const Map = function() {
 
 
 
-    console.log("language", selectedLanguage);
-    console.log("TOTALLL", numberOfLearnedWords);
 
 
     // Navigate to the Artist component with the username as a prop
