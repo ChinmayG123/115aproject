@@ -261,11 +261,13 @@ const School = function() {
 
             <div className="npc-content">
                 <img id="npcimg" src={npcimg} alt="npc image" />
+                <div className="npc-text">
 
                 {!isLastWordCorrect && <p className="incorrect-message">Incorrect word. Try again!</p>}
                 {congrats && isLastWordCorrect && <p className="congrats-message">Congrats! You're done!</p>}
                 {!startClicked && <p>{texts[currentTextIndex]}</p>}
                 {startClicked && isLastWordCorrect && !congrats && <p>A {chosenWords[currentWordIndex]} is a {definition}</p>}
+                </div>
                 <img id="npcTextbox" src={npcTextbox} alt="NPC Textbox" />
             </div>
             <img id="deskimg" src={overlayIMG}></img>            

@@ -234,7 +234,6 @@ useEffect(() => {
           <div className= "popup-page-left">
             
             <div className = "welcome-user">
-              <h2>Welcome, {props.username}!</h2>
               <p>Total Learned Words: {Object.keys(userDictionary).length}</p>
             </div>
 
@@ -260,8 +259,8 @@ useEffect(() => {
                               
 
                               <div className="word-info">
-                                <h1 style={{ marginTop: '270px', marginLeft: '50px' }} >English: {key}</h1>
-                                <h2 style={{ marginTop: '0px', marginLeft: '50px' }} > {selectedLanguage}: {translatedWord}</h2>
+                                <h1 >English: {key}</h1>
+                                <h2 > {selectedLanguage}: {translatedWord}</h2>
               </div>
                             </div>
                         );
@@ -302,8 +301,8 @@ useEffect(() => {
                                   )}
                                 </div>
                             <div className="word-info2">
-                              <h1 style={{ marginTop: '270px', marginLeft: '40px' }} >English: {key}</h1>
-                              <h2 style={{ marginTop: '0px', marginLeft: '40px' }} > {selectedLanguage}: {translatedWord2}</h2>
+                              <h1  >English: {key}</h1>
+                              <h2 > {selectedLanguage}: {translatedWord2}</h2>
                           </div>
                         </div>
                       );
