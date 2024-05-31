@@ -43,6 +43,8 @@
     
 }
 #npcTextbox{
+    z-index:1;
+
     position: absolute;
     
     width: 40vw;
@@ -57,9 +59,7 @@
     justify-content: flex-start;
 }
 
-#npcTextbox{
-    z-index:1;
-}
+
 /* .npc-content img {
     position: absolute;
     top: 0;
