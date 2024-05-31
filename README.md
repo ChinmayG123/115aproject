@@ -1,6 +1,6 @@
 # 115aproject
 Setup for Local Hosting:
-1) Navigate to vocab-venture directory in the repository
+1) Navigate to modules/vocab-venture directory in the repository
 2) Run "npn run dev" in order to open the site
 
 Setup for Accessing Website (not locally):
