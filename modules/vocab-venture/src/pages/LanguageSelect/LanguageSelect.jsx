@@ -64,8 +64,8 @@ const LanguageSelect = function() {
           {/* <button type= "button" id= "submit-spanish" onClick = {goToMap}>Spanish</button>
           <button type= "button" id= "submit-french" onClick = {goToMap}>French</button> */}
 
-            <button type="button" id="submit-spanish" onClick={() => { setSelectedLanguage('spanish'); goToMap('spanish'); }}>Spanish</button>
-            <button type="button" id="submit-french" onClick={() => { setSelectedLanguage('french'); goToMap('french'); }}>French</button>
+            <button type="button" id="submit-spanish" onClick={() => { gameClient.clearCache(username); setSelectedLanguage('spanish'); goToMap('spanish'); }}>Spanish</button>
+            <button type="button" id="submit-french" onClick={() => { gameClient.clearCache(username); setSelectedLanguage('french'); goToMap('french'); }}>French</button>
 
           <hr/>
                     <button type= "button" id = "submit-mainpage" onClick= {goToMainPage}>Back Home</button>
