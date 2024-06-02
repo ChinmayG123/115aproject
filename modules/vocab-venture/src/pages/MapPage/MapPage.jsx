@@ -121,7 +121,11 @@ const Map = function() {
 
     // const goToTailor =() => {navigate('/tailor');}
 
-    const goToMenu =() => {navigate('/home')};
+    const goToMenu =() => {
+        navigate('/language', { state: { username } });
+
+    };
+
 
 
     const [isSchoolHovered, setIsSchoolHovered] = useState(false);
