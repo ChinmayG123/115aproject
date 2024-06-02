@@ -57,6 +57,22 @@ const Quiz = () => {
 
     const [beforeCorrectCounter, setBeforeCorrectCounter] = useState(0);
     const [beforeWrongCounter, setBeforeWrongCounter] = useState(0);
+    const [currentWord, setCurrentWord] = useState(null);
+    const [nextWord, getNextWord] = useState(false);
+
+    const fetchQuestion = async () => {
+        try {
+            const questionWord = await gameClient.getQuestionWord(username, selectedlanguage, 1);
+            if (questionWord) {
+               // const [correctIndex, choices] = await gameClient.getMultipleChoice(username, selectedlanguage, questionWord);
+                setCurrentWord(questionWord);
+            }
+        } catch (error) {
+            console.error('Error fetching question word:', error);
+        }
+    };
+
+  
 
 
 
@@ -188,10 +204,38 @@ const Quiz = () => {
         //console.log("shuffled keys",shuffledDictKeys);
 
             console.log("current dictionary index: ", currentDictIndex);
-            setWordToShow(shuffledDictKeys[currentDictIndex]);
-            //console.log(shuffledDictKeys);
 
-            let next4Words = shuffledDictKeys.slice(currentDictIndex, currentDictIndex + 4)
+            //modify shuffledDictKeys[currentDictIndex] to the word from weighted randomizer 
+
+            // all about modifying these two parameters
+
+            //fetch the question word
+            fetchQuestion();
+
+
+
+            console.log("Fetched Word: ", currentWord);
+            console.log("Old current word: ", shuffledDictKeys[currentDictIndex] );
+            if(currentWord)
+            {
+                setWordToShow(currentWord);
+            }
+            //handle edge case where for some reason the weighted randomizer word
+            //is null for the first word in the game
+            else
+            {
+                setWordToShow(shuffledDictKeys[currentDictIndex]);
+            }
+            
+            //need to modify 4 word array to contain the new randomized word
+            console.log("Old 4 words: ",  shuffledDictKeys.slice(currentDictIndex, currentDictIndex + 4));
+            //initially populate it with 4 words, to avoid the currentWord null issue
+            let next4Words =  shuffledDictKeys.slice(currentDictIndex, currentDictIndex + 4);
+            if(currentWord)
+            {
+               next4Words = [currentWord, shuffledDictKeys[currentDictIndex],shuffledDictKeys[currentDictIndex+1], shuffledDictKeys[currentDictIndex+2]];
+               //the incorrect answer choices doesn't really matter, so I just populated it with random words for now
+            }
             console.log("INIT ", next4Words);
             let wordGroupLen = next4Words.length;
             console.log("WG LEN ",wordGroupLen);
