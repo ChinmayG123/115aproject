@@ -220,7 +220,7 @@ class GameClient {
      *                              -1 for any other error or unknown status code.
      */
     async learnNewWord(username, language, word) {
-
+        this.userData[username] = null;
         const options = {
             method: 'PUT',
             headers: {
@@ -264,6 +264,7 @@ class GameClient {
     }
 
     async upProficiency(username, language, word) {
+        this.userData[username] = null;
         const options = {
             method: 'PUT',
             headers: {
