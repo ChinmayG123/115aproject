@@ -51,7 +51,7 @@ const Quiz = () => {
     const [showReadyGo, setReadyGo] = useState(false);
     
 
-    const [backgroundStall, setBackgroundStall] = useState(false);
+    const [backgroundStall, setBackgroundStall] = useState(true);
 
     const [correctCounter, setCorrectCounter] = useState(0);
     const [wrongCounter, setWrongCounter] = useState(0);

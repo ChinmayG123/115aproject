@@ -469,7 +469,7 @@ const Outskirts = function() {
     };
 
     return(  
-        <body className="mapbackground">
+        <div className="mapbackground">
             <h1>Outskirts</h1>
 
             <div>
@@ -492,7 +492,7 @@ const Outskirts = function() {
             <button type="button" id="QuizButton" onClick={quiz}>
                 Quiz
             </button>
-        </body>
+        </div>
     );
 };
 

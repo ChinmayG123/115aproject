@@ -186,7 +186,7 @@ const Map = function() {
                     </button>
                     <p className = "descTxt">Learn about Colors</p>
                 </div>
-                <div class = "mapbtndiv" id = "outskirts">
+                <div className = "mapbtndiv" id = "outskirts">
                     <button type= "button" id= "outskirtsimg" onClick={goToOutskirts} onMouseEnter={handleOutskirtsMouseEnter} onMouseLeave={handleOutskirtsMouseLeave}>
                         <img src={isOutskirtsHovered ? outskirtsHLImage : outskirtsImage} />
                     </button>
