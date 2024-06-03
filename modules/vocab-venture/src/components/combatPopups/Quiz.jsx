@@ -83,20 +83,17 @@ const Quiz = () => {
     const username = location.state.username;
     const selectedlanguage = location.state.language;
 
-    console.log("COUNTING", correctCounter, wrongCounter);
     
     useEffect(() => {
 
 
         setBeforeCorrectCounter(correctCounter);
         setBeforeWrongCounter(wrongCounter);
-        console.log("BEFORE COUNTING", beforeCorrectCounter, beforeWrongCounter);
 
 
     })
 
     const goToAfterPage = () => {
-        console.log("quizzzzzzzzzz", beforeCorrectCounter, beforeWrongCounter);
         navigate('/afterquizpage', { state: { username, selectedlanguage, beforeCorrectCounter, beforeWrongCounter } });
 
     };
@@ -154,11 +151,11 @@ const Quiz = () => {
 
 
                 // Shuffle the entries (key-value pairs) in the dictionary
-                // const shuffledEntries = Object.entries(result).sort(() => Math.random() - 0.5);
-                // const shuffledDictionary = Object.fromEntries(shuffledEntries);
+                const shuffledEntries = Object.entries(result).sort(() => Math.random() - 0.5);
+                const shuffledDictionary = Object.fromEntries(shuffledEntries);
 
-                // console.log("shuffledDictionary", shuffledDictionary);
-                setUserDictionary(result); //set user dictionary (includes proficiencies)
+                console.log("shuffledDictionary", shuffledDictionary);
+                setUserDictionary(shuffledDictionary); //set user dictionary (includes proficiencies)
                 
             } catch (error) {
                 console.error('An error occurred while fetching user information:', error);
@@ -202,43 +199,16 @@ const Quiz = () => {
         setReadyGo(true);
         getNextQuestion();
     }
+    
        
     const sendWords = (numWords) =>{
         //console.log("shuffled keys",shuffledDictKeys);
 
             console.log("current dictionary index: ", currentDictIndex);
+            setWordToShow(shuffledDictKeys[currentDictIndex]);
+            //console.log(shuffledDictKeys);
 
-            //modify shuffledDictKeys[currentDictIndex] to the word from weighted randomizer 
-
-            // all about modifying these two parameters
-
-            //fetch the question word
-            fetchQuestion();
-
-
-
-            console.log("Fetched Word: ", currentWord);
-            console.log("Old current word: ", shuffledDictKeys[currentDictIndex] );
-            if(currentWord)
-            {
-                setWordToShow(currentWord);
-            }
-            //handle edge case where for some reason the weighted randomizer word
-            //is null for the first word in the game
-            else
-            {
-                setWordToShow(shuffledDictKeys[currentDictIndex]);
-            }
-            
-            //need to modify 4 word array to contain the new randomized word
-            console.log("Old 4 words: ",  shuffledDictKeys.slice(currentDictIndex, currentDictIndex + 4));
-            //initially populate it with 4 words, to avoid the currentWord null issue
-            let next4Words =  shuffledDictKeys.slice(currentDictIndex, currentDictIndex + 4);
-            if(currentWord)
-            {
-               next4Words = [currentWord, shuffledDictKeys[currentDictIndex],shuffledDictKeys[currentDictIndex+1], shuffledDictKeys[currentDictIndex+2]];
-               //the incorrect answer choices doesn't really matter, so I just populated it with random words for now
-            }
+            let next4Words = shuffledDictKeys.slice(currentDictIndex, currentDictIndex + 4)
             console.log("INIT ", next4Words);
             let wordGroupLen = next4Words.length;
             console.log("WG LEN ",wordGroupLen);
@@ -372,31 +342,43 @@ const Quiz = () => {
   
 
     useEffect(() => {
-        if (isStartClicked) {
-            const interval = setInterval(() => {
-                setTimer(prevTimer => {
-                    if (prevTimer <= 1) {
-                        clearInterval(interval);
-                        setIsQuestionDone(true);
+        if (showReadyGo) {
+            const timeout = setTimeout(() => {
+                const interval = setInterval(() => {
+                    setTimer(prevTimer => {
+                        if (prevTimer <= 1) {
+                            clearInterval(interval);
+                            setIsQuestionDone(true);
+                            return 0;
+                        }
+                        return prevTimer - 1;
+                    });
+                }, 1000);
+                return () => clearInterval(interval);
+            }, 2700); // Delay before starting the interval
+            
+            // const interval = setInterval(() => {
+            //     setTimer(prevTimer => {
+            //         if (prevTimer <= 1) {
+            //             clearInterval(interval);
+            //             setIsQuestionDone(true);
 
                 
-                        return 0;
-                    }
-                    return prevTimer - 1;
-                });
-            }, 1000);
-            return () => clearInterval(interval);
+            //             return 0;
+            //         }
+            //         return prevTimer - 1;
+            //     });
+            // }, 1000);
+            // return () => clearInterval(interval);
         }
-    }, [isStartClicked]);
+    }, [showReadyGo]);
 
-    console.log("TIMERRRRRR", timer);
 
 
     useEffect(() => {
         if (timer == 0) {
             setBeforeCorrectCounter(correctCounter);
             setBeforeWrongCounter(wrongCounter);
-            console.log("TIMR COUNTING", beforeCorrectCounter, beforeWrongCounter);
             goToAfterPage();
 
         }
