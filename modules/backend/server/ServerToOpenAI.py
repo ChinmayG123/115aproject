@@ -27,7 +27,7 @@ class VocabAI:
         prompt_str = f"""Please create 4 {language} words close to {translated}. 
 The generated words should be resemble to {translated}, and should mean diferrent or mean nothing.
 Your words' length should be close, so that the examinee would know a hint. Ensure that you provide 4 words and no more or less. Do not put {translated} in the list. 
-Follow the format of <word><newline char><word><newline char><word><newline char><word>, all lower case. """
+Follow the format of <word><\\n><word><\\n><word><\\n><word>, all lower case. """
         try:
             completion = self.client.chat.completions.create(
                 model="gpt-3.5-turbo",

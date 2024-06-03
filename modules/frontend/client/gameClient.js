@@ -209,6 +209,12 @@ class GameClient {
             default: return -1;
         }
     }
+
+    clearCache(username) {
+        if (username in this.userData) {
+            this.userData[username] = null;
+        }
+    }
     /**
      * 
      * @param {*} username 
@@ -463,7 +469,9 @@ class GameClient {
         }
         const text_response = await response.text();
 
-        let choices = text_response.trim().split(/\s*\r?\n\s*/);
+        let choices = text_response.trim().split(/\s*\r?\n\s*/).map(word =>
+            word.replace(/[\d\s.]/g, '')
+        );
         let answer;
         const index = choices.indexOf(translate_word);
         if (index === -1) {

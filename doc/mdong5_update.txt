@@ -65,3 +65,8 @@ Using AES-128 CBC to encrypt OpenAI API Key.
 Migrated ChatGPT compatibility to backend. 
 Improved randomizer with difficulty parameter. 
 Working on AI generated conversations. 
+
+2024/05/31: 
+Added local caching mechanism to improve performance. 
+Refactored multiple choice mode. 
+Migrated to a better server for final demo. 
