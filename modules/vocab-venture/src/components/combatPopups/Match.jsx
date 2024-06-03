@@ -83,7 +83,8 @@ const Match = (props) => {
                     setTimeout(() => {
                         setCorrectMessage("");
                     },1000)
-                    gameClient.upProficiency(username, selectedlanguage, selectedEnglishWord); // Call downProficiency()
+                    gameClient.downProficiency(username, selectedlanguage, selectedEnglishWord); // Call downProficiency()
+
                         // props.setIsAnswerCorrect(true);
                     props.setCorrectCounter((prevCount) => prevCount + 1); // Increment correct counter
 
@@ -97,8 +98,8 @@ const Match = (props) => {
                             setCorrectMessage("");
                     },1000)
                     // props.setIsAnswerCorrect(false);
+                    gameClient.upProficiency(username, selectedlanguage, selectedEnglishWord); // Call downProficiency()
 
-                    gameClient.downProficiency(username, selectedlanguage, selectedEnglishWord); // Call downProficiency()
                     props.setWrongCounter((prevCount) => prevCount + 1); // Increment correct counter
 
                 }

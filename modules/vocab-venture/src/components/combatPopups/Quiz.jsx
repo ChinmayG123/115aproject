@@ -152,11 +152,11 @@ const Quiz = () => {
 
 
                 // Shuffle the entries (key-value pairs) in the dictionary
-                const shuffledEntries = Object.entries(result).sort(() => Math.random() - 0.5);
-                const shuffledDictionary = Object.fromEntries(shuffledEntries);
+                // const shuffledEntries = Object.entries(result).sort(() => Math.random() - 0.5);
+                // const shuffledDictionary = Object.fromEntries(shuffledEntries);
 
-                console.log("shuffledDictionary", shuffledDictionary);
-                setUserDictionary(shuffledDictionary); //set user dictionary (includes proficiencies)
+                // console.log("shuffledDictionary", shuffledDictionary);
+                setUserDictionary(result); //set user dictionary (includes proficiencies)
                 
             } catch (error) {
                 console.error('An error occurred while fetching user information:', error);

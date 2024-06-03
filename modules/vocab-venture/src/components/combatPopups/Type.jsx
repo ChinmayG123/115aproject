@@ -175,8 +175,8 @@ const Type = function(props) {
         if (textInput.toLowerCase() === translation.toLowerCase()) {
            
                 // showNextWord();
-                gameClient.upProficiency(username, selectedlanguage, key); // Call downProficiency()
-                
+                gameClient.downProficiency(username, selectedlanguage, key); // Call downProficiency()
+
                 setTimeout(() => {
                     props.setIsAttacking(true);
                     setTimeout(() => {
@@ -199,8 +199,8 @@ const Type = function(props) {
 
             props.setIsAnswerCorrect(false);
             props.setIsQuestionDone(true);
+            gameClient.upProficiency(username, selectedlanguage, key); // Call downProficiency()
 
-            gameClient.downProficiency(username, selectedlanguage, key); // Call downProficiency()
             props.setWrongCounter((prevCount) => prevCount + 1); // Increment correct counter
 
 

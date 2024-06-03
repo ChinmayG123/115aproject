@@ -225,7 +225,7 @@ const MultChoice = (props) => {
                     props.setIsSlimeHit(true);
                 }, 600);
             }, 1000);
-            gameClient.upProficiency(username, selectedlanguage, correctWord);
+            gameClient.downProficiency(username, selectedlanguage, correctWord);
             props.setCorrectCounter((prevCount) => prevCount + 1);
         } else {
             props.setIsAnswerCorrect(false);
@@ -236,7 +236,8 @@ const MultChoice = (props) => {
                     props.setIsHit(true);
                 }, 600);
             }, 1000);
-            gameClient.downProficiency(username, selectedlanguage, correctWord);
+            gameClient.upProficiency(username, selectedlanguage, correctWord);
+
             props.setWrongCounter((prevCount) => prevCount + 1);
         }
         setTextInput("");
