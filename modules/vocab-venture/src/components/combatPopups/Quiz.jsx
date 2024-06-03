@@ -357,19 +357,6 @@ const Quiz = () => {
                 return () => clearInterval(interval);
             }, 2700); // Delay before starting the interval
             
-            // const interval = setInterval(() => {
-            //     setTimer(prevTimer => {
-            //         if (prevTimer <= 1) {
-            //             clearInterval(interval);
-            //             setIsQuestionDone(true);
-
-                
-            //             return 0;
-            //         }
-            //         return prevTimer - 1;
-            //     });
-            // }, 1000);
-            // return () => clearInterval(interval);
         }
     }, [showReadyGo]);
 
