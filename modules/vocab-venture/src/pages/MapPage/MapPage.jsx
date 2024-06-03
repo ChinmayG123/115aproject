@@ -176,7 +176,7 @@ const Map = function() {
 
 
     return(  
-        <body className = "mapbackground">
+        <div className = "mapbackground">
 
             
             < form action ="">
@@ -234,7 +234,7 @@ const Map = function() {
               
             </DictionaryPopup>
             
-        </body>
+        </div>
 
      );
 };

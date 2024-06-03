@@ -21,7 +21,7 @@ import './Quiz.css';
 import TypePopup from '../combatPopups/Type';
 import MCPopup from '../combatPopups/MultChoice';
 import MatchPopup from '../combatPopups/Match';
-
+import ReadyGoPopup from '../combatPopups/ReadyGoDisplay';
 
 // import { useLocation } from 'react-router-dom';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -48,6 +48,8 @@ const Quiz = () => {
     const [qType, setQType] = useState(0); //0 is mult choice, 1 type, 2 match
     const [wordGroup, setWordGroup] = useState([]); //store 4 words to pass to mult choice and matching
     const [correctMessage, setCorrectMessage] = useState("");
+    const [showReadyGo, setReadyGo] = useState(false);
+    
 
     const [backgroundStall, setBackgroundStall] = useState(false);
 
@@ -74,7 +76,7 @@ const Quiz = () => {
 
   
 
-
+ 
 
     const navigate = useNavigate(); 
     const location = useLocation();
@@ -197,6 +199,7 @@ const Quiz = () => {
 
     const handleStartClick = () =>{
         setIsStartClicked(true);
+        setReadyGo(true);
         getNextQuestion();
     }
        
@@ -411,6 +414,8 @@ const Quiz = () => {
     
     return(  
         <div className = "combatBackground">
+            <ReadyGoPopup trigger= {showReadyGo} setReadyGo = {setReadyGo}></ReadyGoPopup>
+
             {correctMessage && (
                 <div className="isCorrect-display">
                     <p>{correctMessage}</p>
@@ -453,7 +458,6 @@ const Quiz = () => {
                         START            
                 </button>
             </div>}
-            
             <TypePopup trigger = {typePopup} setTrigger={setTypePopup} username={username} selectedLanguage={selectedlanguage}
             setIsHit = {setIsHit} setIsAttacking = {setIsAttacking} setIsSlimeAttacking = {setIsSlimeAttacking} wordToShow = {wordToShow} setIsAnswerCorrect = {setIsAnswerCorrect} setIsQuestionDone = {setIsQuestionDone}
             setIsSlimeHit = {setIsSlimeHit} correctCounter = {correctCounter} setCorrectCounter = {setCorrectCounter} wrongCounter = {wrongCounter} setWrongCounter = {setWrongCounter} >

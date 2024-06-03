@@ -2,7 +2,24 @@
   z-index:3;
   position:absolute
 }
-
+.ready-go-display{
+  z-index:10;
+  position:absolute;
+  border:dashed;
+  border-color: rgb(228, 191, 171);
+  border-width: 6px;
+  color:rgb(102, 73, 91);
+  display:flex;
+  justify-content:center;
+  text-align: center;
+  align-content: center;
+  width: 20%;
+  padding: 3%;
+  left: 41%;
+  top: 20%;
+  font-size: x-large;
+  background-color: antiquewhite;
+}
 #goToMapButton{
   z-index:3;
 
@@ -72,8 +89,9 @@
     overflow: hidden;
     bottom: -30%;
     left:5%;
-
+  
   }
+
   .SpriteOpp{
     z-index:3;
     display:flex;

@@ -1,12 +1,8 @@
 // import { useNavigate } from 'react-router-dom/dist';
 // import { useNavigate } from 'react-router-dom';
 
-import npcimg from '../../assets/artist-assets/Artist.png';
-import learnBG from '../../assets/artist-assets/Contentbox.png';
-import npcTextbox from '../../assets/artist-assets/ArtistTextbox.png';
-import easel from '../../assets/artist-assets/Easel.png';
-import artistbg from '../../assets/artist-assets/ArtistBG.png';
 import './MultChoice.css';
+import './Quiz.css';
 
 
 
@@ -16,7 +12,6 @@ import { useNavigate, useLocation } from 'react-router-dom';
 
 import React, { useState, useEffect } from 'react';
 // import React, { useState } from 'react';
-
 
 import blue from '../../assets/dict-images/colors/blue.png';
 import black from '../../assets/dict-images/colors/black.png';
@@ -37,43 +32,94 @@ import milk from '../../assets/dict-images/food/Milk.png';
 import water from '../../assets/dict-images/food/Water.png';
 
 
+import shirt from '../../assets/dict-images/clothing/shirt.png';
+import hat from '../../assets/dict-images/clothing/hat.png';
+import skirt from '../../assets/dict-images/clothing/skirt.png';
+import jacket from '../../assets/dict-images/clothing/jacket.png';
+import socks from '../../assets/dict-images/clothing/socks.png';
+import shoes from '../../assets/dict-images/clothing/shoes.png';
+import gloves from '../../assets/dict-images/clothing/gloves.png';
+import pants from '../../assets/dict-images/clothing/pants.png';
+
+import desk from '../../assets/dict-images/school/desk.png'
+import paper from '../../assets/dict-images/school/paper.png'
+import pencil from '../../assets/dict-images/school/pencil.png'
+import pen from '../../assets/dict-images/school/pen.png'
+import student from '../../assets/dict-images/school/student.png'
+import teacher from '../../assets/dict-images/school/teacher.png'
+import classroom from '../../assets/dict-images/school/classroom.png'
+import book from '../../assets/dict-images/school/book.png'
+
+
 const getWordImageSrc = (wordImage) => {
-    switch (wordImage) {
-        case 'black':
-            return black;
-        case 'blue':
-            return blue;
-        case 'brown':
-            return brown;
-        case 'red':
-            return red;
-        case 'yellow':
-            return yellow;
-        case 'green':
-            return green;
-        case 'white':
-            return white;
-        case 'orange':
-            return orange;
-        case 'apple':
-            return apple;
-        case 'bread':
-            return bread;
-        case 'egg':
-            return egg;
-        case 'fish':
-            return fish;
-        case 'juice':
-            return juice;
-        case 'meat':
-            return meat;
-        case 'milk':
-            return milk;
-        case 'water':
-            return water;
-        default:
-            return null;
-    }
+  switch (wordImage) {
+      case 'black':
+          return black;
+      case 'blue':
+          return blue;
+      case 'brown':
+          return brown;
+      case 'red':
+          return red;
+      case 'yellow':
+          return yellow;
+      case 'green':
+          return green;
+      case 'white':
+          return white;
+      case 'orange':
+          return orange;
+      case 'apple':
+        return apple;
+      case 'bread':
+          return bread;
+      case 'egg':
+          return egg;
+      case 'fish':
+          return fish;
+      case 'juice':
+          return juice;
+      case 'meat':
+          return meat;
+      case 'milk':
+          return milk;
+      case 'water':
+          return water;
+      case 'shirt':
+            return shirt;
+      case 'pants':
+            return pants;
+      case 'socks':
+            return socks;
+      case 'jacket':
+            return jacket;
+      case 'shoes':
+            return shoes;
+      case 'hat':
+            return hat;
+      case 'gloves':
+            return gloves;
+      case 'skirt':
+            return skirt;
+      case 'desk':
+        return desk;
+      case 'pencil':
+        return pencil;
+      case 'pen':
+        return pen;
+      case 'classroom':
+        return classroom;
+      case 'teacher':
+        return teacher;
+      case 'student':
+        return student;
+      case 'paper':
+        return paper;
+      case 'book':
+        return book;
+      default:
+          return null;
+  }
 };
 
 
@@ -197,42 +243,46 @@ const MultChoiceOG = ({ questionType }) => {
     }, [currentWord, correctMessage, difficulty, username, selectedlanguage]);
 
     return (
-        <div className="container">
-            <div className="timer">
+            <div className="mc-container">
+                <div className="timer">
                 <h1>Timer: {timer === 0 ? "Time is up!" : timer}</h1>
             </div>
-            {currentWord && (
-                <div className="learned-words1">
-                    <div key={currentWord.english} className="word-container">
-                        <div className="image-container">
-                            {getWordImageSrc(currentWord.english) && (
-                                <img
-                                    id="wordImage1"
-                                    src={getWordImageSrc(currentWord.english)}
-                                    alt={currentWord.english}
-                                />
-                            )}
-                        </div>
-                        <div className="word-info">
-                            <h1 style={{ marginTop: '300px', marginLeft: '550px' }} >English: {currentWord.english}</h1>
+                
+                {currentWord && (
+                    <div className="mcCONTENT">
+                        <div key={currentWord.english} className="mc-word-container">
+                            <div className="mc-image-container">
+                                {getWordImageSrc(currentWord.english) && (
+                                    <img
+                                        id="mc-image"
+                                        src={getWordImageSrc(currentWord.english)}
+                                        alt={currentWord.english}
+                                    />
+                                )}
+                            </div>
+                            <div className="mc-word-info">
+                                <h1 >English: {currentWord.english}</h1>
+                            </div>
+                            <div className="mc-buttons">
+                                {currentWord.choices.map((choice, index) => (
+                                    <button key={`${choice}-${index}`} className="mc-button" onClick={() => handleEnterClick(choice)}>
+                                        {choice}
+                                    </button>
+                                ))}
+                            
+                            </div>
                         </div>
                     </div>
-                    <div className="word-buttons">
-                        {currentWord.choices.map((choice, index) => (
-                            <button key={`${choice}-${index}`} className="word-button" onClick={() => handleEnterClick(choice)}>
-                                {choice}
-                            </button>
-                        ))}
-                    </div>
-                </div>
-            )}
-            {correctMessage && (
+
+                )}
+                {correctMessage && (
                 <div className="message-display">
                     <p>{correctMessage}</p>
                 </div>
-            )}
-            <button type="button" id="goToMapButton" onClick={goToMap}> Go to Map</button>
-        </div>
+                )}
+              
+                <button type="button" id="goToMapButton" onClick={goToMap}> Go to Map</button>
+            </div>
     );
 };
 
