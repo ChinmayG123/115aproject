@@ -11,6 +11,15 @@
     font-size: 16px;
 }
 
+
+  .quiz-button-container {
+    position: absolute;
+    bottom: 15px; /* Adjust this value to move the container up or down */
+    right: -9px; /* Adjust this value to move the container left or right */
+    padding: 10px 20px;
+    font-size: 16px;
+
+  }
 .page-content {
     position: relative;
     display: inline-block;

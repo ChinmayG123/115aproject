@@ -26,16 +26,21 @@ const afterQuizPage = () => {
     };
 
 
+    const goToQuiz = () => {
+        navigate('/quiz', { state: { username, language: selectedlanguage } });
+    };
+
+
     return(  
         <div className="after-quiz-page">
 
             <div className = "SpriteAFTER"> {<img className= "catSS" src= {cat} ></img>} 
             </div>
-
+            
             <button type="button" id="goToMapButton" onClick={goToMap}>Go to Map</button>
             <div className="page-content">
                 <div className="score-header">
-                    <h1>Your Report:</h1>
+                    <h1>Your Score Report:</h1>
                 </div>
                 
                 <img src={pageleft} alt="Page Left" className="page-image" />
@@ -45,6 +50,11 @@ const afterQuizPage = () => {
                     <h2>Number of Questions Wrong: {wrongCounter}</h2>
                 </div>
             </div>
+            <div className="quiz-button-container">
+                <button type="button" id="goToQuiz" onClick={goToQuiz}>Play Again</button>
+            </div>
+
+
         </div>
     
      );
