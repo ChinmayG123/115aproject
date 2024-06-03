@@ -470,8 +470,24 @@ const Outskirts = function() {
 
     return(  
         <body className="mapbackground">
+            <h1>Outskirts</h1>
+
+            <div>
+                <h1>Select Difficulty:</h1>
+                <select value={difficulty} onChange={(e) => setDifficulty(e.target.value)}>
+                    <option value="easy">Easy</option>
+                    <option value="medium">Medium</option>
+                    <option value="hard">Hard</option>
+                </select>
+            </div>
+            <button type="button" id="goToTypeButton" onClick={goToType}>
+                Go to Type
+            </button>
             <button type="button" id="MultipleChoiceButton" onClick={multipleChoice}>
                 MultipleChoice
+            </button>
+            <button type="button" id="MatchButton" onClick={match}>
+                Match
             </button>
             <button type="button" id="QuizButton" onClick={quiz}>
                 Quiz
