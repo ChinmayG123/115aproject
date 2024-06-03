@@ -92,21 +92,21 @@ const getWordImageSrc = (wordImage) => {
       case 'skirt':
             return skirt;
       case 'desk':
-        return desk;
+            return desk;
       case 'pencil':
-        return pencil;
+            return pencil;
       case 'pen':
-        return pen;
+            return pen;
       case 'classroom':
-        return classroom;
+            return classroom;
       case 'teacher':
-        return teacher;
+            return teacher;
       case 'student':
-        return student;
+            return student;
       case 'paper':
-        return paper;
+            return paper;
       case 'book':
-        return book;
+            return book;
       default:
           return null;
   }

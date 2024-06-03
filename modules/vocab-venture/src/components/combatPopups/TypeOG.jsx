@@ -1,13 +1,5 @@
-// import { useNavigate } from 'react-router-dom/dist';
-// import { useNavigate } from 'react-router-dom';
 
-import npcimg from '../../assets/artist-assets/Artist.png';
-import learnBG from '../../assets/artist-assets/Contentbox.png';
-import npcTextbox from '../../assets/artist-assets/ArtistTextbox.png';
-import easel from '../../assets/artist-assets/Easel.png';
-import artistbg from '../../assets/artist-assets/ArtistBG.png';
 import './Type.css';
-
 import blue from '../../assets/dict-images/colors/blue.png';
 import black from '../../assets/dict-images/colors/black.png';
 import brown from '../../assets/dict-images/colors/brown.png';
@@ -26,6 +18,23 @@ import meat from '../../assets/dict-images/food/Meat.png';
 import milk from '../../assets/dict-images/food/Milk.png';
 import water from '../../assets/dict-images/food/Water.png';
 
+import shirt from '../../assets/dict-images/clothing/shirt.png';
+import hat from '../../assets/dict-images/clothing/hat.png';
+import skirt from '../../assets/dict-images/clothing/skirt.png';
+import jacket from '../../assets/dict-images/clothing/jacket.png';
+import socks from '../../assets/dict-images/clothing/socks.png';
+import shoes from '../../assets/dict-images/clothing/shoes.png';
+import gloves from '../../assets/dict-images/clothing/gloves.png';
+import pants from '../../assets/dict-images/clothing/pants.png';
+
+import desk from '../../assets/dict-images/school/desk.png'
+import paper from '../../assets/dict-images/school/paper.png'
+import pencil from '../../assets/dict-images/school/pencil.png'
+import pen from '../../assets/dict-images/school/pen.png'
+import student from '../../assets/dict-images/school/student.png'
+import teacher from '../../assets/dict-images/school/teacher.png'
+import classroom from '../../assets/dict-images/school/classroom.png'
+import book from '../../assets/dict-images/school/book.png'
 
 
 const getWordImageSrc = (wordImage) => {
@@ -62,12 +71,42 @@ const getWordImageSrc = (wordImage) => {
           return milk;
       case 'water':
           return water;
+      case 'shirt':
+            return shirt;
+      case 'pants':
+            return pants;
+      case 'socks':
+            return socks;
+      case 'jacket':
+            return jacket;
+      case 'shoes':
+            return shoes;
+      case 'hat':
+            return hat;
+      case 'gloves':
+            return gloves;
+      case 'skirt':
+            return skirt;
+      case 'desk':
+            return desk;
+      case 'pencil':
+            return pencil;
+      case 'pen':
+            return pen;
+      case 'classroom':
+            return classroom;
+      case 'teacher':
+            return teacher;
+      case 'student':
+            return student;
+      case 'paper':
+            return paper;
+      case 'book':
+            return book;
       default:
           return null;
   }
 };
-
-
 // import { useLocation } from 'react-router-dom';
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -204,6 +243,11 @@ const TypeOG = function() {
         // console.log(newValue);
     };
 
+    const handleKeyPress = (e) =>{
+        if(e.key === 'Enter'){
+            handleEnterClick(props.wordToShow);
+        }
+    }
 
    const randomizeWords = (array) =>{
         // Create a copy of the array
@@ -309,9 +353,7 @@ const TypeOG = function() {
     
     return(  
 
-        <div className = "container">
-            
-
+        <div className = "type-container">
             <div className="textdiv">
                 <input
                     type="text"
@@ -319,21 +361,12 @@ const TypeOG = function() {
                     placeholder="text"
                     value={textInput}
                     onChange={handleInputChange}
+                    onKeyPress={handleKeyPress}
+                    autoFocus
                 />
             </div>
-
-{/* 
-            <button type="button"  id="enterbutton" onClick={() => handleEnterClick(englishword)}>
-                Enter
-            </button> */}
-
             <div className='timer'>
-                
-                {/* <h1>Timer: {timer}</h1> */}
-
                 <h1>Timer: {timer === 0 ? "Time is up!" : timer}</h1>
-
-
             </div>
 
                 
@@ -344,28 +377,28 @@ const TypeOG = function() {
             )}
 
 
-            <div className = "learned-words1" >
+            <div className = "typeCONTENT" >
               {userDictionary &&
                     Object.entries(userDictionary).map(([key, value], index) => {
                         // englishword = key;
                         if (index === currentWordIndex)
                         return (
                           
-                          <div key={key} className="word-container">
+                          <div key={key} className="type-word-container">
                             
                             
-                              <div className="image-container">
+                              <div className="type-image-container">
                                 {getWordImageSrc(key) && (
                                   <img
-                                    id="wordImage1"
+                                    id="type-image"
                                     src={getWordImageSrc(key)}
                                     alt={key}
                                   />
                                 )}
                               </div>
 
-                              <div className="word-info">
-                                <h1 style={{ marginTop: '250px', marginLeft: '200px' }} >English: {key}</h1>
+                              <div className="type-word-info">
+                                <h1 >English: {key}</h1>
                                 </div>
 
                             {/* <button type="button" style={{ position: 'fixed'}} id="enterbutton" onClick={() => handleEnterClick(key)}>
