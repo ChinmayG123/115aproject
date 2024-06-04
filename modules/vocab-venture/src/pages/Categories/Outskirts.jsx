@@ -472,6 +472,7 @@ const Outskirts = function() {
     return(  
         <div className="combatbackground">
             <h1>Outskirts</h1>
+            <p>select a game-mode below to play</p>
             <div className= "outskirts-buttons">
                 <button type="button" id="goToType" onClick={goToType}>
                     Type
@@ -483,7 +484,7 @@ const Outskirts = function() {
                     Match
                 </button>
                 <button type="button" id="goToQuiz" onClick={quiz}>
-                    Quiz
+                    All Modes
                 </button>
             </div>
         </div>
