@@ -30,135 +30,76 @@ import React, { useState, useEffect } from 'react';
 
 
 const Quiz = () => {
-    //const [timer, setTimer] = useState(10000000); // Initial timer value in seconds
+    //overlays 
     const [typePopup, setTypePopup] = useState(false);
     const [mcPopup, setMcPopup] = useState(false);
     const [matchPopup, setMatchPopup] = useState(false);
+    const [showReadyGo, setReadyGo] = useState(false);
+    const [correctMessage, setCorrectMessage] = useState("");
+    const [backgroundStall, setBackgroundStall] = useState(false);
+
+
+
+    //animation states 
     const [isHit, setIsHit] = useState(false);
     const [isAttacking, setIsAttacking] = useState(false);
     const [isSlimeHit, setIsSlimeHit] = useState(false);
     const [isSlimeAttacking, setIsSlimeAttacking] = useState(false);
-    const [userDictionary, setUserDictionary] = useState([]);
-    const [wordToShow, setWordToShow] = useState('');
-    const [isAnswerCorrect, setIsAnswerCorrect] = useState(false); 
-    const [isStartClicked, setIsStartClicked] = useState(false);
+
+    //question variables
+    const [qType, setQType] = useState(-1); //0 is mult choice, 1 type, 2 match
+    const [isStartClicked, setIsStartClicked] = useState(false); //start game trigger
     const [isQuestionDone, setIsQuestionDone] = useState(false); //if the time runs out or answers correctly/incorrectly this will be true
+    const [wordToShow, setWordToShow] = useState(''); //word to send to type
+    const [isAnswerCorrect, setIsAnswerCorrect] = useState(false); 
+    const [wordGroup, setWordGroup] = useState([]); //store 4 words to pass to mult choice
+    const [wordGroupMatch, setWordGroupMatch] = useState([]); //store 4 words to pass to match 
+
+    //userDictionary
+    const [userDictionary, setUserDictionary] = useState([]);
     const [currentDictIndex, setCurrentDictIndex] = useState(0);
     const [shuffledDictKeys, setShuffledDictKeys] = useState([]);
-    const [qType, setQType] = useState(0); //0 is mult choice, 1 type, 2 match
-    const [wordGroup, setWordGroup] = useState([]); //store 4 words to pass to mult choice and matching
-    const [wordGroupMatch, setWordGroupMatch] = useState([]); //
-    const [correctMessage, setCorrectMessage] = useState("");
-    const [showReadyGo, setReadyGo] = useState(false);
     
 
-    const [backgroundStall, setBackgroundStall] = useState(true);
-
+    //num questions right/wrong counters
     const [correctCounter, setCorrectCounter] = useState(0);
     const [wrongCounter, setWrongCounter] = useState(0);
-
-
     const [beforeCorrectCounter, setBeforeCorrectCounter] = useState(0);
     const [beforeWrongCounter, setBeforeWrongCounter] = useState(0);
-    const [currentWord, setCurrentWord] = useState(null);
-    const [nextWord, getNextWord] = useState(false);
 
-    const fetchQuestion = async () => {
-        try {
-            const questionWord = await gameClient.getQuestionWord(username, selectedlanguage, 2);
-            setWordToShow(questionWord);
-            if (questionWord) {
-                const [correctIndex, choices] = await gameClient.getMultipleChoice(username, selectedlanguage, questionWord);
-                setCurrentWord({ english: questionWord, correctIndex, choices 
-                });
-                setWordGroup(choices);
-            }
-        } catch (error) {
-            console.error('Error fetching question word:', error);
-        }
-    };
+    const [timer, setTimer] = useState(60); // Initial timer value in seconds
 
-    const fetchOneQuestion = async () => {
-        try {
-            const questionWord = await gameClient.getQuestionWord(username, selectedlanguage, 2);
-            setWordToShow(questionWord);
-        } catch (error) {
-            console.error('Error fetching question word:', error);
-        }
-    };
-    // Fetch question when component mounts or when nextWord changes
-    useEffect(() => {
-        if(qType == 0 && isQuestionDone == false){
-            fetchQuestion();
-        }
-        if(qType == 1 && isQuestionDone == false){
-            fetchOneQuestion()
-        }
-    }, [qType, isQuestionDone]);
-  
-
- 
 
     const navigate = useNavigate(); 
     const location = useLocation();
     const username = location.state.username;
     const selectedlanguage = location.state.language;
 
-    
-    useEffect(() => {
+    //handle game start
+    const handleStartClick = () =>{
+        setIsStartClicked(true);
+        setReadyGo(true);
+        getNextQuestion();
+    }
 
-
-        setBeforeCorrectCounter(correctCounter);
-        setBeforeWrongCounter(wrongCounter);
-
-
-    })
-
+    //after game end go to after quiz page
     const goToAfterPage = () => {
         navigate('/afterquizpage', { state: { username, selectedlanguage, beforeCorrectCounter, beforeWrongCounter } });
-
     };
 
-    
-
+    //go to map procedure 
     const goToMap = () => {
         navigate('/map', { state: { username, language: selectedlanguage } });
     };
 
-    const getTheUserInformation = async (username, language) => {
-        try {
-            const result = await gameClient.getUserDictionary(username, language);
-            return result;
-        } catch (error) {
-            return { status: 'error', message: 'An error occurred during login. Please try again.' };
-        }
-      }
+    //keep track of num questions got wrong and right 
+    useEffect(() => {
+        setBeforeCorrectCounter(correctCounter);
+        setBeforeWrongCounter(wrongCounter);
+    })
 
-      //run every time the user finished a question
-      useEffect(() => {
-        if(isAnswerCorrect == false && isQuestionDone ==true){
-            console.log("wrong answer");
-            getNextQuestion();
-            setCorrectMessage("Incorrect!");
-            setTimeout(()=>{
-                setCorrectMessage("");
-            },1000);
-
-        }
-        else if(isAnswerCorrect == true && isQuestionDone == true){
-            console.log("correct answer");
-            getNextQuestion();
-            setCorrectMessage("Correct!");
-            setTimeout(()=>{
-                setCorrectMessage("");
-            },1000);
-
-
-        }
-    
-      }, [isQuestionDone])
-
-      useEffect(() => {
+    //when user dictioanry is retrieved, shuffle for match
+    useEffect(() => {
         const fetchData = async () => {
             try {
                 console.log(username, selectedlanguage);
@@ -167,9 +108,7 @@ const Quiz = () => {
                     console.error('User dictionary is empty or undefined.');
                     return;
                 }
-
                 console.log("result", result);
-
 
                 // Shuffle the entries (key-value pairs) in the dictionary
                 const shuffledEntries = Object.entries(result).sort(() => Math.random() - 0.5);
@@ -191,13 +130,76 @@ const Quiz = () => {
         setShuffledDictKeys(Object.keys(userDictionary));
     },[userDictionary]);
 
+    //use weighted randomizer to fetch 4 words for mult choice 
+    const fetchQuestion = async () => {
+        try {
+            const questionWord = await gameClient.getQuestionWord(username, selectedlanguage, 2);
+            setWordToShow(questionWord);
+            if (questionWord) {
+                const [correctIndex, choices] = await gameClient.getMultipleChoice(username, selectedlanguage, questionWord);
+                setWordGroup(choices);
+            }
+        } catch (error) {
+            console.error('Error fetching question word:', error);
+        }
+    };
+    //use weighted randomizer to fetch 1 word for typ
+    const fetchOneQuestion = async () => {
+        try {
+            const questionWord = await gameClient.getQuestionWord(username, selectedlanguage, 2);
+            setWordToShow(questionWord);
+        } catch (error) {
+            console.error('Error fetching question word:', error);
+        }
+    };
+
+    // Fetch question when question type changes and there is no question being shown 
     useEffect(() => {
-        console.log("______________________");
-        console.log(isQuestionDone);
-        console.log(wordGroup);
-        console.log(wordToShow);
-        console.log(backgroundStall);
-        if(isStartClicked == true && isQuestionDone == false && wordGroup != null && wordGroupMatch != null && backgroundStall == false){
+        if(qType == 0 && isQuestionDone == false){
+            fetchQuestion();
+        }
+        if(qType == 1 && isQuestionDone == false){
+            fetchOneQuestion();
+        }
+    }, [qType, isQuestionDone]);
+  
+
+
+    //get user dictionary 
+    const getTheUserInformation = async (username, language) => {
+        try {
+            const result = await gameClient.getUserDictionary(username, language);
+            return result;
+        } catch (error) {
+            return { status: 'error', message: 'An error occurred during login. Please try again.' };
+        }
+      }
+
+      //after a question has completed, get next question 
+      useEffect(() => {
+        if(isAnswerCorrect == false && isQuestionDone ==true){
+            console.log("wrong answer");
+            getNextQuestion();
+            setCorrectMessage("Incorrect!");
+            setTimeout(()=>{
+                setCorrectMessage("");
+            },1000);
+        }
+        else if(isAnswerCorrect == true && isQuestionDone == true){
+            console.log("correct answer");
+            getNextQuestion();
+            setCorrectMessage("Correct!");
+            setTimeout(()=>{
+                setCorrectMessage("");
+            },1000);
+        }
+      }, [isQuestionDone])
+
+      
+
+    //show popup based on qType if game has started, word/wordgroup is chosen and if there isnt a question already shown 
+    useEffect(() => {
+        if(isStartClicked == true && isQuestionDone == false && wordGroup != null && wordGroupMatch != null){
             if(qType == 0){
                 console.log("Word group passed to MC ", wordGroup);
                 setMcPopup(true);
@@ -219,159 +221,51 @@ const Quiz = () => {
         }
     },[wordToShow, isStartClicked, wordGroup, wordGroupMatch, backgroundStall]);
 
-
-    const handleStartClick = () =>{
-        setIsStartClicked(true);
-        setReadyGo(true);
-        getNextQuestion();
-    }
     
-       
+    
+    //get 4 words from user dictionary and set them to the word group for match ONLY   
     const sendWords = (numWords) =>{
-        //console.log("shuffled keys",shuffledDictKeys);
-            if(numWords == 3){ //if mult choice
-                
-            }
-            else if (numWords == 1){ //if type
-                console.log("current dictionary index: ", currentDictIndex);
-                setWordToShow(shuffledDictKeys[currentDictIndex]);
-            }
             if(numWords == 4){ //if matching
+                //get next 4 words
                 let next4Words = shuffledDictKeys.slice(currentDictIndex, currentDictIndex + 4)
-                console.log("INIT ", next4Words);
                 let wordGroupLen = next4Words.length;
-                console.log("WG LEN ",wordGroupLen);
+                //if at end of array, take remaining from start
                 if (wordGroupLen < 4){
                     next4Words = next4Words.concat(shuffledDictKeys.slice(0, 4-wordGroupLen));
                 }
-                console.log("AFTER ", next4Words);
                 setWordGroupMatch(next4Words);
+                //increment index by 4 words, make sure array loops 
                 setCurrentDictIndex((currentDictIndex + numWords) % shuffledDictKeys.length);
-
             }
-            
             //console.log(shuffledDictKeys);
-
-            
-
-
     }
+
     
-    const playCorrectEffect= ()=>{
 
-            if(qType == 0){
-                return( 
-                    <div className= "coverUpBG">
-                        <div className="Effects" >
-                            <img className= "correctEffect1SS" src= {correctEffect1} ></img>
-                        </div>
-                    </div>
-                )
-            }
-            else if (qType == 1){
-                return( 
-                    <div className= "coverUpBG">
-                        <div className="Effects" >
-                            <img className= "correctEffect2SS" src= {correctEffect2} ></img>
-                        </div>
-                    </div>
-                )
-
-            }
-            else{
-                return( 
-                    <div className= "coverUpBG">
-                        <div className="Effects" >
-                            <img className= "correctEffect3SS" src= {correctEffect3} ></img>
-                        </div>
-                    </div>
-                )
-
-            }
-        
-    }
-    const playIncorrectEffect= ()=>{
-        return( 
-        <div className= "coverUpBG">
-            <div className="Effects" >
-                <img className="incorrectEffect1SS" src= {incorrectEffect1} ></img>
-            </div>
-        </div>)
-    }
-
-    const playSlimeIdleAnim = () =>{
-        return( <img className= "slimeSS" src= {slime} ></img>)
-    }
-    const playSlimeAttackAnim = () =>{
-
-        
-        
-        return(
-            <img onAnimationEnd= {handleSlimeEndAttackAnimation} className = "slimeAttackSS" src={slimeATTACK}></img>
-        )
-
-    }
-    const playSlimeHitAnim = () =>{
-            return(
-                <img onAnimationEnd= {handleSlimeEndHitAnimation} className = "slimeHitSS" src={slimeHIT}></img>
-         )
-
-        
-    }
-
-
-   
-    const playAttackAnim = () =>{
-        
-        return(
-            <img onAnimationEnd= {handleEndAttackAnimation} className = "catAttackSS" src={catATTACK}></img>
-        )
-    }
-    const playHitAnim = () =>{
-            return(
-                <img onAnimationEnd= {handleEndHitAnimation} className = "catHitSS" src={catHIT}></img>
-            )
-        
-    }
-    const handleSlimeEndHitAnimation = () =>{
-        setIsSlimeHit(false);
-    }
-    const handleSlimeEndAttackAnimation = () =>{
-        setIsSlimeAttacking(false);
-    }
-    const handleEndAttackAnimation = () =>{
-        setIsAttacking(false);
-       
-    }
-    const handleEndHitAnimation = () =>{
-        setIsHit(false);
-    }
-
+    //if background stall is true, deactivate after 3.1s 
     useEffect(() => {
-        if(backgroundStall){
+       if(backgroundStall){
             setTimeout(() => {
                 setBackgroundStall(false);
-            },3500)
+            },2800)
         }
-
     },[backgroundStall])
 
-    const playIdleAnim = () => {
-        return( <img className= "catSS" src= {cat} ></img>)
-    }
 
-    
+    //determining question type
     const getNextQuestion = () => {
-        setBackgroundStall(true);
-
-        let q = Math.floor(Math.random() * 2)
+        //get question type
+        let q = Math.floor(Math.random() * 3);
         setQType(q);
+        //begin stall bg
+        setBackgroundStall(true);
+        //indicate a question is in progress
         setIsQuestionDone(false);
         
         
         console.log("Question: ", q);
         if(q == 0){
-            sendWords(3); //num words to send, */
+            sendWords(3);
         }
         else if(q == 1){ //type
             sendWords(1);
@@ -379,13 +273,10 @@ const Quiz = () => {
         else{ //match
             sendWords(4);
         }
-        
     }
-
-    const [timer, setTimer] = useState(60); // Initial timer value in seconds
    
   
-
+    //if game start, show ready go countdown 
     useEffect(() => {
         if (showReadyGo) {
             const timeout = setTimeout(() => {
@@ -400,30 +291,112 @@ const Quiz = () => {
                     });
                 }, 1000);
                 return () => clearInterval(interval);
-            }, 2700); // Delay before starting the interval
+            }, 2800); // Delay before starting the interval
             
         }
     }, [showReadyGo]);
 
-
-
+    //if game end, go to after page 
     useEffect(() => {
         if (timer == 0) {
+            setBackgroundStall(true);
             setBeforeCorrectCounter(correctCounter);
             setBeforeWrongCounter(wrongCounter);
             goToAfterPage();
 
         }
-    });
+    },[timer]);
 
 
-    // const handleAnswer = (isCorrect) => {
-    //     if (isCorrect) {
-    //         setCorrectCounter(prev => prev + 1);
-    //     } else {
-    //         setWrongCounter(prev => prev + 1);
-    //     }
-    // };
+    //======= A N I M A T I O N S ===========
+
+
+    //show correct effect
+    const playCorrectEffect= ()=>{
+        if(qType == 0){
+            return( 
+                <div className= "coverUpBG">
+                    <div className="Effects" >
+                        <img className= "correctEffect1SS" src= {correctEffect1} ></img>
+                    </div>
+                </div>
+            )
+        }
+        else if (qType == 1){
+            return( 
+                <div className= "coverUpBG">
+                    <div className="Effects" >
+                        <img className= "correctEffect2SS" src= {correctEffect2} ></img>
+                    </div>
+                </div>
+            )
+        }
+        else{
+            return( 
+                <div className= "coverUpBG">
+                    <div className="Effects" >
+                        <img className= "correctEffect3SS" src= {correctEffect3} ></img>
+                    </div>
+                </div>
+            )
+        }
+    }
+
+    //show incorrect effect
+    const playIncorrectEffect= ()=>{
+        return( 
+        <div className= "coverUpBG">
+            <div className="Effects" >
+                <img className="incorrectEffect1SS" src= {incorrectEffect1} ></img>
+            </div>
+        </div>)
+    }
+
+    //cat idle 
+    const playIdleAnim = () => {
+        return( <img className= "catSS" src= {cat} ></img>)
+    }
+    //slime idle
+    const playSlimeIdleAnim = () =>{
+        return( <img className= "slimeSS" src= {slime} ></img>)
+    }
+
+    //attack and hit animations
+    const playSlimeAttackAnim = () =>{
+        return(
+            <img onAnimationEnd= {handleSlimeEndAttackAnimation} className = "slimeAttackSS" src={slimeATTACK}></img>
+        )
+    }
+    const playSlimeHitAnim = () =>{
+        return(
+            <img onAnimationEnd= {handleSlimeEndHitAnimation} className = "slimeHitSS" src={slimeHIT}></img>
+        )
+    }
+    const playAttackAnim = () =>{
+        return(
+            <img onAnimationEnd= {handleEndAttackAnimation} className = "catAttackSS" src={catATTACK}></img>
+        )
+    }
+    const playHitAnim = () =>{
+        return(
+            <img onAnimationEnd= {handleEndHitAnimation} className = "catHitSS" src={catHIT}></img>
+        )  
+    }
+
+    //end animations
+    const handleSlimeEndHitAnimation = () =>{
+        setIsSlimeHit(false);
+    }
+    const handleSlimeEndAttackAnimation = () =>{
+        setIsSlimeAttacking(false);
+    }
+    const handleEndAttackAnimation = () =>{
+        setIsAttacking(false);
+    
+    }
+    const handleEndHitAnimation = () =>{
+        setIsHit(false);
+    }
     
     
     return(  

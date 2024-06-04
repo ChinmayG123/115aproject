@@ -183,6 +183,7 @@ const Type = function(props) {
                         props.setIsSlimeHit(true);
                     }, 600)
                 },1000)
+                props.setTrigger(false);
                 props.setIsAnswerCorrect(true);
                 props.setIsQuestionDone(true);
                 props.setCorrectCounter((prevCount) => prevCount + 1); // Increment correct counter
@@ -197,8 +198,10 @@ const Type = function(props) {
                 }, 600) 
             },1000)
 
+            props.setTrigger(false);
             props.setIsAnswerCorrect(false);
             props.setIsQuestionDone(true);
+            
             gameClient.upProficiency(username, selectedlanguage, key); // Call downProficiency()
 
             props.setWrongCounter((prevCount) => prevCount + 1); // Increment correct counter

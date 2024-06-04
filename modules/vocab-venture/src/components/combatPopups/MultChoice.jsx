@@ -215,9 +215,11 @@ const MultChoice = (props) => {
                     props.setIsSlimeHit(true);
                 }, 600);
             }, 1000);
+            props.setTrigger(false);
             gameClient.downProficiency(username, selectedlanguage, correctWord);
             props.setCorrectCounter((prevCount) => prevCount + 1);
         } else {
+            props.setTrigger(false);
             props.setIsAnswerCorrect(false);
             props.setIsQuestionDone(true);
             setTimeout(() => {

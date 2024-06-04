@@ -1,6 +1,11 @@
 .timer{
   z-index:3;
-  position:absolute
+  position:absolute;
+  color:rgb(102, 73, 91);
+  border:dashed;
+  border-color: rgb(228, 191, 171);
+  padding: 5px;
+  background-color: rgba(250, 235, 215, 0.907);
 }
 .ready-go-display{
   z-index:10;

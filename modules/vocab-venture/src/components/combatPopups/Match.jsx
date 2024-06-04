@@ -8,7 +8,6 @@ const Match = (props) => {
     const username = location.state.username;
     const selectedlanguage = location.state.language;
 
-    const [userDictionary, setUserDictionary] = useState({});
     const [currentWords, setCurrentWords] = useState([]);
     const [currentTranslations, setCurrentTranslations] = useState([]);
     const [correctMessage, setCorrectMessage] = useState("");
@@ -51,6 +50,7 @@ const Match = (props) => {
                 if (clickedWord === translation) {
                     console.log("correct match");
                     if (currentWords.length === 1) { // if all words matched
+                        props.setTrigger(false); //hide match popup
                         props.setIsAnswerCorrect(true);
                         setTimeout(() => {
                             props.setIsAttacking(true);
@@ -75,7 +75,6 @@ const Match = (props) => {
                     props.setCorrectCounter((prevCount) => prevCount + 1);
                 } else {
                     console.log("Incorrect");
-
                     setCorrectMessage("Incorrect!");
                     setTimeout(() => {
                         setCorrectMessage("");
