@@ -451,19 +451,19 @@ const Outskirts = function() {
 
     const [questionType, setQuestionType] = useState('MultChoice'); // Default to 'MultChoice'
     const [difficulty, setDifficulty] = useState('easy'); // Default difficulty level
-
+    //allows the user to go to the type mode
     const goToType = () => {
         navigate('/typeOG', { state: { username, language: selectedlanguage, questionType, difficulty } });
     };
-
+    //allows the user to go to the multiple choice mode
     const multipleChoice = () => {
         navigate('/multiplechoiceOG', { state: { username, language: selectedlanguage, questionType, difficulty } });
     };
-
+    //allows the user to go to the match mode
     const match = () => {
         navigate('/match', { state: { username, language: selectedlanguage, questionType, difficulty } });
     };
-
+    //allows the user to go to the quiz mode
     const quiz = () => {
         navigate('/quiz', { state: { username, language: selectedlanguage, questionType } });
     };

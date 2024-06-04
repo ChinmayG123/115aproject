@@ -340,6 +340,21 @@ class GameClient {
         }
     }
 
+    /**
+     * Retrieves the translation of a word in the specified language.
+     * 
+     * This function first checks local dictionaries for the translation. If the translation
+     * is not found locally or if the local value is empty, it fetches the translation from 
+     * a remote data source.
+     * 
+     * @param {string} username - The username of the user requesting the translation.
+     * @param {string} language - The language into which the word should be translated.
+     *                             Supported languages are "spanish" and "french".
+     * @param {string} word - The word that needs to be translated.
+     * 
+     * @returns {Promise<string|null>} A promise that resolves to the translated word as a string,
+     *                                  or null if the translation cannot be found or an error occurs.
+     */
     async getTranslation(username, language, word) {
         if (language == "spanish") {
             if (word in this.spanish && this.spanish[word] !== null && this.spanish[word] !== undefined && this.spanish[word] !== '') {
@@ -372,7 +387,20 @@ class GameClient {
             return null; // Error or data not found
         }
     }
-
+    /**
+     * Fetches the definition of a specified word in the given language from a remote service.
+     * This function constructs a request to the remote data source with necessary headers
+     * and fetches the definition using an HTTP GET request.
+     *
+     * @param {string} username - The username of the user requesting the definition. This is used
+     *                            for authentication or user-specific customization if necessary.
+     * @param {string} language - The language context of the word. This parameter helps the server
+     *                            determine in which language the definition should be provided.
+     * @param {string} word - The word for which the definition is being requested.
+     *
+     * @returns {Promise<string|null>} A promise that resolves to the definition of the word as a string,
+     *                                 or null if the definition cannot be found or an error occurs during the fetch.
+     */
     async getDefinition(username, language, word) {
         const options = {
             method: 'GET',
@@ -469,9 +497,9 @@ class GameClient {
         }
         const text_response = await response.text();
 
-    let choices = text_response.trim().split(/\s*\r?\n\s*/).map(word =>
-        word.replace(/[\d\s.]/g, '')
-    );
+        let choices = text_response.trim().split(/\s*\r?\n\s*/).map(word =>
+            word.replace(/[\d\s.]/g, '')
+        );
         let answer;
         const index = choices.indexOf(translate_word);
         if (index === -1) {
