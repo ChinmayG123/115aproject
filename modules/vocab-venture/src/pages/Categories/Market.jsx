@@ -44,7 +44,7 @@ const Market = function() {
     const [textInput, setTextInput] = useState("");
     const [isLastWordCorrect, setIsLastWordCorrect] = useState(true);
     const [congrats, setCongrats] = useState(false);
-
+    //fetches the words from the backend
     useEffect(() => {
         const fetchWords = async () => {
             try {
@@ -64,7 +64,7 @@ const Market = function() {
         };
         fetchWords();
     }, []);
-
+    //retrieves the translation and definition of the words
     useEffect(() => {
         const fetchTranslationAndDefinition = async () => {
             if (currentWordIndex < chosenWords.length) {
@@ -82,7 +82,7 @@ const Market = function() {
 
         fetchTranslationAndDefinition();
     }, [currentWordIndex, fetchedWords, chosenWords, selectedlanguage, username]);
-
+    //records the seen and unseen words that the user has seen and not seen respectively
     useEffect(() => {
         const recordSeenAndUnseen = () => {
             let unseenTemp = [];
@@ -103,7 +103,7 @@ const Market = function() {
         }
         recordSeenAndUnseen();
     }, [fetchedWords, username, selectedlanguage]);
-
+    //allows the user to use enter key on the keyboard as a way of input
     const handleKeyPress = (e) => {
         if (e.key === 'Enter') {
             handleEnterClick();
@@ -116,7 +116,7 @@ const Market = function() {
     };
 
     const greeting = greetings[selectedlanguage] || 'Hello';
-
+    //prompts the user with greetings and choices on whether to learn or practice
     useEffect(() => {
         const decideTextTree = () => {
             let t = [];
@@ -139,19 +139,19 @@ const Market = function() {
         }
         decideTextTree();
     }, [unseenWords, seenWords, username, selectedlanguage]);
-
+    //shows the next text
     const showNextText = () => {
         if (currentTextIndex < texts.length - 1) {
             setCurrentTextIndex(currentTextIndex + 1);
         }
     };
-
+    //shows the next word
     const showNextWord = () => {
         if (currentWordIndex < chosenWords.length - 1) {
             setCurrentWordIndex(currentWordIndex + 1);
         }
     };
-
+    //allows the user to start by clicking the start key
     const handleStartClick = () => {
         if (currentTextIndex === texts.length - 1) {
             setPromptTrigger(false);
@@ -166,12 +166,12 @@ const Market = function() {
             showNextText();
         }
     };
-
+    //handle the change in input
     const handleInputChange = (event) => {
         const newValue = event.target.value;
         setTextInput(newValue);
     };
-
+    //create randomness by shuffling the array
     const randomizeWords = (array) => {
         const shuffledArray = array.slice();
         for (let i = shuffledArray.length - 1; i > 0; i--) {
@@ -187,7 +187,7 @@ const Market = function() {
             handleStartClick();
         }
     }, [chosenWords])
-
+    //allows to track user change
     useEffect(() => {
         console.log("user choice changed: ", userChoice);
         if (userChoice.localeCompare("practice") === 0) {
@@ -198,17 +198,19 @@ const Market = function() {
             randomizeWords(fetchedWords);
         }
     }, [userChoice, unseenWords, seenWords, fetchedWords]);
-
+    //changes to practice old words mode
     const changeToPractice = () => {
         setUserChoice("practice");
     }
+    //changes to mode with both practice and learn
     const changeToBoth = () => {
         setUserChoice("both");
     }
+    //changes to only learning new words mode
     const changeToLearn = () => {
         setUserChoice("learn");
     }
-
+    //handles when the user clicks the enter button 
     const handleEnterClick = async () => {
         if (textInput.toLowerCase() === translatedWord.toLowerCase()) {
             await gameClient.learnNewWord(username, selectedlanguage, chosenWords[currentWordIndex]);
@@ -225,7 +227,7 @@ const Market = function() {
         }
         setTextInput("");
     };
-
+    //handles getting the image with the associated english word learned
     const getFoodImageSrc = (foodWord) => {
         switch (foodWord) {
             case 'apple':
