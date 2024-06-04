@@ -279,7 +279,7 @@ const TypeOG = function() {
             setTranslatedWord(translation[key]);
         }
 
-        if (textInput.toLowerCase() === translation[key].toLowerCase()) {
+        if (textInput.toLowerCase() === translation.toLowerCase()) {
             // showNextWord();
             // setIsLastWordCorrect(true); // Set the state to true if the word is correct
             // console.log("page", currentWordIndex);
