@@ -190,19 +190,9 @@ const MultChoice = (props) => {
 
     // Fetch the translations for the multiple-choice options
     useEffect(() => {
-        const fetchTranslations = async () => {
-            let temp = [];
-            for (const dictWord of props.wordGroup) {
-                const translation = await gameClient.getTranslation(username, selectedlanguage, dictWord);
-                if (translation) {
-                    temp.push(translation);
-                } else {
-                    temp.push(""); // Push an empty string if the translation is missing
-                }
-            }
-            setWordChoices(temp);
-        };
-        fetchTranslations();
+        if(props.wordGroup != null){
+                setWordChoices(props.wordGroup);
+        }
     }, [props.wordGroup, username, selectedlanguage]);
 
     /**

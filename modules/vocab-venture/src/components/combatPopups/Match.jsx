@@ -25,13 +25,13 @@ const Match = (props) => {
     
 
     useEffect(() => {
-        if (props.wordGroup.length > 0) {
+        if (props.wordGroupMatch.length > 0) {
             loadNewSet();
         }
-    }, [props.wordGroup]);
+    }, [props.wordGroupMatch]);
 
     const loadNewSet = () => {
-        let newWords = props.wordGroup;
+        let newWords = props.wordGroupMatch;
         /*
         if (newWords.length < 4) {
             usedWords.current.clear();

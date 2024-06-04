@@ -47,6 +47,7 @@ const Quiz = () => {
     const [shuffledDictKeys, setShuffledDictKeys] = useState([]);
     const [qType, setQType] = useState(0); //0 is mult choice, 1 type, 2 match
     const [wordGroup, setWordGroup] = useState([]); //store 4 words to pass to mult choice and matching
+    const [wordGroupMatch, setWordGroupMatch] = useState([]); //
     const [correctMessage, setCorrectMessage] = useState("");
     const [showReadyGo, setReadyGo] = useState(false);
     
@@ -64,16 +65,37 @@ const Quiz = () => {
 
     const fetchQuestion = async () => {
         try {
-            const questionWord = await gameClient.getQuestionWord(username, selectedlanguage, 1);
+            const questionWord = await gameClient.getQuestionWord(username, selectedlanguage, 2);
+            setWordToShow(questionWord);
             if (questionWord) {
-               // const [correctIndex, choices] = await gameClient.getMultipleChoice(username, selectedlanguage, questionWord);
-                setCurrentWord(questionWord);
+                const [correctIndex, choices] = await gameClient.getMultipleChoice(username, selectedlanguage, questionWord);
+                setCurrentWord({ english: questionWord, correctIndex, choices 
+                });
+                setWordGroup(choices);
+                console.log("CHOICES", choices)
             }
         } catch (error) {
             console.error('Error fetching question word:', error);
         }
     };
 
+    const fetchOneQuestion = async () => {
+        try {
+            const questionWord = await gameClient.getQuestionWord(username, selectedlanguage, 2);
+            setWordToShow(questionWord);
+        } catch (error) {
+            console.error('Error fetching question word:', error);
+        }
+    };
+    // Fetch question when component mounts or when nextWord changes
+    useEffect(() => {
+        if(qType == 0){
+            fetchQuestion();
+        }
+        if(qType == 1){
+            fetchOneQuestion()
+        }
+    }, [qType]);
   
 
  
@@ -171,7 +193,7 @@ const Quiz = () => {
     },[userDictionary]);
 
     useEffect(() => {
-        if(isStartClicked == true && isQuestionDone == false){
+        if(isStartClicked == true && isQuestionDone == false && wordGroup != null && wordGroupMatch != null){
             if(qType == 0){
                 console.log("Word group passed to MC ", wordGroup);
                 setMcPopup(true);
@@ -185,13 +207,13 @@ const Quiz = () => {
                 setMatchPopup(false);
             }
             else if(qType == 2){
-                console.log("Word Group being passed to Match: ", wordGroup);
+                console.log("Word Group being passed to Match: ", wordGroupMatch);
                 setMatchPopup(true);
                 setMcPopup(false);
                 setTypePopup(false);
             }
         }
-    },[qType, isStartClicked]);
+    },[qType, isStartClicked, wordGroup, wordGroupMatch]);
 
 
     const handleStartClick = () =>{
@@ -203,21 +225,30 @@ const Quiz = () => {
        
     const sendWords = (numWords) =>{
         //console.log("shuffled keys",shuffledDictKeys);
+            if(numWords == 3){ //if mult choice
+                
+            }
+            else if (numWords == 1){ //if type
+                console.log("current dictionary index: ", currentDictIndex);
+                setWordToShow(shuffledDictKeys[currentDictIndex]);
+            }
+            if(numWords == 4){ //if matching
+                let next4Words = shuffledDictKeys.slice(currentDictIndex, currentDictIndex + 4)
+                console.log("INIT ", next4Words);
+                let wordGroupLen = next4Words.length;
+                console.log("WG LEN ",wordGroupLen);
+                if (wordGroupLen < 4){
+                    next4Words = next4Words.concat(shuffledDictKeys.slice(0, 4-wordGroupLen));
+                }
+                console.log("AFTER ", next4Words);
+                setWordGroupMatch(next4Words);
+                setCurrentDictIndex((currentDictIndex + numWords) % shuffledDictKeys.length);
 
-            console.log("current dictionary index: ", currentDictIndex);
-            setWordToShow(shuffledDictKeys[currentDictIndex]);
+            }
+            
             //console.log(shuffledDictKeys);
 
-            let next4Words = shuffledDictKeys.slice(currentDictIndex, currentDictIndex + 4)
-            console.log("INIT ", next4Words);
-            let wordGroupLen = next4Words.length;
-            console.log("WG LEN ",wordGroupLen);
-            if (wordGroupLen < 4){
-                next4Words = next4Words.concat(shuffledDictKeys.slice(0, 4-wordGroupLen));
-            }
-            console.log("AFTER ", next4Words);
-            setWordGroup(next4Words);
-            setCurrentDictIndex((currentDictIndex + numWords) % shuffledDictKeys.length);
+            
 
 
     }
@@ -334,7 +365,16 @@ const Quiz = () => {
         
         
         console.log("Question: ", q);
-        sendWords(1); //num words to send, */
+        if(q == 0){
+            sendWords(3); //num words to send, */
+        }
+        else if(q == 1){ //type
+            sendWords(1);
+        }
+        else{ //match
+            sendWords(4);
+        }
+        
     }
 
     const [timer, setTimer] = useState(60); // Initial timer value in seconds
@@ -449,7 +489,7 @@ const Quiz = () => {
             setIsSlimeHit = {setIsSlimeHit} correctCounter = {correctCounter} setCorrectCounter = {setCorrectCounter} wrongCounter = {wrongCounter} setWrongCounter = {setWrongCounter} >
             </MCPopup>
             <MatchPopup trigger = {matchPopup} setTrigger= {setMatchPopup}username={username} selectedLanguage={selectedlanguage}
-            setIsHit = {setIsHit} setIsAttacking = {setIsAttacking} setIsSlimeAttacking = {setIsSlimeAttacking} setIsAnswerCorrect = {setIsAnswerCorrect} setIsQuestionDone = {setIsQuestionDone} wordGroup = {wordGroup}
+            setIsHit = {setIsHit} setIsAttacking = {setIsAttacking} setIsSlimeAttacking = {setIsSlimeAttacking} setIsAnswerCorrect = {setIsAnswerCorrect} setIsQuestionDone = {setIsQuestionDone} wordGroupMatch = {wordGroupMatch}
             setIsSlimeHit = {setIsSlimeHit} correctCounter = {correctCounter} setCorrectCounter = {setCorrectCounter} wrongCounter = {wrongCounter} setWrongCounter = {setWrongCounter} >
             </MatchPopup>
             <button type="button" id="goToMapButton" onClick={goToMap}> Go to Map</button>
