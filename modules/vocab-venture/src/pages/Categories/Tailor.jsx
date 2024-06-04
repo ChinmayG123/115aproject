@@ -44,7 +44,7 @@ const Tailor = function() {
     const [textInput, setTextInput] = useState("");
     const [isLastWordCorrect, setIsLastWordCorrect] = useState(true);
     const [congrats, setCongrats] = useState(false);
-
+    //gets the image for each corresponding word in the Tailor learning mode
     const getTailorImageSrc = (tailorWord) => {
         switch (tailorWord) {
             case 'shirt':
@@ -67,7 +67,7 @@ const Tailor = function() {
                 return null;
         }
     };
-
+    //fetches the words from the backend
     useEffect(() => {
         const fetchWords = async () => {
             try {
@@ -87,13 +87,13 @@ const Tailor = function() {
         };
         fetchWords();
     }, []);
-
+    //handles so that the user can enter from the keyboard key their user input
     const handleKeyPress = (e) => {
         if (e.key === 'Enter') {
             handleEnterClick();
         }
     }
-
+    //fetches the translation and definition from the backend 
     useEffect(() => {
         const fetchTranslationAndDefinition = async () => {
             if (currentWordIndex < chosenWords.length) {
@@ -111,7 +111,7 @@ const Tailor = function() {
 
         fetchTranslationAndDefinition();
     }, [currentWordIndex, fetchedWords, chosenWords, selectedlanguage, username]);
-
+    //records which words are seen and not seen by the user
     useEffect(() => {
         const recordSeenAndUnseen = () => {
             let unseenTemp = [];
@@ -139,7 +139,7 @@ const Tailor = function() {
     };
 
     const greeting = greetings[selectedlanguage] || 'Hello';
-
+    //gives the user a text tree for practice old words, learning new words, or both 
     useEffect(() => {
         const decideTextTree = () => {
             let t = [];
@@ -162,19 +162,19 @@ const Tailor = function() {
         }
         decideTextTree();
     }, [unseenWords, seenWords, username, selectedlanguage]);
-
+    //shows the next text
     const showNextText = () => {
         if (currentTextIndex < texts.length - 1) {
             setCurrentTextIndex(currentTextIndex + 1);
         }
     };
-
+    //shows the next word
     const showNextWord = () => {
         if (currentWordIndex < chosenWords.length - 1) {
             setCurrentWordIndex(currentWordIndex + 1);
         }
     };
-
+    //handles what happens when the user clicks on start
     const handleStartClick = () => {
         if (currentTextIndex === texts.length - 1) {
             setPromptTrigger(false);
@@ -189,12 +189,12 @@ const Tailor = function() {
             showNextText();
         }
     };
-
+    //handles the input change (for example, when the user is typing)
     const handleInputChange = (event) => {
         const newValue = event.target.value;
         setTextInput(newValue);
     };
-
+    //randomizes the words by shuffling the array
     const randomizeWords = (array) => {
         const shuffledArray = array.slice();
         for (let i = shuffledArray.length - 1; i > 0; i--) {
@@ -203,14 +203,14 @@ const Tailor = function() {
         }
         setChosenWords(shuffledArray);
         console.log("shuffled words: ", shuffledArray);
-    }
+    }  
 
     useEffect(() => {
         if (currentTextIndex > 0) {
             handleStartClick();
         }
     }, [chosenWords])
-
+    //allows the user to change their choice of practicing,learning, or both
     useEffect(() => {
         console.log("user choice changed: ", userChoice);
         if (userChoice.localeCompare("practice") === 0) {
@@ -221,7 +221,7 @@ const Tailor = function() {
             randomizeWords(fetchedWords);
         }
     }, [userChoice, unseenWords, seenWords, fetchedWords]);
-
+    //series of functions to change to practice mode, learn mode, or both
     const changeToPractice = () => {
         setUserChoice("practice");
     }
@@ -231,7 +231,7 @@ const Tailor = function() {
     const changeToLearn = () => {
         setUserChoice("learn");
     }
-
+    //handles what happens when the user clicks
     const handleEnterClick = async () => {
         if (textInput.toLowerCase() === translatedWord.toLowerCase()) {
             await gameClient.learnNewWord(username, selectedlanguage, chosenWords[currentWordIndex]);

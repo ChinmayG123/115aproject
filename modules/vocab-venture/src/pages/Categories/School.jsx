@@ -44,13 +44,13 @@ const School = function() {
     const [textInput, setTextInput] = useState("");
     const [isLastWordCorrect, setIsLastWordCorrect] = useState(true);
     const [congrats, setCongrats] = useState(false);
-
+    //allows the user to use the enter word as keyboard input 
     const handleKeyPress = (e) => {
         if (e.key === 'Enter') {
             handleEnterClick();
         }
     }
-
+    //fetches the words from the backend
     useEffect(() => {
         const fetchWords = async () => {
             try {
@@ -70,7 +70,7 @@ const School = function() {
         };
         fetchWords();
     }, []);
-
+    //fetches the translation and definition for all the words
     useEffect(() => {
         const fetchTranslationAndDefinition = async () => {
             if (currentWordIndex < chosenWords.length) {
@@ -88,7 +88,7 @@ const School = function() {
 
         fetchTranslationAndDefinition();
     }, [currentWordIndex, fetchedWords, chosenWords, selectedlanguage, username]);
-
+    //records which words are seen and not seen by the user 
     useEffect(() => {
         const recordSeenAndUnseen = () => {
             let unseenTemp = [];
@@ -116,7 +116,8 @@ const School = function() {
     };
 
     const greeting = greetings[selectedlanguage] || 'Hello';
-
+    //provides the user with a series of decisions and conversations for 
+    //each decision
     useEffect(() => {
         const decideTextTree = () => {
             let t = [];
@@ -139,19 +140,19 @@ const School = function() {
         }
         decideTextTree();
     }, [unseenWords, seenWords, username, selectedlanguage]);
-
+    //shows the next text
     const showNextText = () => {
         if (currentTextIndex < texts.length - 1) {
             setCurrentTextIndex(currentTextIndex + 1);
         }
     };
-
+    //shows the next word
     const showNextWord = () => {
         if (currentWordIndex < chosenWords.length - 1) {
             setCurrentWordIndex(currentWordIndex + 1);
         }
     };
-
+    //handles what happens with the user clicks start
     const handleStartClick = () => {
         if (currentTextIndex === texts.length - 1) {
             setPromptTrigger(false);
@@ -166,12 +167,12 @@ const School = function() {
             showNextText();
         }
     };
-
+    //handles the change in input (when the user is typing)
     const handleInputChange = (event) => {
         const newValue = event.target.value;
         setTextInput(newValue);
     };
-
+    //randomizes the words by shuffling the array
     const randomizeWords = (array) => {
         const shuffledArray = array.slice();
         for (let i = shuffledArray.length - 1; i > 0; i--) {
@@ -181,13 +182,13 @@ const School = function() {
         setChosenWords(shuffledArray);
         console.log("shuffled words: ", shuffledArray);
     }
-
+    
     useEffect(() => {
         if (currentTextIndex > 0) {
             handleStartClick();
         }
     }, [chosenWords])
-
+    //allows for the change in activity when the user makes a different option
     useEffect(() => {
         console.log("user choice changed: ", userChoice);
         if (userChoice.localeCompare("practice") === 0) {
@@ -198,7 +199,7 @@ const School = function() {
             randomizeWords(fetchedWords);
         }
     }, [userChoice, unseenWords, seenWords, fetchedWords]);
-
+    //series of functions to allow the user to change modes
     const changeToPractice = () => {
         setUserChoice("practice");
     }
@@ -208,7 +209,7 @@ const School = function() {
     const changeToLearn = () => {
         setUserChoice("learn");
     }
-
+    //handles what happens when the user clicks the enter button
     const handleEnterClick = async () => {
         if (textInput.toLowerCase() === translatedWord.toLowerCase()) {
             await gameClient.learnNewWord(username, selectedlanguage, chosenWords[currentWordIndex]);
@@ -225,7 +226,7 @@ const School = function() {
         }
         setTextInput("");
     };
-
+    //gets the image for each corresponding word in School
     const getSchoolImageSrc = (schoolWord) => {
         switch (schoolWord) {
             case 'desk':
