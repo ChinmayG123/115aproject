@@ -248,7 +248,7 @@ class GameClient {
     }
 
     async downProficiency(username, language, word) {
-        this.userData[username] = null;
+        //this.userData[username] = null;
         const options = {
             method: 'PUT',
             headers: {
@@ -270,7 +270,7 @@ class GameClient {
     }
 
     async upProficiency(username, language, word) {
-        this.userData[username] = null;
+        //this.userData[username] = null;
         const options = {
             method: 'PUT',
             headers: {

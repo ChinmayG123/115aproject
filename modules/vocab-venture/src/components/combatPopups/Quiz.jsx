@@ -72,7 +72,6 @@ const Quiz = () => {
                 setCurrentWord({ english: questionWord, correctIndex, choices 
                 });
                 setWordGroup(choices);
-                console.log("CHOICES", choices)
             }
         } catch (error) {
             console.error('Error fetching question word:', error);
@@ -89,13 +88,13 @@ const Quiz = () => {
     };
     // Fetch question when component mounts or when nextWord changes
     useEffect(() => {
-        if(qType == 0){
+        if(qType == 0 && isQuestionDone == false){
             fetchQuestion();
         }
-        if(qType == 1){
+        if(qType == 1 && isQuestionDone == false){
             fetchOneQuestion()
         }
-    }, [qType]);
+    }, [qType, isQuestionDone]);
   
 
  
@@ -213,7 +212,7 @@ const Quiz = () => {
                 setTypePopup(false);
             }
         }
-    },[qType, isStartClicked, wordGroup, wordGroupMatch]);
+    },[wordToShow, isStartClicked, wordGroup, wordGroupMatch]);
 
 
     const handleStartClick = () =>{
