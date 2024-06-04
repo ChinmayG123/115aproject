@@ -11,7 +11,7 @@ import pagesimg from '../../assets/dictionary-assets/Pagesfull.png'
 import baseimg from '../../assets/dictionary-assets/DictionaryBaseFull.png'
 import { useNavigate } from 'react-router-dom'; // Import useNavigate from react-router-dom
 
-
+// important all of the assets to display along with each word
 import blue from '../../assets/dict-images/colors/blue.png';
 import black from '../../assets/dict-images/colors/black.png';
 import brown from '../../assets/dict-images/colors/brown.png';
@@ -119,7 +119,7 @@ const getWordImageSrc = (wordImage) => {
   }
 };
 
-const getTheUserInformation = async (username, language) => {
+const getTheUserInformation = async (username, language) => {  
   try {
       const result = await gameClient.getUserDictionary(username, language);
       // return { status: 'success' };
@@ -130,7 +130,7 @@ const getTheUserInformation = async (username, language) => {
   }
 }
 
-function DictionaryPopup (props) {
+function DictionaryPopup (props) { // the pop up will fetch two of the learned translations to display
 
   const { selectedLanguage } = props;
 
@@ -153,7 +153,7 @@ const handleClose = () => {
 };
 
 
-const handleNextPage = () => {
+const handleNextPage = () => { // This is the handler to access the other pages in the user's dictionary
   if (currentPage < Math.floor((Object.keys(userDictionary).length - 1) / 2)) {
     setCurrentPage(current => {
       const nextPage = current + 1;
@@ -166,13 +166,13 @@ const handleNextPage = () => {
 };
  
 
-  const handlePreviousPage = () => {
+  const handlePreviousPage = () => { // This is the handler to access the previous pages in the user's dictionary
     setCurrentPage(current => Math.max(current - 1, 0));
   };
 
   useEffect(() => {
     const fetchData = async () => {
-        
+        // calling the function to recieve the progress of the user
         const result = await getTheUserInformation(props.username, selectedLanguage);
         setUserDictionary(result);
         setCurrentPage(0); 
@@ -182,7 +182,7 @@ const handleNextPage = () => {
 
 
 
-const [definition, setDefinition] = useState(null);
+const [definition, setDefinition] = useState(null); // two constants that will set the definitions to be displayed for the words
 const [definition2, setDefinition2] = useState(null);
 
 
@@ -193,14 +193,14 @@ useEffect(() => {
       const key1 = keys[currentPage * 2];
       const key2 = keys[currentPage * 2 + 1];
       
-      if (key1) {
+      if (key1) { // this format will display the translation and definition for each of the learned words 
         const translation1 = await gameClient.getTranslation(props.username, selectedLanguage, key1);
         setTranslatedWord(translation1);
 
         const def = await gameClient.getDefinition(props.username, selectedLanguage, key1);
         setDefinition(def);
       }
-      if (key2) {
+      if (key2) { // repeat for second page on right
         const translation2 = await gameClient.getTranslation(props.username, selectedLanguage, key2);
         setTranslatedWord2(translation2);
 
@@ -214,7 +214,7 @@ useEffect(() => {
 }, [currentPage, userDictionary, props.username, selectedLanguage]);
 
 
-
+  // display formatting for the actual page 
   return (props.trigger) ? (
     <div className= "popup">      
         <div className= "popup-inner"> 
@@ -240,7 +240,6 @@ useEffect(() => {
               {userDictionary &&
                     Object.entries(userDictionary).map(([key, value], index) => {
                         if (index % 2 === 0 && index === currentPage * 2) {
-                          // showTranslation1(key);
                         return (
 
                           <div key={key} className="word-container">

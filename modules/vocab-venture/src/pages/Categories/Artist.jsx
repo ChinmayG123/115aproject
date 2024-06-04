@@ -42,7 +42,7 @@ const Artist = function() {
     const [textInput, setTextInput] = useState("");
     const [isLastWordCorrect, setIsLastWordCorrect] = useState(true);
     const [congrats, setCongrats] = useState(false);
-
+    //fetches the word from the backend
     useEffect(() => {
         const fetchWords = async () => {
             try {
@@ -58,7 +58,7 @@ const Artist = function() {
         };
         fetchWords();
     }, []);
-
+    //retrieves the translations and definitions of each word
     useEffect(() => {
         const fetchTranslationAndDefinition = async () => {
             if (currentWordIndex < chosenWords.length) {
@@ -76,7 +76,7 @@ const Artist = function() {
 
         fetchTranslationAndDefinition();
     }, [currentWordIndex, chosenWords, selectedlanguage, username]);
-
+    //records which words are seen and not seen
     useEffect(() => {
         const recordSeenAndUnseen = () => {
             let unseenTemp = [];
@@ -100,9 +100,10 @@ const Artist = function() {
         'spanish': 'Hola',
         'french': 'Bonjour',
     };
-
+    //greets the user
     const greeting = greetings[selectedlanguage] || 'Hello';
-
+    //prompts the user with a conversation and allows them to 
+    //decide on what to do 
     useEffect(() => {
         const decideTextTree = () => {
             let t = [];
@@ -125,19 +126,19 @@ const Artist = function() {
         }
         decideTextTree();
     }, [unseenWords, fetchedWords, username, selectedlanguage]);
-
+    //shows the next text
     const showNextText = () => {
         if (currentTextIndex < texts.length - 1) {
             setCurrentTextIndex(currentTextIndex + 1);
         }
     };
-
+    //shows the next word
     const showNextWord = () => {
         if (currentWordIndex < chosenWords.length - 1) {
             setCurrentWordIndex(currentWordIndex + 1);
         }
     };
-
+    //allows the user to click the start button 
     const handleStartClick = () => {
         if (currentTextIndex === texts.length - 1) {
             setPromptTrigger(false);
@@ -151,7 +152,7 @@ const Artist = function() {
             showNextText();
         }
     };
-
+    //allows the user to either hit the enter word as well to enter their input
     const handleKeyPress = (e) => {
         if (e.key === 'Enter') {
             handleEnterClick();
@@ -162,6 +163,7 @@ const Artist = function() {
         setTextInput(event.target.value);
     };
 
+    //function that shuffles the words in order to create randomness
     const randomizeWords = (array) => {
         const shuffledArray = array.slice();
         for (let i = shuffledArray.length - 1; i > 0; i--) {
@@ -187,16 +189,20 @@ const Artist = function() {
         }
     }, [userChoice, unseenWords, seenWords, fetchedWords]);
 
+    //function that allows the user to start practicing 
     const changeToPractice = () => {
         setUserChoice("practice");
     }
+    //function that allows the user to both practice and learn
     const changeToBoth = () => {
         setUserChoice("both");
     }
+    //function that allows the user to go to learn mode
     const changeToLearn = () => {
         setUserChoice("learn");
     }
-
+    //function that handles what happens when the user types in the learned word
+    //and clicks enter
     const handleEnterClick = async () => {
         if (textInput.toLowerCase() === translatedWord.toLowerCase()) {
             await gameClient.learnNewWord(username, selectedlanguage, chosenWords[currentWordIndex]);
@@ -212,7 +218,7 @@ const Artist = function() {
         }
         setTextInput("");
     };
-
+    //gets the image of the respective color that the user is learning
     const getColorImageSrc = (colorWord) => {
         switch (colorWord) {
             case 'black':

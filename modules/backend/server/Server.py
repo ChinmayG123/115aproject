@@ -45,6 +45,9 @@ class Server:
         self.username = ""
         self.debugMode = debug_mode
 
+    """
+    parse, compose, recv, and send are conventional socket programming methods. 
+    """
     def parse_request(self, data):
         try:
             lines = data.split("\r\n")
@@ -102,7 +105,10 @@ class Server:
     def send_response(self):
         response = self.compose_response()
         self.socket.sendall(response.encode("utf-8"))
-
+        
+    """
+    retrieve functions pull data from external APIs, and will not change data in Database.
+    """
     def retrieve_data(self):
         """
         Getter function for all database access. May consist sensitive data. Will not alter database.
@@ -275,6 +281,9 @@ class Server:
             self.Response["StatusLine"] = "Internal Server Error"
             print(f"An error occurred: {e}")
 
+    """
+    update functions are used to write to database. Use with cautions. 
+    """
     def update_data(self):
         """
         Setter function for all database access. May consist sensitive data. Will alter database.
@@ -320,6 +329,9 @@ class Server:
                 self.Response["StatusLine"] = "Internal Server Error"
                 self.Response["Body"] = "update_user_dictionary() failed"
 
+    """
+    toggle functions are alternatives to update funcstion. They are used when the user only updates one field in the database. 
+    """
     def toggle_data(self):
         """
         Quick access function to database. Should not consist sensitive data. Database will only be altered in a specific field.
@@ -361,6 +373,9 @@ class Server:
             self.Response["StatusLine"] = "Internal Server Error"
             self.Response["Body"] = "alter_proficiency() failed"
 
+    """
+    Dispatcher for server jobs. 
+    """
     def process_request(self):
         if self.Request["Method"] == "GET":
             if self.debugMode:
@@ -391,25 +406,23 @@ class Server:
             self.Response["StatusCode"] = "501"
             self.Response["StatusLine"] = "Not Implemented"
 
+    '''
+    Entry point for Server instance. 
+    '''
     def run(self):
         state = "RECV"
-
         while True:
             if state == "RECV":
                 self.recv_request()
                 state = "PROCESS"
-
             elif state == "PROCESS":
                 # Process the request here
-
                 self.process_request()
                 state = "SEND"
-
             elif state == "SEND":
                 response = self.compose_response()
                 self.socket.sendall(response.encode("utf-8"))
                 state = "CLOSE"
-
             elif state == "CLOSE":
                 self.socket.shutdown(socket.SHUT_RDWR)
                 # self.socket.close()
