@@ -1,10 +1,6 @@
-
 import './Match.css';
-
 import { useNavigate, useLocation } from 'react-router-dom';
 import React, { useState, useEffect, useRef } from 'react';
-
-
 
 const Match = (props) => {
     const navigate = useNavigate();
@@ -12,17 +8,14 @@ const Match = (props) => {
     const username = location.state.username;
     const selectedlanguage = location.state.language;
 
-
-  
     const [userDictionary, setUserDictionary] = useState({});
     const [currentWords, setCurrentWords] = useState([]);
     const [currentTranslations, setCurrentTranslations] = useState([]);
     const [correctMessage, setCorrectMessage] = useState("");
     const [selectedEnglishWord, setSelectedEnglishWord] = useState(null);
+    const [selectedTranslation, setSelectedTranslation] = useState(null); // State to track selected translation
 
     const usedWords = useRef(new Set());
-
-    
 
     useEffect(() => {
         if (props.wordGroupMatch.length > 0) {
@@ -32,11 +25,6 @@ const Match = (props) => {
 
     const loadNewSet = () => {
         let newWords = props.wordGroupMatch;
-        /*
-        if (newWords.length < 4) {
-            usedWords.current.clear();
-            newWords = Object.keys(userDictionary).slice(0, 4);
-        }*/
 
         let newTranslations = [];
         newWords.forEach(async (word) => {
@@ -53,59 +41,48 @@ const Match = (props) => {
     const handleWordClick = async (clickedWord, isEnglish) => {
         if (isEnglish) {
             setSelectedEnglishWord(clickedWord);
+            setSelectedTranslation(null); // Reset selected translation
         } else {
+            setSelectedTranslation(clickedWord);
             if (selectedEnglishWord) {
                 const translation = await gameClient.getTranslation(username, selectedlanguage, selectedEnglishWord);
                 console.log("HERE", translation);
 
                 if (clickedWord === translation) {
                     console.log("correct match");
-                    if(currentWords.length === 1){ //if all words matched
-                       
+                    if (currentWords.length === 1) { // if all words matched
                         props.setIsAnswerCorrect(true);
                         setTimeout(() => {
                             props.setIsAttacking(true);
                             setTimeout(() => {
                                 props.setIsSlimeHit(true);
-                            }, 600)
-                        },1000)
+                            }, 600);
+                        }, 1000);
                         console.log("All words matched");
                         props.setIsQuestionDone(true);
-                        
                     }
-                    //setCorrectMessage(currentWords.length === 1 ? "All Words Matched!" : "Correct!");
-                   
-                    //setCorrectMessage("");
+
                     setCurrentWords(currentWords.filter(word => word !== selectedEnglishWord));
                     setCurrentTranslations(currentTranslations.filter(word => word !== clickedWord));
                     setSelectedEnglishWord(null);
-                    if(currentWords.length > 1){ //only set correct message for the first 3 matches
+                    if (currentWords.length > 1) { // only set correct message for the first 3 matches
                         setCorrectMessage("Correct!");
                     }
                     setTimeout(() => {
                         setCorrectMessage("");
-                    },1000)
-                    gameClient.downProficiency(username, selectedlanguage, selectedEnglishWord); // Call downProficiency()
-
-                        // props.setIsAnswerCorrect(true);
-                    props.setCorrectCounter((prevCount) => prevCount + 1); // Increment correct counter
-
-
-                   
+                    }, 1000);
+                    gameClient.downProficiency(username, selectedlanguage, selectedEnglishWord);
+                    props.setCorrectCounter((prevCount) => prevCount + 1);
                 } else {
                     console.log("Incorrect");
 
                     setCorrectMessage("Incorrect!");
-                        setTimeout(() => {
-                            setCorrectMessage("");
-                    },1000)
-                    // props.setIsAnswerCorrect(false);
-                    gameClient.upProficiency(username, selectedlanguage, selectedEnglishWord); // Call downProficiency()
-
-                    props.setWrongCounter((prevCount) => prevCount + 1); // Increment correct counter
-
+                    setTimeout(() => {
+                        setCorrectMessage("");
+                    }, 1000);
+                    gameClient.upProficiency(username, selectedlanguage, selectedEnglishWord);
+                    props.setWrongCounter((prevCount) => prevCount + 1);
                 }
-                
             }
         }
     };
@@ -114,12 +91,8 @@ const Match = (props) => {
         navigate('/map', { state: { username, language: selectedlanguage } });
     };
 
-
-    return (props.trigger) ?(
+    return (props.trigger) ? (
         <div className="match-container">
-           
-
-                
             {correctMessage && (
                 <div className="message-display-match">
                     <p>{correctMessage}</p>
@@ -130,7 +103,7 @@ const Match = (props) => {
                     {currentWords.map((englishWord) => (
                         <button
                             key={englishWord}
-                            className="word-button"
+                            className={`word-button ${selectedEnglishWord === englishWord ? 'selected' : ''}`}
                             onClick={() => handleWordClick(englishWord, true)}
                         >
                             {englishWord}
@@ -141,14 +114,13 @@ const Match = (props) => {
                     {currentTranslations.map((translatedWord, index) => (
                         <button
                             key={`${translatedWord}-${index}`}
-                            className="word-button"
+                            className={`word-button ${selectedTranslation === translatedWord ? 'selected-translation' : ''}`}
                             onClick={() => handleWordClick(translatedWord, false)}
                         >
                             {translatedWord}
                         </button>
                     ))}
                 </div>
-                
             </div>
             <button type="button" id="goToMapButton" onClick={goToMap}>
                 Go to Map
@@ -157,7 +129,7 @@ const Match = (props) => {
                 <p>Click the English word, then the corresponding translated word.</p>
             </div>
         </div>
-    ):"";
+    ) : "";
 };
 
 export default Match;
