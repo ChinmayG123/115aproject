@@ -195,11 +195,9 @@ useEffect(() => {
       
       if (key1) {
         const translation1 = await gameClient.getTranslation(props.username, selectedLanguage, key1);
-        console.log("TRANSL", translation1);
         setTranslatedWord(translation1);
 
         const def = await gameClient.getDefinition(props.username, selectedLanguage, key1);
-        console.log("def1 ", def);
         setDefinition(def);
       }
       if (key2) {
@@ -207,7 +205,6 @@ useEffect(() => {
         setTranslatedWord2(translation2);
 
         const def = await gameClient.getDefinition(props.username, selectedLanguage, key2);
-        console.log("def2", def);
         setDefinition2(def);
       }
     }
