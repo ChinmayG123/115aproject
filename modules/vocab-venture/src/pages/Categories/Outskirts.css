@@ -1,4 +1,7 @@
-#combatBackground {
+.combatbackground {
+    top:0;
+    left:0;
+
     font-family: 'Popins', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-fond-smoothing: grayscale;
@@ -9,38 +12,35 @@
     position: absolute;
    
     width: 100%;
-    height: auto;
+    height: 100%;;
     
     background-size: cover;
     font-family: 'roboto', sans-serif;
-  } 
-  #goToTypeButton{
-    position: absolute;
-    width: 10%;
-    right:0;
-    bottom:0;
-
-  } 
-
-  
-  .Sprite {
+    color:rgb(50, 38, 38);
     display:flex;
+    border:solid;
+    justify-content: center;
+  } 
+
+  .outskirts-buttons {
+    background-color: rgba(250, 235, 215, 0.222);
+    top:40%;
+    display:flex;
+    align-content:center;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    width: 50%;
+    height:30%;
     position:absolute;
-    width: 600px; /* Width of each frame */
-    height: 600px; /* Height of each frame */
-    transform:scale(.5);
-    bottom: -50px;
-    left: -100px;
-    overflow: hidden;
- }
-.catSS{
-    animation: playSprite 1s steps(4) infinite;
-}
-  @keyframes playSprite {
-    from {
-      transform: translate3d(0px,0,0);
-    }
-    to {
-      transform: translate3d(-100%,0,0); /* Total width of sprite sheet (100px * 4 frames) */
-    }
+    
   }
+
+  .outskirts-buttons button{
+    justify-content: space-around;
+    max-height: 50%;
+    min-height: 10%;
+    max-width: 40%;
+    margin:5px;
+
+  }
+

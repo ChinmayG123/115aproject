@@ -441,6 +441,7 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import MultChoice from '../../components/combatPopups/MultChoice';
 import Type from '../../components/combatPopups/Type';
+import './Outskirts.css';
 
 
 const Outskirts = function() {
@@ -469,29 +470,22 @@ const Outskirts = function() {
     };
 
     return(  
-        <div className="mapbackground">
+        <div className="combatbackground">
             <h1>Outskirts</h1>
-
-            <div>
-                <h1>Select Difficulty:</h1>
-                <select value={difficulty} onChange={(e) => setDifficulty(e.target.value)}>
-                    <option value="easy">Easy</option>
-                    <option value="medium">Medium</option>
-                    <option value="hard">Hard</option>
-                </select>
+            <div className= "outskirts-buttons">
+                <button type="button" id="goToType" onClick={goToType}>
+                    Type
+                </button>
+                <button type="button" id="goToMultChoice" onClick={multipleChoice}>
+                    Multiple Choice
+                </button>
+                <button type="button" id="gotToMatch" onClick={match}>
+                    Match
+                </button>
+                <button type="button" id="goToQuiz" onClick={quiz}>
+                    Quiz
+                </button>
             </div>
-            <button type="button" id="goToTypeButton" onClick={goToType}>
-                Go to Type
-            </button>
-            <button type="button" id="MultipleChoiceButton" onClick={multipleChoice}>
-                MultipleChoice
-            </button>
-            <button type="button" id="MatchButton" onClick={match}>
-                Match
-            </button>
-            <button type="button" id="QuizButton" onClick={quiz}>
-                Quiz
-            </button>
         </div>
     );
 };
