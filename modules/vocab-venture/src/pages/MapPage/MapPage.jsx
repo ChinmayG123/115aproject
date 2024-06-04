@@ -16,8 +16,8 @@ import tailorHLImage from '../../assets/TailorHL.png';
 
 
 import menuBarImage from '../../assets/MenuBar.png'; 
-import dictionaryImage from '../../assets/DictionaryTab.png'; 
-import menuImage from '../../assets/MenuTab.png'; 
+import dictionaryImage from '../../assets/DictionaryTabSHORT.png'; 
+import menuImage from '../../assets/MenuTabSHORT.png'; 
 
 import './MapPage.css';
 import DictionaryPopup from '../../components/dictionary/DictionaryPopup';

@@ -45,6 +45,7 @@
     width: 50%;
     height:30%;
     position:absolute;
+    padding: 10px;
     
   }
 
@@ -52,7 +53,7 @@
     justify-content: space-around;
     max-height: 50%;
     min-height: 10%;
-    max-width: 40%;
+    max-width: 35%;
     margin:5px;
 
   }

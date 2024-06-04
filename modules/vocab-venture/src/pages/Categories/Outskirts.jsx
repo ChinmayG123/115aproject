@@ -480,9 +480,6 @@ const Outskirts = function() {
                 <button type="button" id="goToMultChoice" onClick={multipleChoice}>
                     Multiple Choice
                 </button>
-                <button type="button" id="gotToMatch" onClick={match}>
-                    Match
-                </button>
                 <button type="button" id="goToQuiz" onClick={quiz}>
                     All Modes
                 </button>

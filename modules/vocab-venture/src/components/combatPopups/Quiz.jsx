@@ -192,7 +192,12 @@ const Quiz = () => {
     },[userDictionary]);
 
     useEffect(() => {
-        if(isStartClicked == true && isQuestionDone == false && wordGroup != null && wordGroupMatch != null){
+        console.log("______________________");
+        console.log(isQuestionDone);
+        console.log(wordGroup);
+        console.log(wordToShow);
+        console.log(backgroundStall);
+        if(isStartClicked == true && isQuestionDone == false && wordGroup != null && wordGroupMatch != null && backgroundStall == false){
             if(qType == 0){
                 console.log("Word group passed to MC ", wordGroup);
                 setMcPopup(true);
@@ -212,7 +217,7 @@ const Quiz = () => {
                 setTypePopup(false);
             }
         }
-    },[wordToShow, isStartClicked, wordGroup, wordGroupMatch]);
+    },[wordToShow, isStartClicked, wordGroup, wordGroupMatch, backgroundStall]);
 
 
     const handleStartClick = () =>{
@@ -317,8 +322,7 @@ const Quiz = () => {
 
    
     const playAttackAnim = () =>{
-        console.log("ONCEEEEE");
-        handleStall();
+        
         return(
             <img onAnimationEnd= {handleEndAttackAnimation} className = "catAttackSS" src={catATTACK}></img>
         )
@@ -343,12 +347,14 @@ const Quiz = () => {
         setIsHit(false);
     }
 
-    const handleStall = () => {
+    useEffect(() => {
+        if(backgroundStall){
             setTimeout(() => {
                 setBackgroundStall(false);
-            },2800)
+            },3500)
+        }
 
-    }
+    },[backgroundStall])
 
     const playIdleAnim = () => {
         return( <img className= "catSS" src= {cat} ></img>)
@@ -356,10 +362,10 @@ const Quiz = () => {
 
     
     const getNextQuestion = () => {
-        let q = Math.floor(Math.random() * 3)
-        setQType(q);
         setBackgroundStall(true);
-        handleStall();
+
+        let q = Math.floor(Math.random() * 2)
+        setQType(q);
         setIsQuestionDone(false);
         
         

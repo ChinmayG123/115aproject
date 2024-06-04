@@ -245,7 +245,7 @@ const TypeOG = function() {
 
     const handleKeyPress = (e) =>{
         if(e.key === 'Enter'){
-            handleEnterClick(props.wordToShow);
+            handleEnterClick(englishword);
         }
     }
 

@@ -20,7 +20,6 @@
   left: 30%; /* Adjusted left position */
   top: 15%; /* Adjusted top position */
   font-size: xx-large; /* Increased font size */
-
   /* width: 20%;
   padding: 3%;
   left: 41%; */
@@ -63,7 +62,9 @@
     bottom:0;
     left:0;
 }
-#combatBackground {
+.combatBackground {
+    top:0;
+    left:0;
     font-family: 'Popins', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-fond-smoothing: grayscale;
@@ -72,12 +73,13 @@
     background-position: center; 
     background-repeat: no-repeat; 
     position: absolute;
-    display:flex;
-    width: 100%;
-    height: auto;
-    
+    width: 100vw;
+    height:100vh;
     background-size: cover;
     font-family: 'roboto', sans-serif;
+    justify-content: center;
+    align-items: center;
+    overflow:hidden;
   } 
   #goToTypeButton{
     position: absolute;
@@ -106,9 +108,11 @@
     position:absolute;
     width: 1300px; /* Width of each frame */
     height: 1300px; /* Height of each frame */
+    transform-origin: bottom;
+    bottom: 15%;
+    left:35%;
     transform:scale(.18);
-    bottom: -60%;
-    left: 40%;
+
     overflow: hidden;
 
   }
@@ -120,13 +124,21 @@
     width: 600px; /* Width of each frame */
     height: 600px; /* Height of each frame */
     transform:scale(.5);
-    bottom: -50px;
+    bottom: -43px;
     left: -100px;
     overflow: hidden;
  }
 
 .start-btn{
+  width: 8vw;
   position:absolute;
+  justify-self: center;
+  align-self: center;
+  align-items: center;
+  text-align: center;
+  font-size: large;
+  height: 5vh;
+
   display:flex;
   z-index:3;
 }
