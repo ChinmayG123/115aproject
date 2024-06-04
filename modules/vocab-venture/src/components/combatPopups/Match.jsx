@@ -79,7 +79,9 @@ const Match = (props) => {
                     setCurrentWords(currentWords.filter(word => word !== selectedEnglishWord));
                     setCurrentTranslations(currentTranslations.filter(word => word !== clickedWord));
                     setSelectedEnglishWord(null);
-                    setCorrectMessage("Correct!");
+                    if(currentWords.length > 1){ //only set correct message for the first 3 matches
+                        setCorrectMessage("Correct!");
+                    }
                     setTimeout(() => {
                         setCorrectMessage("");
                     },1000)
