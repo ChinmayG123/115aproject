@@ -38,6 +38,9 @@ class GameClient {
     }
 
     async init() {
+        this.spanish = {};
+        this.french = {};
+        this.definition = {};
         const colors = await this.getAllWordsByCategory("client", "colors");
         const school = await this.getAllWordsByCategory("client", "school");
         const food = await this.getAllWordsByCategory("client", "food");
@@ -214,6 +217,7 @@ class GameClient {
         if (username in this.userData) {
             this.userData[username] = null;
         }
+        this.init();
     }
     /**
      * 
