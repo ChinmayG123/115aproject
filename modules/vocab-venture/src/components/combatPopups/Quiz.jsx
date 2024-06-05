@@ -146,7 +146,7 @@ const Quiz = () => {
 
                 const [correctIndex, choices] = await gameClient.getMultipleChoice(username, selectedlanguage, questionWord);
                 setTimeout(()=>{
-                },2000);
+                },1000);
                 if (choices.length == 1) {
                     console.log("ONLY ONE");
                     choices.push(randomWords[0], randomWords[1], randomWords[2]);
