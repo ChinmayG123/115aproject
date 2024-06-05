@@ -132,11 +132,25 @@ const Quiz = () => {
 
     //use weighted randomizer to fetch 4 words for mult choice 
     const fetchQuestion = async () => {
+        // console.log("BEFORE TRYYYYYY");
+        const words = ["pera", "uva", "piña", "fresa", "arándano", "kiwi", "sandía", "pomme", "poire", "raisin", "ananas", "fraise", "myrtille", "kiwi", "pastèque", "Apfel", "Birne", "Traube", "Ananas", "Erdbeere", "Blaubeere",  "Wassermelone", "mela", "arancia", "pera", "uva", "ananas", "fragola", "mirtillo", "kiwi", "anguria"];
+        const randomWords = [];
+        for (let i = 0; i < 3; i++) {
+            const randomIndex = Math.floor(Math.random() * words.length);
+            randomWords.push(words[randomIndex]);
+        }
         try {
             const questionWord = await gameClient.getQuestionWord(username, selectedlanguage, 2);
             setWordToShow(questionWord);
             if (questionWord) {
+
                 const [correctIndex, choices] = await gameClient.getMultipleChoice(username, selectedlanguage, questionWord);
+                setTimeout(()=>{
+                },2000);
+                if (choices.length == 1) {
+                    console.log("ONLY ONE");
+                    choices.push(randomWords[0], randomWords[1], randomWords[2]);
+                }
                 setWordGroup(choices);
             }
         } catch (error) {
@@ -145,8 +159,14 @@ const Quiz = () => {
     };
     //use weighted randomizer to fetch 1 word for typ
     const fetchOneQuestion = async () => {
+        // console.log("ONEEEE");
         try {
+            // console.log("TWOOOOO");
             const questionWord = await gameClient.getQuestionWord(username, selectedlanguage, 2);
+            // console.log("THREEEE");
+            // setTimeout(()=>{
+            //     setCorrectMessage("");
+            // },1000);
             setWordToShow(questionWord);
         } catch (error) {
             console.error('Error fetching question word:', error);
@@ -197,8 +217,10 @@ const Quiz = () => {
 
       
 
+    let count = 0;
     //show popup based on qType if game has started, word/wordgroup is chosen and if there isnt a question already shown 
     useEffect(() => {
+        console.log("USE EFFECT", count);
         if(isStartClicked == true && isQuestionDone == false && wordGroup != null && wordGroupMatch != null){
             if(qType == 0){
                 console.log("Word group passed to MC ", wordGroup);
@@ -219,7 +241,8 @@ const Quiz = () => {
                 setTypePopup(false);
             }
         }
-    },[wordToShow, isStartClicked, wordGroup, wordGroupMatch, backgroundStall]);
+        count += 1;
+    },[wordToShow, isStartClicked, wordGroup, wordGroupMatch]);
 
     
     
